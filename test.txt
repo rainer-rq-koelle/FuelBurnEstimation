@@ -1,1 +1,4 @@
 this is to tell you that i have successfully made it!    0804
+
+Excellent. Thus, we are "hooked up" and can make use of github for collaborating on code/documentation. 
+Well done. RQ
