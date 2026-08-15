@@ -1,3 +1,8 @@
 this is to tell you that i have successfully made it!    0804
 
+<<<<<<< HEAD
 This is my homework 0810
+=======
+Excellent. Thus, we are "hooked up" and can make use of github for collaborating on code/documentation. 
+Well done. RQ
+>>>>>>> 08cbbaa9d3fbe29ef3fa0f235e54bac501db1f8d
