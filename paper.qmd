@@ -1,0 +1,51 @@
+---
+title: "Fuel Burn Estimation and Summarisation"
+subtitle: "Flight-phase based comparison framework"
+author:
+  - name: Lingling Ma
+  - name: Wei Dai
+  - name: Rainer Koelle
+date: today
+format:
+  html:
+    toc: true
+  docx: default
+  pdf: default
+---
+
+```{r}
+#| label: setup
+source(here::here("R", "setup.R"))
+```
+
+# Introduction
+
+Air transport performance work increasingly needs comparable fuel-burn summaries across operational contexts, data providers, and regions. This paper develops a flight-phase based approach for estimating and comparing fuel burn using Chinese QAR/FDR-derived data and European gate-to-gate fuel-burn data.
+
+# Background
+
+The 2025 ICNS draft established the first CHN-EUR comparison workflow. It treated each flight as a trajectory with characteristic milestones, then summarised fuel burn by phase and aircraft type.
+
+# Data and Methods
+
+The data-preparation workflow is documented separately in `technical-note-data-preparation.qmd`. The core architecture is:
+
+1. Inventory source data and metadata.
+2. Standardise raw trajectory and fuel-flow fields.
+3. Derive or validate milestones.
+4. Summarise fuel burn by flight phase.
+5. Build comparable CHN and EUR analysis tables.
+
+# Results
+
+To be developed once the refreshed data extracts and processing choices are agreed.
+
+# Discussion
+
+To be developed.
+
+# Conclusions
+
+To be developed.
+
+# References

@@ -1,0 +1,51 @@
+================================================================================
+QUICK START GUIDE - Fuel Burn QAR Processing
+For: Lingling / China Eastern Airlines
+================================================================================
+
+WHAT YOU HAVE:
+  • QAR CSV files for China Eastern flights (July 2025)
+  • One file per flight
+  • Files contain: TIME, LATP, LONP, ALT_STD, FF1C, FF2C, etc.
+
+WHAT TO DO:
+  1. Put all QAR CSV files in one folder
+     (or ZIP them into one file)
+
+  2. Open R or RStudio
+
+  3. Run this command:
+     
+     Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R <your_qar_folder> <output_folder>
+     
+     Example:
+     Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./fuel-output
+
+  4. Wait for processing to complete (shows progress)
+
+  5. Check the output folder - it will contain:
+     • CHN-phase-summaries.csv (main results)
+     • CHN-qar-fuel-flow-qc.csv (quality check)
+     • profile-plots/*.png (altitude profiles)
+     • PROCESSING-SUMMARY.txt (what was processed)
+
+  6. Send the entire output folder back to us
+
+ROUTES NEEDED:
+  Priority 1: ZBAA-ZSSS / ZSSS-ZBAA  (Beijing - Shanghai)
+  Priority 2: ZLXY-ZSSS / ZSSS-ZLXY  (Xi'an - Shanghai)
+              OR ZGGG-ZSSS / ZSSS-ZGGG  (Guangzhou - Shanghai) if ZLXY difficult
+  Priority 3: ZPPP-ZSSS / ZSSS-ZPPP  (Kunming - Shanghai)
+
+TIME PERIOD:
+  July 2025 preferred (to match European summer data)
+
+QUESTIONS?
+  • Check PROCESSING-SUMMARY.txt for processing results
+  • Review a few profile-plots/*.png to verify it looks reasonable
+  • Contact report team if any issues
+
+MORE DETAILS:
+  See README-FOR-LINGLING-fuel-burn-data-request.md for complete documentation
+
+================================================================================

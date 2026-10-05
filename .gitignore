@@ -1,0 +1,23 @@
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store
+
+# Quarto/R render artefacts
+*_cache/
+*_files/
+/.quarto/
+/_output/
+/outputs/*
+!outputs/.gitkeep
+
+# Local data products. Keep source data outside Git until explicitly agreed.
+/data-raw/*
+!/data-raw/.gitkeep
+/data-derived/*
+!/data-derived/.gitkeep
+
+# Temporary extraction folders used by helper scripts
+/tmp_unzip/
+
+**/*.quarto_ipynb
