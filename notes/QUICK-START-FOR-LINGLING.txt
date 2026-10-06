@@ -21,15 +21,25 @@ WHAT TO DO:
      Example:
      Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./fuel-output
 
+     Optional if the fuel-flow unit is known:
+     Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./fuel-output kg/h
+     Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./fuel-output lb/h
+
   4. Wait for processing to complete (shows progress)
 
   5. Check the output folder - it will contain:
      • CHN-phase-summaries.csv (main results)
+     • CHN-fuel-flow-unit-qc.csv (kg/h vs lb/h check)
      • CHN-qar-fuel-flow-qc.csv (quality check)
      • profile-plots/*.png (altitude profiles)
      • PROCESSING-SUMMARY.txt (what was processed)
 
   6. Send the entire output folder back to us
+
+IMPORTANT:
+  Please check CHN-fuel-flow-unit-qc.csv before sending the output.
+  Any row marked review_required = TRUE should be mentioned, because it means
+  the script could not confidently decide whether FF*C is kg/h or lb/h.
 
 ROUTES NEEDED:
   Priority 1: ZBAA-ZSSS / ZSSS-ZBAA  (Beijing - Shanghai)

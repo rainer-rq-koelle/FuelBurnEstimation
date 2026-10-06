@@ -74,9 +74,30 @@ The 2025 workflow condensed high-frequency CHN files to a trajectory-level table
 - milestone labels already present in the shared data;
 - cumulative fuel burn under the working assumption that fuel flow is reported per hour.
 
+## CHN Fuel-Flow Unit Integrity
+
+The QAR reader now treats fuel-flow units as an explicit source-data assumption rather than a hidden constant. The raw `FF*C` values are preserved, and the reader evaluates whether each flight is more plausible as `kg/h` or `lb/h` before converting to canonical kilogram-based fields.
+
+The check computes candidate fuel totals under both assumptions and scores them against broad plausibility ranges for the aircraft type:
+
+- fuel burn per nautical mile;
+- average fuel burn rate in kg/h;
+- median total fuel flow in kg/h.
+
+The output file `CHN-fuel-flow-unit-qc.csv` records the inferred unit, confidence flag, candidate totals, and review status for each flight. Flights marked for review should be checked with Lingling before they feed the paper analysis. The full local note is `notes/fuel-flow-unit-qc.md`.
+
+The helper can still be forced to a known unit when needed:
+
+```sh
+Rscript scripts/prepare-chn-qar-canonical.R <qar_input> <output_dir> <airport_meta> kg/h
+Rscript scripts/prepare-chn-qar-canonical.R <qar_input> <output_dir> <airport_meta> lb/h
+```
+
+With no unit argument, it defaults to `auto`.
+
 Open technical questions to carry forward:
 
-- Confirm fuel-flow units for CHN data.
+- Confirm fuel-flow units for CHN data, using the new QC file as evidence.
 - Decide whether first/last record should stand for AOBT/AIBT or engine-on/engine-off.
 - Verify duplicated timestamps and row-level deduplication rules.
 - Agree how taxi-out and taxi-in should be treated in cross-region comparisons.

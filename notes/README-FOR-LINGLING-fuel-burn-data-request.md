@@ -53,7 +53,7 @@ Each QAR CSV file should contain:
 - `TIME` - timestamp (HH:MM:SS format)
 - `LATP`, `LONP` - latitude, longitude
 - `ALT_STD` - standard altitude (feet)
-- `FF1C`, `FF2C` - fuel flow per engine (kg/h)
+- `FF1C`, `FF2C` - fuel flow per engine. If the source system may report lb/h rather than kg/h, the helper will run an automatic plausibility check and record the inferred unit.
 
 **Optional but helpful:**
 - `FF3C`, `FF4C` - additional engines (if 3/4-engine aircraft)
@@ -78,9 +78,10 @@ We have prepared a **standalone R script** that will process your QAR files and 
 2. Detects flight phases using harmonized ICAO methodology
 3. Calculates fuel burn per phase
 4. Detects and corrects fuel flow spikes
-5. Measures climb/descent smoothness
-6. Generates altitude profile plots
-7. Produces standardized output files
+5. Checks whether fuel flow is more plausible as kg/h or lb/h
+6. Measures climb/descent smoothness
+7. Generates altitude profile plots
+8. Produces standardized output files
 
 ### How to Run
 
@@ -93,6 +94,15 @@ Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R <input_folder> <output_folder
 ```bash
 Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./output-fuel-burn
 ```
+
+The optional third argument can force the fuel-flow unit if it is known:
+
+```bash
+Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./output-fuel-burn kg/h
+Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-july-2025 ./output-fuel-burn lb/h
+```
+
+If omitted, the script uses `auto` and writes a unit QC file for review.
 
 **Option 2: Interactive mode (RStudio)**
 ```r
@@ -149,19 +159,23 @@ After processing, the output folder will contain:
 
 ### Quality Control Outputs
 
-4. **`CHN-qar-fuel-flow-qc.csv`**
+4. **`CHN-fuel-flow-unit-qc.csv`**
+   - One row per flight comparing the kg/h and lb/h assumptions
+   - Includes inferred unit, confidence, candidate fuel totals, and review flag
+
+5. **`CHN-qar-fuel-flow-qc.csv`**
    - Fuel flow spike detection report
    - Shows raw vs. cleaned fuel totals per flight
 
-5. **`CHN-flight-phase-code-diagnostics.csv`**
+6. **`CHN-flight-phase-code-diagnostics.csv`**
    - Maps raw `FLIGHT_PHASE` codes to harmonized phases
    - Helps verify phase detection accuracy
 
-6. **`profile-plots/*.png`**
+7. **`profile-plots/*.png`**
    - Altitude profile visualizations (sample flights)
    - Useful for visual verification of milestone detection
 
-7. **`PROCESSING-SUMMARY.txt`**
+8. **`PROCESSING-SUMMARY.txt`**
    - Processing statistics
    - Route pair coverage summary
    - File inventory
@@ -209,7 +223,8 @@ The processing methodology is documented in the report's technical note (Chapter
 
 - **Phase detection:** Uses ICAO vertical flight efficiency convention (GANP/PEG methodology)
 - **Top of climb/descent:** Detected from altitude profile smoothing + vertical rate analysis
-- **Fuel flow QC:** Isolated spikes are detected and smoothed (raw values preserved for audit)
+- **Fuel flow unit QC:** The helper compares kg/h and lb/h assumptions and flags ambiguous flights
+- **Fuel flow spike QC:** Isolated spikes are detected and smoothed (raw values preserved for audit)
 - **Harmonization:** Chinese QAR and European G2G data processed to common "milestone" format
 
 This ensures the Chinese and European fuel burn data are directly comparable.

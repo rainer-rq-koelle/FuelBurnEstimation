@@ -21,7 +21,7 @@
 #   • TIME (HH:MM:SS format)
 #   • LATP, LONP (latitude, longitude)
 #   • ALT_STD (altitude in feet)
-#   • FF1C, FF2C (fuel flow per engine in kg/h)
+#   • FF1C, FF2C (fuel flow per engine; kg/h or lb/h can be auto-checked)
 #   • Optional: FF3C, FF4C (if 4-engine aircraft)
 #   • Optional: FLIGHT_PHASE (raw phase code)
 #   • Optional: IASC, GS (indicated airspeed, ground speed)
@@ -47,6 +47,7 @@
 #   • CHN-canonical-milestones.parquet  (milestone snapshots)
 #   • CHN-phase-summaries.csv           (fuel burn per phase)
 #   • CHN-phase-level-descriptors.csv   (climb/descent smoothness)
+#   • CHN-fuel-flow-unit-qc.csv         (kg/h vs lb/h plausibility check)
 #   • CHN-qar-fuel-flow-qc.csv          (quality control report)
 #   • CHN-flight-phase-code-diagnostics.csv
 #   • profile-plots/*.png               (altitude profile visualizations)
@@ -152,6 +153,7 @@ if (length(args) == 0) {
 } else if (length(args) >= 2) {
   input_path <- path.expand(args[[1]])
   output_dir <- args[[2]]
+  fuel_flow_unit <- if (length(args) >= 3) args[[3]] else Sys.getenv("CHN_QAR_FUEL_FLOW_UNIT", unset = "auto")
   cat("Command-line mode:\n")
   cat("  Input:  ", input_path, "\n")
   cat("  Output: ", output_dir, "\n\n")
@@ -159,10 +161,11 @@ if (length(args) == 0) {
   cat(
     paste(
       "USAGE:",
-      "  Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R <input_path> <output_folder>",
+      "  Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R <input_path> <output_folder> [auto|kg/h|lb/h]",
       "",
       "  <input_path>: Folder or ZIP file containing QAR CSV files",
       "  <output_folder>: Where to save processed results",
+      "  optional unit: auto-detect fuel-flow units or force kg/h or lb/h",
       "",
       "EXAMPLE:",
       "  Rscript HELPER-FOR-LINGLING-fuel-burn-processing.R ./qar-files ./output",
@@ -174,6 +177,11 @@ if (length(args) == 0) {
   )
   quit(status = 1)
 }
+
+if (!exists("fuel_flow_unit")) {
+  fuel_flow_unit <- Sys.getenv("CHN_QAR_FUEL_FLOW_UNIT", unset = "auto")
+}
+cat("Fuel-flow unit mode:", fuel_flow_unit, "\n\n")
 
 # STEP 5: Find and validate QAR files ==========================================
 
@@ -249,7 +257,7 @@ dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 trajectories <- purrr::map(qar_files, function(path) {
   cat("  Reading:", basename(path), "\n")
   tryCatch(
-    fuel_read_chn_qar_csv(path),
+    fuel_read_chn_qar_csv(path, fuel_flow_unit = fuel_flow_unit),
     error = function(e) {
       cat("    WARNING: Failed to read", basename(path), "-", e$message, "\n")
       return(NULL)
@@ -282,6 +290,10 @@ level_descriptors <- fuel_level_descriptors(dplyr::bind_rows(trajectories), phas
 # Diagnostic: phase code agreement
 cat("Running phase code diagnostics...\n")
 phase_code_diagnostics <- fuel_phase_code_diagnostics(trajectories, phases)
+
+# Diagnostic: fuel-flow unit inference
+cat("Running fuel-flow unit plausibility checks...\n")
+unit_qc <- fuel_flow_unit_qc(trajectories)
 
 # Quality control: fuel flow spike detection
 cat("Running fuel flow quality control...\n")
@@ -324,6 +336,9 @@ cat("Saved: CHN-phase-level-descriptors.csv\n")
 readr::write_csv(phase_code_diagnostics, file.path(output_dir, "CHN-flight-phase-code-diagnostics.csv"))
 cat("Saved: CHN-flight-phase-code-diagnostics.csv\n")
 
+readr::write_csv(unit_qc, file.path(output_dir, "CHN-fuel-flow-unit-qc.csv"))
+cat("Saved: CHN-fuel-flow-unit-qc.csv\n")
+
 readr::write_csv(qc, file.path(output_dir, "CHN-qar-fuel-flow-qc.csv"))
 cat("Saved: CHN-qar-fuel-flow-qc.csv\n")
 
@@ -361,6 +376,7 @@ cat("Milestone records:     ", summary_stats$milestone_records, "\n")
 cat("Phase records:         ", summary_stats$phase_records, "\n")
 cat("Airports covered:      ", paste(summary_stats$airports, collapse = ", "), "\n")
 cat("Aircraft types:        ", paste(summary_stats$aircraft_types, collapse = ", "), "\n")
+cat("Fuel unit review rows: ", sum(unit_qc$review_required, na.rm = TRUE), "\n")
 
 # Route pair summary
 route_summary <- phases |>
@@ -389,6 +405,11 @@ summary_report <- c(
   paste("  Milestone records:", summary_stats$milestone_records),
   paste("  Phase records:", summary_stats$phase_records),
   "",
+  "FUEL-FLOW UNIT CHECK:",
+  paste("  Unit mode:", fuel_flow_unit),
+  paste("  Flights requiring unit review:", sum(unit_qc$review_required, na.rm = TRUE)),
+  capture.output(print(dplyr::count(unit_qc, inferred_unit, unit_confidence, unit_flag), row.names = FALSE)),
+  "",
   "ROUTE PAIRS:",
   capture.output(print(route_summary, row.names = FALSE)),
   "",
@@ -397,13 +418,15 @@ summary_report <- c(
   "  • CHN-phase-summaries.parquet/.csv",
   "  • CHN-phase-level-descriptors.csv",
   "  • CHN-flight-phase-code-diagnostics.csv",
+  "  • CHN-fuel-flow-unit-qc.csv",
   "  • CHN-qar-fuel-flow-qc.csv",
   "  • profile-plots/*.png",
   "",
   "NEXT STEPS:",
   "  1. Review the profile-plots/*.png files to verify milestone detection",
-  "  2. Check CHN-qar-fuel-flow-qc.csv for fuel flow spike corrections",
-  "  3. Send the entire output folder to the report team for integration",
+  "  2. Check CHN-fuel-flow-unit-qc.csv for kg/h vs lb/h unit inference",
+  "  3. Check CHN-qar-fuel-flow-qc.csv for fuel flow spike corrections",
+  "  4. Send the entire output folder to the report team for integration",
   "",
   "For questions, contact the China-Europe report coordination team."
 )

@@ -86,6 +86,189 @@ fuel_fill_numeric_linear <- function(x) {
     zoo::na.locf(fromLast = TRUE, na.rm = FALSE)
 }
 
+`%||%` <- function(x, y) {
+  if (is.null(x) || length(x) == 0 || is.na(x[1])) y else x
+}
+
+fuel_normalise_flow_unit <- function(unit) {
+  unit <- tolower(trimws(unit %||% "auto"))
+  unit <- gsub("_", "/", unit, fixed = TRUE)
+
+  dplyr::case_when(
+    unit %in% c("", "auto", "infer", "inferred") ~ "auto",
+    unit %in% c("kg", "kgs", "kg/h", "kg/hr", "kgph", "kilogram", "kilograms", "kilograms/hour") ~ "kg/h",
+    unit %in% c("lb", "lbs", "lb/h", "lbs/h", "lb/hr", "lbs/hr", "lbph", "pounds", "pounds/hour") ~ "lb/h",
+    TRUE ~ NA_character_
+  )
+}
+
+fuel_aircraft_fuel_reference <- function(type) {
+  type <- toupper(gsub("[^A-Z0-9]", "", type %||% ""))
+
+  if (grepl("^(A319|A320|A321|B737|B738|B739|B73|B38|B39|7M8|7M9|C919)", type)) {
+    return(list(
+      class = "narrow_body",
+      burn_per_nm = c(low = 2.5, typical = 6.0, high = 14.0),
+      burn_rate_kgph = c(low = 1200, typical = 3000, high = 6500),
+      total_flow_kgph = c(low = 900, typical = 2800, high = 7000)
+    ))
+  }
+
+  if (grepl("^(A330|A340|A350|A380|B747|B767|B777|B787|B77|B78|B76|B74)", type)) {
+    return(list(
+      class = "wide_body",
+      burn_per_nm = c(low = 7.0, typical = 18.0, high = 45.0),
+      burn_rate_kgph = c(low = 3500, typical = 8000, high = 22000),
+      total_flow_kgph = c(low = 3000, typical = 8000, high = 26000)
+    ))
+  }
+
+  if (grepl("^(E17|E19|E2|CRJ|ARJ|AT7|DH8)", type)) {
+    return(list(
+      class = "regional",
+      burn_per_nm = c(low = 1.2, typical = 3.5, high = 9.0),
+      burn_rate_kgph = c(low = 500, typical = 1400, high = 3500),
+      total_flow_kgph = c(low = 400, typical = 1300, high = 4000)
+    ))
+  }
+
+  list(
+    class = "unknown",
+    burn_per_nm = c(low = 1.2, typical = 7.0, high = 45.0),
+    burn_rate_kgph = c(low = 500, typical = 3500, high = 22000),
+    total_flow_kgph = c(low = 400, typical = 3500, high = 26000)
+  )
+}
+
+fuel_metric_plausibility_score <- function(value, reference) {
+  if (!is.finite(value) || value <= 0) return(NA_real_)
+
+  low <- unname(reference[["low"]])
+  typical <- unname(reference[["typical"]])
+  high <- unname(reference[["high"]])
+
+  score <- abs(log(value / typical))
+  if (value < low) score <- score + 2 * abs(log(value / low))
+  if (value > high) score <- score + 2 * abs(log(value / high))
+  score
+}
+
+fuel_flow_unit_candidate_scores <- function(flow_raw, dt_sec, distance_nm, type) {
+  flow_raw <- as.numeric(flow_raw)
+  dt_sec <- as.numeric(dt_sec)
+  distance_nm <- as.numeric(distance_nm)
+  dt_sec[!is.finite(dt_sec) | dt_sec < 0 | dt_sec > 300] <- 0
+  distance_nm[!is.finite(distance_nm) | distance_nm < 0] <- 0
+
+  total_time_hr <- sum(dt_sec, na.rm = TRUE) / 3600
+  total_distance_nm <- sum(distance_nm, na.rm = TRUE)
+  ref <- fuel_aircraft_fuel_reference(type)
+
+  score_one <- function(unit, factor) {
+    flow_kgph <- flow_raw * factor
+    total_burn_kg <- sum(flow_kgph * dt_sec / 3600, na.rm = TRUE)
+    median_total_flow_kgph <- stats::median(flow_kgph[flow_kgph > 0], na.rm = TRUE)
+    burn_rate_kgph <- if (total_time_hr > 0) total_burn_kg / total_time_hr else NA_real_
+    burn_per_nm <- if (total_distance_nm > 0) total_burn_kg / total_distance_nm else NA_real_
+
+    metric_scores <- c(
+      1.00 * fuel_metric_plausibility_score(burn_per_nm, ref$burn_per_nm),
+      0.75 * fuel_metric_plausibility_score(burn_rate_kgph, ref$burn_rate_kgph),
+      0.50 * fuel_metric_plausibility_score(median_total_flow_kgph, ref$total_flow_kgph)
+    )
+
+    tibble::tibble(
+      candidate_unit = unit,
+      kg_per_raw_unit = factor,
+      aircraft_reference_class = ref$class,
+      candidate_total_burn_kg = total_burn_kg,
+      candidate_burn_per_nm = burn_per_nm,
+      candidate_burn_rate_kgph = burn_rate_kgph,
+      candidate_median_total_flow_kgph = median_total_flow_kgph,
+      candidate_score = sum(metric_scores, na.rm = TRUE),
+      candidate_evidence_count = sum(!is.na(metric_scores))
+    )
+  }
+
+  dplyr::bind_rows(
+    score_one("kg/h", 1),
+    score_one("lb/h", 0.45359237)
+  )
+}
+
+fuel_infer_flow_unit <- function(flow_raw, dt_sec, distance_nm, type, requested_unit = "auto") {
+  requested_unit <- fuel_normalise_flow_unit(requested_unit)
+  if (is.na(requested_unit)) {
+    stop("Unsupported fuel-flow unit. Use auto, kg/h, or lb/h.", call. = FALSE)
+  }
+
+  scores <- fuel_flow_unit_candidate_scores(flow_raw, dt_sec, distance_nm, type)
+  kg <- scores |> dplyr::filter(.data$candidate_unit == "kg/h")
+  lb <- scores |> dplyr::filter(.data$candidate_unit == "lb/h")
+
+  best <- scores |>
+    dplyr::arrange(.data$candidate_score) |>
+    dplyr::slice(1)
+  second <- scores |>
+    dplyr::arrange(.data$candidate_score) |>
+    dplyr::slice(2)
+
+  if (requested_unit != "auto") {
+    selected <- scores |> dplyr::filter(.data$candidate_unit == requested_unit)
+    return(tibble::tibble(
+      FF_UNIT_REQUESTED = requested_unit,
+      FF_UNIT_INFERRED = requested_unit,
+      FF_UNIT_CONFIDENCE = "forced",
+      FF_UNIT_FLAG = "forced_by_user",
+      FF_KG_PER_RAW_UNIT = selected$kg_per_raw_unit,
+      FF_UNIT_SCORE_KG = kg$candidate_score,
+      FF_UNIT_SCORE_LB = lb$candidate_score,
+      FF_UNIT_SCORE_GAP = abs(kg$candidate_score - lb$candidate_score),
+      FF_BURN_IF_KG = kg$candidate_total_burn_kg,
+      FF_BURN_IF_LB = lb$candidate_total_burn_kg,
+      FF_BURN_PER_NM_IF_KG = kg$candidate_burn_per_nm,
+      FF_BURN_PER_NM_IF_LB = lb$candidate_burn_per_nm,
+      FF_BURN_RATE_KGPH_IF_KG = kg$candidate_burn_rate_kgph,
+      FF_BURN_RATE_KGPH_IF_LB = lb$candidate_burn_rate_kgph,
+      FF_AIRCRAFT_REFERENCE_CLASS = best$aircraft_reference_class,
+      FF_UNIT_REVIEW_REQUIRED = FALSE
+    ))
+  }
+
+  score_gap <- second$candidate_score - best$candidate_score
+  confidence <- dplyr::case_when(
+    !is.finite(score_gap) | best$candidate_evidence_count == 0 ~ "unknown",
+    score_gap >= 0.45 ~ "high",
+    score_gap >= 0.20 ~ "medium",
+    TRUE ~ "low"
+  )
+  flag <- dplyr::case_when(
+    confidence == "high" ~ "ok_auto_inferred",
+    confidence == "medium" ~ "review_auto_medium_confidence",
+    confidence == "unknown" ~ "review_insufficient_evidence",
+    TRUE ~ "review_ambiguous_unit"
+  )
+
+  tibble::tibble(
+    FF_UNIT_REQUESTED = "auto",
+    FF_UNIT_INFERRED = best$candidate_unit,
+    FF_UNIT_CONFIDENCE = confidence,
+    FF_UNIT_FLAG = flag,
+    FF_KG_PER_RAW_UNIT = best$kg_per_raw_unit,
+    FF_UNIT_SCORE_KG = kg$candidate_score,
+    FF_UNIT_SCORE_LB = lb$candidate_score,
+    FF_UNIT_SCORE_GAP = score_gap,
+    FF_BURN_IF_KG = kg$candidate_total_burn_kg,
+    FF_BURN_IF_LB = lb$candidate_total_burn_kg,
+    FF_BURN_PER_NM_IF_KG = kg$candidate_burn_per_nm,
+    FF_BURN_PER_NM_IF_LB = lb$candidate_burn_per_nm,
+    FF_BURN_RATE_KGPH_IF_KG = kg$candidate_burn_rate_kgph,
+    FF_BURN_RATE_KGPH_IF_LB = lb$candidate_burn_rate_kgph,
+    FF_AIRCRAFT_REFERENCE_CLASS = best$aircraft_reference_class,
+    FF_UNIT_REVIEW_REQUIRED = confidence != "high"
+  )
+}
+
 fuel_clean_flow_spikes <- function(flow_kgph, window = 11, ratio_threshold = 4, min_delta_kgph = 1500) {
   raw <- as.numeric(flow_kgph)
   med <- fuel_roll_median(raw, k = window)
@@ -107,46 +290,80 @@ fuel_clean_flow_spikes <- function(flow_kgph, window = 11, ratio_threshold = 4, 
   )
 }
 
-fuel_read_chn_qar_csv <- function(path, date = NULL) {
+fuel_read_chn_qar_csv <- function(path, date = NULL, fuel_flow_unit = Sys.getenv("CHN_QAR_FUEL_FLOW_UNIT", unset = "auto")) {
   meta <- fuel_parse_chn_filename(path)
   if (is.null(date)) date <- meta$DATE[[1]]
 
   dt <- data.table::fread(path, check.names = TRUE)
-  names(dt) <- toupper(names(dt))
+  names(dt) <- make.names(toupper(names(dt)), unique = TRUE)
 
   alt_cols <- grep("^ALT_STD", names(dt), value = TRUE)
   ff_cols <- intersect(c("FF1C", "FF2C", "FF3C", "FF4C"), names(dt))
+  time_col <- if ("TIME.1" %in% names(dt)) "TIME.1" else "TIME"
 
-  if (!"TIME" %in% names(dt)) stop("QAR file has no TIME column: ", path)
+  if (!time_col %in% names(dt)) stop("QAR file has no TIME column: ", path)
   if (length(alt_cols) == 0) stop("QAR file has no ALT_STD column: ", path)
   if (length(ff_cols) == 0) stop("QAR file has no FF*C fuel-flow columns: ", path)
 
   phase_vec <- if ("FLIGHT_PHASE" %in% names(dt)) as.character(dt$FLIGHT_PHASE) else NA_character_
-  ias_vec <- if ("IASC" %in% names(dt)) dt$IASC else NA_real_
+  ias_vec <- if ("IASC" %in% names(dt)) dt$IASC else if ("IAS" %in% names(dt)) dt$IAS else NA_real_
   gs_vec <- if ("GS" %in% names(dt)) dt$GS else NA_real_
 
 	  out <- tibble::as_tibble(dt) |>
 	    dplyr::mutate(
-	      TIME = fuel_make_time(date, .data$TIME),
+	      TIME = fuel_make_time(date, .data[[time_col]]),
 	      LAT = fuel_fill_numeric_linear(.data$LATP),
 	      LON = fuel_fill_numeric_linear(.data$LONP),
-	      ALT_FT = rowMeans(dplyr::pick(dplyr::all_of(alt_cols)), na.rm = TRUE),
+      ALT_FT = rowMeans(dplyr::pick(dplyr::all_of(alt_cols)), na.rm = TRUE),
       IASC = ias_vec,
       GS = gs_vec,
       FLIGHT_PHASE_RAW = phase_vec,
-      FF_TOTAL_RAW_KGPH = rowSums(dplyr::pick(dplyr::all_of(ff_cols)), na.rm = TRUE)
+      FF_TOTAL_RAW = rowSums(dplyr::pick(dplyr::all_of(ff_cols)), na.rm = TRUE)
+    )
+
+  out <- out |>
+    dplyr::arrange(.data$TIME) |>
+    dplyr::mutate(
+      DT_SEC = as.numeric(difftime(dplyr::lead(.data$TIME), .data$TIME, units = "secs")),
+      DT_SEC = dplyr::if_else(is.na(.data$DT_SEC) | .data$DT_SEC < 0 | .data$DT_SEC > 300, 0, .data$DT_SEC),
+      DISTANCE_NM = fuel_haversine_nm(.data$LAT, .data$LON, dplyr::lead(.data$LAT), dplyr::lead(.data$LON)),
+      DISTANCE_NM = dplyr::if_else(is.na(.data$DISTANCE_NM), 0, .data$DISTANCE_NM)
+    )
+
+  unit_info <- fuel_infer_flow_unit(
+    flow_raw = out$FF_TOTAL_RAW,
+    dt_sec = out$DT_SEC,
+    distance_nm = out$DISTANCE_NM,
+    type = meta$TYPE[[1]],
+    requested_unit = fuel_flow_unit
+  )
+
+  out <- out |>
+    dplyr::mutate(
+      FF_UNIT_REQUESTED = unit_info$FF_UNIT_REQUESTED[[1]],
+      FF_UNIT_INFERRED = unit_info$FF_UNIT_INFERRED[[1]],
+      FF_UNIT_CONFIDENCE = unit_info$FF_UNIT_CONFIDENCE[[1]],
+      FF_UNIT_FLAG = unit_info$FF_UNIT_FLAG[[1]],
+      FF_KG_PER_RAW_UNIT = unit_info$FF_KG_PER_RAW_UNIT[[1]],
+      FF_UNIT_SCORE_KG = unit_info$FF_UNIT_SCORE_KG[[1]],
+      FF_UNIT_SCORE_LB = unit_info$FF_UNIT_SCORE_LB[[1]],
+      FF_UNIT_SCORE_GAP = unit_info$FF_UNIT_SCORE_GAP[[1]],
+      FF_BURN_IF_KG = unit_info$FF_BURN_IF_KG[[1]],
+      FF_BURN_IF_LB = unit_info$FF_BURN_IF_LB[[1]],
+      FF_BURN_PER_NM_IF_KG = unit_info$FF_BURN_PER_NM_IF_KG[[1]],
+      FF_BURN_PER_NM_IF_LB = unit_info$FF_BURN_PER_NM_IF_LB[[1]],
+      FF_BURN_RATE_KGPH_IF_KG = unit_info$FF_BURN_RATE_KGPH_IF_KG[[1]],
+      FF_BURN_RATE_KGPH_IF_LB = unit_info$FF_BURN_RATE_KGPH_IF_LB[[1]],
+      FF_AIRCRAFT_REFERENCE_CLASS = unit_info$FF_AIRCRAFT_REFERENCE_CLASS[[1]],
+      FF_UNIT_REVIEW_REQUIRED = unit_info$FF_UNIT_REVIEW_REQUIRED[[1]],
+      FF_TOTAL_RAW_KGPH = .data$FF_TOTAL_RAW * .data$FF_KG_PER_RAW_UNIT
     )
 
   out <- out |>
     dplyr::bind_cols(fuel_clean_flow_spikes(out$FF_TOTAL_RAW_KGPH) |> dplyr::select(-FF_TOTAL_RAW_KGPH)) |>
-    dplyr::arrange(.data$TIME) |>
     dplyr::mutate(
-      DT_SEC = as.numeric(dplyr::lead(.data$TIME) - .data$TIME),
-      DT_SEC = dplyr::if_else(is.na(.data$DT_SEC) | .data$DT_SEC < 0 | .data$DT_SEC > 300, 0, .data$DT_SEC),
       FUEL_BURNT_KG_ORIGINAL = .data$FF_TOTAL_RAW_KGPH * .data$DT_SEC / 3600,
       FUEL_BURNT_KG = .data$FF_TOTAL_KGPH * .data$DT_SEC / 3600,
-      DISTANCE_NM = fuel_haversine_nm(.data$LAT, .data$LON, dplyr::lead(.data$LAT), dplyr::lead(.data$LON)),
-      DISTANCE_NM = dplyr::if_else(is.na(.data$DISTANCE_NM), 0, .data$DISTANCE_NM),
       TOT_FUEL_KG = cumsum(.data$FUEL_BURNT_KG),
       TOT_FUEL_KG_ORIGINAL = cumsum(.data$FUEL_BURNT_KG_ORIGINAL),
       DIST_FLOWN_NM = cumsum(.data$DISTANCE_NM)
@@ -154,6 +371,41 @@ fuel_read_chn_qar_csv <- function(path, date = NULL) {
     dplyr::bind_cols(meta[rep(1, nrow(dt)), ])
 
   out
+}
+
+fuel_flow_unit_qc <- function(trajectories) {
+  trj <- if (is.list(trajectories)) dplyr::bind_rows(trajectories) else trajectories
+
+  trj |>
+    dplyr::summarise(
+      FLTID = dplyr::first(.data$FLTID),
+      ADEP = dplyr::first(.data$ADEP),
+      ADES = dplyr::first(.data$ADES),
+      TYPE = dplyr::first(.data$TYPE),
+      rows = dplyr::n(),
+      duration_min = sum(.data$DT_SEC, na.rm = TRUE) / 60,
+      distance_nm = max(.data$DIST_FLOWN_NM, na.rm = TRUE),
+      raw_total_flow_median = stats::median(.data$FF_TOTAL_RAW[.data$FF_TOTAL_RAW > 0], na.rm = TRUE),
+      selected_total_fuel_kg = max(.data$TOT_FUEL_KG, na.rm = TRUE),
+      selected_total_fuel_kg_original = max(.data$TOT_FUEL_KG_ORIGINAL, na.rm = TRUE),
+      burn_if_kg = dplyr::first(.data$FF_BURN_IF_KG),
+      burn_if_lb = dplyr::first(.data$FF_BURN_IF_LB),
+      burn_per_nm_if_kg = dplyr::first(.data$FF_BURN_PER_NM_IF_KG),
+      burn_per_nm_if_lb = dplyr::first(.data$FF_BURN_PER_NM_IF_LB),
+      burn_rate_kgph_if_kg = dplyr::first(.data$FF_BURN_RATE_KGPH_IF_KG),
+      burn_rate_kgph_if_lb = dplyr::first(.data$FF_BURN_RATE_KGPH_IF_LB),
+      inferred_unit = dplyr::first(.data$FF_UNIT_INFERRED),
+      requested_unit = dplyr::first(.data$FF_UNIT_REQUESTED),
+      unit_confidence = dplyr::first(.data$FF_UNIT_CONFIDENCE),
+      unit_flag = dplyr::first(.data$FF_UNIT_FLAG),
+      unit_score_kg = dplyr::first(.data$FF_UNIT_SCORE_KG),
+      unit_score_lb = dplyr::first(.data$FF_UNIT_SCORE_LB),
+      unit_score_gap = dplyr::first(.data$FF_UNIT_SCORE_GAP),
+      aircraft_reference_class = dplyr::first(.data$FF_AIRCRAFT_REFERENCE_CLASS),
+      review_required = dplyr::first(.data$FF_UNIT_REVIEW_REQUIRED),
+      .by = SOURCE_UID
+    ) |>
+    dplyr::arrange(dplyr::desc(.data$review_required), .data$unit_confidence, .data$SOURCE_UID)
 }
 
 fuel_append_airport_distances <- function(trj, airport_meta) {
@@ -180,7 +432,7 @@ fuel_vertical_profile <- function(trj, altitude_col = "ALT_FT", time_col = "TIME
     dplyr::mutate(
       ALT_SMOOTH_FT = fuel_roll_median(.data[[altitude_col]], k = 31),
       ALT_SMOOTH_FT = dplyr::coalesce(.data$ALT_SMOOTH_FT, .data[[altitude_col]]),
-      DT_SEC_PREV = as.numeric(.data[[time_col]] - dplyr::lag(.data[[time_col]])),
+      DT_SEC_PREV = as.numeric(difftime(.data[[time_col]], dplyr::lag(.data[[time_col]]), units = "secs")),
       ALT_DIFF_PREV = .data$ALT_SMOOTH_FT - dplyr::lag(.data$ALT_SMOOTH_FT),
       VERTICAL_RATE_FPM = .data$ALT_DIFF_PREV / (.data$DT_SEC_PREV / 60),
       VERTICAL_RATE_FPM = dplyr::if_else(
@@ -516,7 +768,7 @@ fuel_eur_level_descriptors_from_segments <- function(segments, flight_metadata, 
     dplyr::mutate(
       TIME = .data$TIME_OVER,
       ROW_ID = dplyr::row_number(),
-      DT_SEC_PREV = as.numeric(.data$TIME - dplyr::lag(.data$TIME)),
+      DT_SEC_PREV = as.numeric(difftime(.data$TIME, dplyr::lag(.data$TIME), units = "secs")),
       DT_SEC_PREV = dplyr::if_else(
         is.finite(.data$DT_SEC_PREV) & .data$DT_SEC_PREV > 0 & .data$DT_SEC_PREV <= 1800,
         .data$DT_SEC_PREV,
@@ -641,10 +893,10 @@ fuel_plot_annotated_profile <- function(trajectory, milestones, output_file) {
   source_id <- unique(trajectory$SOURCE_UID)[1]
   trj <- trajectory |>
     dplyr::arrange(.data$TIME) |>
-    dplyr::mutate(REL_TIME_MIN = as.numeric(.data$TIME - min(.data$TIME, na.rm = TRUE)) / 60)
+    dplyr::mutate(REL_TIME_MIN = as.numeric(difftime(.data$TIME, min(.data$TIME, na.rm = TRUE), units = "secs")) / 60)
   mst <- milestones |>
     dplyr::filter(.data$SOURCE_UID == source_id, .data$MST %in% c("DLTO", "D200", "TOC", "TOD", "A200", "ALTO")) |>
-    dplyr::mutate(REL_TIME_MIN = as.numeric(.data$TIME - min(trj$TIME, na.rm = TRUE)) / 60)
+    dplyr::mutate(REL_TIME_MIN = as.numeric(difftime(.data$TIME, min(trj$TIME, na.rm = TRUE), units = "secs")) / 60)
 
   p <- ggplot2::ggplot(trj, ggplot2::aes(x = .data$REL_TIME_MIN, y = .data$ALT_FT)) +
     ggplot2::geom_line(linewidth = 0.4, colour = "#2f3b52") +

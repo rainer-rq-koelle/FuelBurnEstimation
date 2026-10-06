@@ -32,17 +32,22 @@ if (length(args) == 0) {
   } else {
     project_path("data", "reference", "airport-meta-icao-lat-lon.csv")
   }
+  fuel_flow_unit <- if (length(args) >= 4) args[[4]] else Sys.getenv("CHN_QAR_FUEL_FLOW_UNIT", unset = "auto")
 } else {
   stop(
     paste(
       "Usage:",
       "Rscript scripts/prepare-chn-qar-canonical.R",
       "or",
-      "Rscript scripts/prepare-chn-qar-canonical.R <qar_zip_or_directory> <output_directory> [airport_meta_csv_or_parquet]",
+      "Rscript scripts/prepare-chn-qar-canonical.R <qar_zip_or_directory> <output_directory> [airport_meta_csv_or_parquet] [auto|kg/h|lb/h]",
       sep = "\n"
     ),
     call. = FALSE
   )
+}
+
+if (!exists("fuel_flow_unit")) {
+  fuel_flow_unit <- Sys.getenv("CHN_QAR_FUEL_FLOW_UNIT", unset = "auto")
 }
 
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -95,7 +100,7 @@ message("Found ", length(qar_files), " QAR CSV files.")
 
 trajectories <- map(qar_files, \(path) {
   message("Reading ", basename(path))
-  fuel_read_chn_qar_csv(path)
+  fuel_read_chn_qar_csv(path, fuel_flow_unit = fuel_flow_unit)
 })
 
 milestones <- map(trajectories, fuel_chn_milestones, airport_meta = airport_meta) |>
@@ -104,6 +109,7 @@ milestones <- map(trajectories, fuel_chn_milestones, airport_meta = airport_meta
 phases <- fuel_phase_summaries(milestones)
 level_descriptors <- fuel_level_descriptors(bind_rows(trajectories), phases)
 phase_code_diagnostics <- fuel_phase_code_diagnostics(trajectories, phases)
+unit_qc <- fuel_flow_unit_qc(trajectories)
 
 qc <- map_dfr(trajectories, \(x) {
   x |>
@@ -128,6 +134,7 @@ write_parquet(phases, file.path(output_dir, "CHN-phase-summaries.parquet"))
 write_csv(phases, file.path(output_dir, "CHN-phase-summaries.csv"))
 write_csv(level_descriptors, file.path(output_dir, "CHN-phase-level-descriptors.csv"))
 write_csv(phase_code_diagnostics, file.path(output_dir, "CHN-flight-phase-code-diagnostics.csv"))
+write_csv(unit_qc, file.path(output_dir, "CHN-fuel-flow-unit-qc.csv"))
 write_csv(qc, file.path(output_dir, "CHN-qar-fuel-flow-qc.csv"))
 
 profile_dir <- file.path(output_dir, "profile-plots")
@@ -145,4 +152,5 @@ message("Wrote outputs to ", output_dir)
 message("Flights: ", n_distinct(milestones$SOURCE_UID))
 message("Milestone rows: ", nrow(milestones))
 message("Phase rows: ", nrow(phases))
+message("Fuel-flow unit review flights: ", sum(unit_qc$review_required, na.rm = TRUE))
 message("Annotated profile plots: ", profile_dir)

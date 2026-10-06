@@ -11,6 +11,7 @@ The immediate goal is a simple Quarto paper that can render to MS Word and PDF, 
 - `R/` contains reusable helper functions, initially lifted from the 2025 ICNS CHN-EUR fuel-burn work.
 - `scripts/` contains reproducible data-preparation scripts.
 - `R/canonical-fuel-milestones.R` and `scripts/prepare-chn-qar-canonical.R` are ported from the 2025/2026 CHN-EUR workflow that helped Lingling process one-file-per-flight QAR data locally.
+- The CHN QAR reader now writes `CHN-fuel-flow-unit-qc.csv` to compare kg/h and lb/h fuel-flow assumptions before producing kilogram-based canonical outputs.
 - `data-raw/` and `data-derived/` are intentionally ignored by Git except for placeholders.
 - `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
 - `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
