@@ -16,7 +16,20 @@ The immediate goal is a simple Quarto paper that can render to MS Word and PDF, 
 - `notes/canonical-milestone-model.md` captures the enriched milestone convention for along-track distance anchors, pressure-altitude flight-level crossings, level segments, intervals, and lookup-table inputs.
 - `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
 - `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
+
+## EUR Milestone Harmonization
+
+EUR PRU data uses legacy milestone labels that need harmonization to the 2026 enriched convention:
+
 - `scripts/03-audit-eur-canonical-milestones.R` audits the local EUR canonical milestone parquet against the enriched milestone convention.
+- `R/eur-milestone-harmonization.R` provides functions for renaming, mapping, and deriving canonical milestone labels.
+- `scripts/04-harmonize-eur-milestones.R` applies the full harmonization pipeline:
+  1. Renames distance labels: `F40`→`D040`, `L40`→`A040`, `F100`→`D100`, `L100`→`A100`
+  2. Maps `FL100` to direction-aware `D_FL100`/`A_FL100` based on phase context
+  3. Derives new FL crossing milestones: `D_FL075`, `D_FL180`, `A_FL075`, `A_FL180`
+  4. Reconstructs `LVL` events into paired `LVL_START`/`LVL_END` milestones
+
+Output: `data-derived/canonical-milestones-eur-2026-harmonized.parquet`
 
 ## Reference Project
 
@@ -35,4 +48,5 @@ quarto render technical-note-data-preparation.qmd --to html
 Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
+Rscript scripts/04-harmonize-eur-milestones.R
 ```
