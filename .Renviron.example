@@ -11,3 +11,6 @@
 # Optional: force CHN QAR fuel-flow units when known.
 # Leave unset for automatic kg/h vs lb/h inference.
 # CHN_QAR_FUEL_FLOW_UNIT=auto
+
+# Optional: local EUR canonical milestone parquet used by the import smoke test.
+# FUELBURN_EUR_CANONICAL_MILESTONES=/path/to/EUR-canonical-milestones-summer2025.parquet
