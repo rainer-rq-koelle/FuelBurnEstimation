@@ -16,6 +16,7 @@ The immediate goal is a simple Quarto paper that can render to MS Word and PDF, 
 - `notes/canonical-milestone-model.md` captures the enriched milestone convention for along-track distance anchors, pressure-altitude flight-level crossings, level segments, intervals, and lookup-table inputs.
 - `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
 - `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
+- `scripts/03-audit-eur-canonical-milestones.R` audits the local EUR canonical milestone parquet against the enriched milestone convention.
 
 ## Reference Project
 
@@ -32,4 +33,6 @@ For machine-specific settings, copy `.Renviron.example` to `.Renviron` and edit 
 quarto render paper.qmd --to html
 quarto render technical-note-data-preparation.qmd --to html
 Rscript scripts/00-inventory-reference-data.R
+Rscript scripts/test-eur-canonical-import.R
+Rscript scripts/03-audit-eur-canonical-milestones.R
 ```
