@@ -1,0 +1,34 @@
+# FuelBurnEstimation - Cross-Platform Git Attributes
+#
+# Ensures consistent behavior across Windows/macOS/Linux contributors
+
+# Auto-detect text files
+* text=auto
+
+# Force text mode for source code and documentation
+*.R text
+*.r text
+*.qmd text
+*.Rmd text
+*.md text
+*.txt text
+*.csv text
+*.json text
+*.yaml text
+*.yml text
+
+# Force LF line endings for scripts (cross-platform compatibility)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Binary files (no text conversion)
+*.parquet binary
+*.rds binary
+*.RData binary
+*.rda binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.zip binary
+*.gz binary
