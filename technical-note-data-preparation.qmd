@@ -64,6 +64,20 @@ The pipeline is organised as small, inspectable steps.
 
 The current canonical helper is implemented in `R/canonical-fuel-milestones.R`. It was imported from the earlier CHN-EUR workflow that supported local QAR processing by Lingling and colleagues. The original handover notes are preserved in `notes/`.
 
+## Local Environment Separation
+
+The tracked project should not depend on one person's operating system, home directory, or local copy of restricted data. Raw and derived data folders are ignored by Git except for placeholders, and local data locations should be provided through environment variables rather than hard-coded paths.
+
+The main environment variable is:
+
+```text
+FUELBURN_2025_PROJECT
+```
+
+If it is unset, the scripts assume the 2025 reference project sits next to this repository as `../paper-2025-ICNS-CHN-EUR-fuelburn`. On machines where the reference data are elsewhere, copy `.Renviron.example` to `.Renviron` and set the local path there. The `.Renviron` file is ignored by Git, so macOS and Windows users can keep different local paths without changing tracked scripts.
+
+Generated inventory notes may contain absolute local paths. They should be treated as provenance for the machine that generated them, not as portable source-data locations.
+
 # CHN Data Preparation
 
 The 2025 workflow condensed high-frequency CHN files to a trajectory-level table with:
@@ -104,7 +118,7 @@ Open technical questions to carry forward:
 
 # Milestone and Phase Summary
 
-The initial comparable phase set is:
+The initial comparable phase set from the 2025 workflow is:
 
 - `FLT`: first to last record;
 - `TXO`: AOBT to ATOT;
@@ -114,6 +128,54 @@ The initial comparable phase set is:
 - `TXI`: ALDT to AIBT.
 
 This mirrors the 2025 exploratory workflow and gives us a stable first target for reproducible tables.
+
+The 2026 work will extend this into a richer canonical data model. The milestone table remains the backbone, but it should distinguish operational events, analytical threshold crossings, and derived level-segment boundaries.
+
+## Canonical Milestone Families
+
+The current target milestone families are:
+
+- operational or source-derived events, for example `AOBT`, `ERWY`, `ATOT`, `TOC`, `TOD`, `ALDT`, `XRWY`, and `AIBT`;
+- departure-side along-track distance milestones, for example `D040`, `D100`, and `D200`;
+- arrival-side along-track distance milestones, for example `A200`, `A100`, and `A040`;
+- departure-side flight-level crossings, for example `D_FL075`, `D_FL100`, and `D_FL180`;
+- arrival-side flight-level crossings, for example `A_FL180`, `A_FL100`, and `A_FL075`;
+- derived level-segment boundaries, `LVL_START` and `LVL_END`.
+
+The `D` and `A` distance milestones are analytical along-track anchors. They should be derived from cumulative flown distance where available:
+
+- departure side: `DIST_FLOWN_NM`;
+- arrival side: `TOTAL_FLOWN_NM - DIST_FLOWN_NM`.
+
+They should therefore not be described as ASMA or TMA rings unless a separate geometric distance to the aerodrome has been computed. The along-track interpretation is better aligned with fuel burn because it follows the route actually flown.
+
+The flight-level milestones are analytical pressure-altitude crossings. For the PRU surveillance-derived data and the CHN QAR-derived data, the vertical reference is treated as standard-pressure altitude, i.e. effectively referenced to 1013.25 hPa. The thresholds are therefore labelled as flight-level-style analytical crossings. Local QNH and field-elevation effects are not corrected at this stage, as they are expected to be negligible for this comparative fuel-burn analysis.
+
+The deterministic crossing rules should be:
+
+- `D_FLxxx`: first upward crossing of the threshold after take-off;
+- `A_FLxxx`: last downward crossing of the threshold before landing;
+- `Dnnn`: first point where cumulative flown distance reaches the threshold after departure;
+- `Annn`: first point where remaining flown distance falls below the threshold before arrival.
+
+Short flights may have overlapping departure- and arrival-side distance windows, for example `D200` and `A200`. This is acceptable, but downstream phase and lookup logic must not assume those windows are disjoint.
+
+## Canonical Analytical Tables
+
+The harmonised outputs should be organised as four related tables:
+
+1. `flights`: one row per flight, with aircraft, route, source, total duration, total flown distance, and quality flags.
+2. `milestones`: one row per operational or analytical event, including source/method fields and canonical fields such as time, altitude, cumulative fuel, and cumulative flown distance.
+3. `phase_intervals`: one row per interval between selected milestones, with duration, distance, fuel, altitude change, and macro phase.
+4. `level_segments`: one row per reconstructed level segment, linked back to paired `LVL_START` / `LVL_END` milestones.
+
+The paper lookup table should be built from the interval and profile-characterisation tables, not directly from individual point milestones. A compact first lookup design is:
+
+```text
+aircraft_group x distance_band x macro_phase x profile_class
+```
+
+with summary metrics such as total fuel, duration, distance, `kg/min`, `kg/NM`, level time, number of level segments, and percentile summaries. Rich milestones can then act as diagnostics and subphase anchors without forcing the final lookup table to become too sparse.
 
 # Level-Off Extension
 
@@ -132,4 +194,13 @@ The most relevant recent implementation is in `../paper-2026-OSN-PBWG`. It alrea
 
 # Next Steps
 
-The next iteration should decide which 2025 artefacts remain reference-only and which raw/shared inputs should be copied or linked into this repo. Once that is agreed, we can turn the placeholder CHN script into an executable build step and render this note to Word/PDF for review.
+The next iteration should check how far the already processed PRU data conforms to the enriched milestone convention before any large reprocessing is launched. In particular:
+
+1. Audit the existing PRU milestone labels and fields, including `D40`/`A40`, `D100`/`A100`, generic `FL100`, and `LVL` labels.
+2. Define canonical renaming and derivation rules, for example `D40` to `D040`, `A40` to `A040`, and generic `FL100` to direction-aware `D_FL100` or `A_FL100` where the phase context supports it.
+3. Confirm that `DIST_FLOWN_NM` is monotonic and can support `D040`, `D100`, `D200`, `A200`, `A100`, and `A040`.
+4. Confirm whether pressure-altitude fields can support `D_FL075`, `D_FL100`, `D_FL180`, `A_FL180`, `A_FL100`, and `A_FL075`.
+5. Reconstruct `LVL_START` / `LVL_END` pairs from existing `LVL` rows and raw phase labels, then inspect segment-duration distributions before choosing reporting thresholds.
+6. Only after this audit, decide which PRU processing needs to be rerun on another machine and which transformations can be applied to the already processed files.
+
+This keeps source-specific preparation reproducible while allowing the paper to use harmonised analytical milestones, intervals, and lookup tables.

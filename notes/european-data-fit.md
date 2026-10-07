@@ -26,6 +26,15 @@ Important observed milestone labels:
 - Backbone: `AOBT`, `ERWY`, `ATOT`, `DLTO`, `D40`, `D100`, `TOC`, `TOD`, `A100`, `A40`, `ALTO`, `ALDT`, `XRWY`, `AIBT`
 - Existing extra event labels: `LVL`, `FL100`, `FIR`, `AUA`
 
+These labels pre-date the enriched canonical convention. The immediate mapping candidates are:
+
+- `D40` -> `D040`;
+- `A40` -> `A040`;
+- `D100` and `A100` remain valid;
+- generic `FL100` should be inspected before mapping to direction-aware `D_FL100` or `A_FL100`.
+
+The European data should also be checked for whether `D200`, `A200`, `D_FL075`, `D_FL180`, `A_FL180`, and `A_FL075` can be derived from the existing processed profile fields, or whether they require a rerun of upstream PRU processing.
+
 `MST == "LVL"` appears 84,939 times. These are not yet paired as `LVL_START` and `LVL_END`, but the row ordering and `FLIGHT_PHASE_RAW` field should allow grouping consecutive level rows into level intervals.
 
 Relevant raw flight-phase labels:
