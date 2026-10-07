@@ -49,4 +49,5 @@ Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
 Rscript scripts/04-harmonize-eur-milestones.R
+Rscript scripts/90-check-data-store.R
 ```
