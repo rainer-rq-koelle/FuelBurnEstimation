@@ -17,6 +17,31 @@ The immediate goal is a simple Quarto paper that can render to MS Word and PDF, 
 - `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
 - `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
 
+## OneDrive Data Store
+
+Large data artifacts are stored in OneDrive for automatic cross-machine sync:
+
+```
+FUELBURN_DATA_STORE/
+├── raw/eur/         EUR canonical milestones (source data)
+├── raw/chn/         CHN canonical milestones (source data)
+├── derived/eur/     EUR harmonized milestones (2026 convention)
+├── derived/chn/     CHN harmonized milestones (2026 convention)
+├── manifest/        Data inventory and validation reports
+└── handover/        Cross-machine sync status summaries
+```
+
+**Setup:**
+1. Copy `.Renviron.example` to `.Renviron`
+2. Set `FUELBURN_DATA_STORE` to your local OneDrive path
+3. Run `Rscript scripts/00-check-data-store.R` to validate setup
+
+**Checker script** (`scripts/00-check-data-store.R`):
+- Validates folder structure and file presence
+- Checks parquet file integrity (row/column counts)
+- Creates manifest CSV with file metadata
+- Generates handover summary for collaboration
+
 ## EUR Milestone Harmonization
 
 EUR PRU data uses legacy milestone labels that need harmonization to the 2026 enriched convention:
@@ -29,7 +54,7 @@ EUR PRU data uses legacy milestone labels that need harmonization to the 2026 en
   3. Derives new FL crossing milestones: `D_FL075`, `D_FL180`, `A_FL075`, `A_FL180`
   4. Reconstructs `LVL` events into paired `LVL_START`/`LVL_END` milestones
 
-Output: `data-derived/canonical-milestones-eur-2026-harmonized.parquet`
+Output: `data-derived/canonical-milestones-eur-2026-harmonized.parquet` or OneDrive `derived/eur/`
 
 ## Reference Project
 
@@ -43,8 +68,14 @@ For machine-specific settings, copy `.Renviron.example` to `.Renviron` and edit 
 ## First Commands
 
 ```sh
+# Validate OneDrive data store
+Rscript scripts/00-check-data-store.R
+
+# Render documentation
 quarto render paper.qmd --to html
 quarto render technical-note-data-preparation.qmd --to html
+
+# Data validation and processing
 Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
