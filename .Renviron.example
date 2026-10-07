@@ -12,9 +12,16 @@
 # Leave unset for automatic kg/h vs lb/h inference.
 # CHN_QAR_FUEL_FLOW_UNIT=auto
 
-# Optional: local EUR canonical milestone parquet used by the import smoke test.
-# The same setting is also used by scripts/03-audit-eur-canonical-milestones.R.
-# FUELBURN_EUR_CANONICAL_MILESTONES=/path/to/EUR-canonical-milestones-summer2025.parquet
+# Shared data store (OneDrive recommended for cross-machine sync)
+# FUELBURN_DATA_STORE=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data
+
+# EUR canonical milestone parquet (raw data)
+# Used by scripts/03-audit-eur-canonical-milestones.R and test-eur-canonical-import.R
+# FUELBURN_EUR_CANONICAL_MILESTONES=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data/raw/eur/EUR-canonical-milestones-summer2025.parquet
+
+# EUR harmonized milestone parquet (derived data)
+# Used by scripts/04-harmonize-eur-milestones.R
+# FUELBURN_EUR_HARMONIZED_MILESTONES=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data/derived/eur/canonical-milestones-eur-2026-harmonized.parquet
 
 # Optional: output folder for the EUR milestone audit CSV files.
 # Defaults to data-derived/eur-canonical-milestone-audit.
