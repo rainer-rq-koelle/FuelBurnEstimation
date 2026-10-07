@@ -1,7 +1,11 @@
 .Rproj.user/
 .Rhistory
 .RData
+.Renviron
+.env
 .DS_Store
+Thumbs.db
+desktop.ini
 
 # Quarto/R render artefacts
 *_cache/

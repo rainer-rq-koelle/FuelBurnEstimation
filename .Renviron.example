@@ -1,0 +1,13 @@
+# Copy to .Renviron for local machine-specific settings.
+# Do not commit .Renviron itself.
+
+# Location of the 2025 reference project on this machine.
+# macOS example:
+# FUELBURN_2025_PROJECT=/Users/<user>/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
+#
+# Windows example:
+# FUELBURN_2025_PROJECT=C:/Users/<user>/Documents/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
+
+# Optional: force CHN QAR fuel-flow units when known.
+# Leave unset for automatic kg/h vs lb/h inference.
+# CHN_QAR_FUEL_FLOW_UNIT=auto
