@@ -28,7 +28,9 @@ WHAT TO DO:
   4. Wait for processing to complete (shows progress)
 
   5. Check the output folder - it will contain:
+     • CHN-canonical-milestones.csv/parquet (enriched milestone table)
      • CHN-phase-summaries.csv (main results)
+     • CHN-level-segments.csv (level-off start/end intervals)
      • CHN-fuel-flow-unit-qc.csv (kg/h vs lb/h check)
      • CHN-qar-fuel-flow-qc.csv (quality check)
      • profile-plots/*.png (altitude profiles)
@@ -40,6 +42,14 @@ IMPORTANT:
   Please check CHN-fuel-flow-unit-qc.csv before sending the output.
   Any row marked review_required = TRUE should be mentioned, because it means
   the script could not confidently decide whether FF*C is kg/h or lb/h.
+
+MILESTONE CONVENTION:
+  The current helper writes the 2026 enriched milestone convention:
+    • along-track distance anchors: D040, D100, D200, A200, A100, A040
+    • pressure-altitude anchors: D_FL075, D_FL100, D_FL180,
+      A_FL180, A_FL100, A_FL075
+    • paired level-off markers: LVL_START and LVL_END
+  The level-off intervals are also written separately to CHN-level-segments.csv.
 
 ROUTES NEEDED:
   Priority 1: ZBAA-ZSSS / ZSSS-ZBAA  (Beijing - Shanghai)

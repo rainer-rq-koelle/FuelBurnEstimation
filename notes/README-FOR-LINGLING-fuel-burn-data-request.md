@@ -146,36 +146,41 @@ After processing, the output folder will contain:
 ### Main Outputs (for report integration)
 
 1. **`CHN-canonical-milestones.parquet`** / **`.csv`**
-   - Flight milestone snapshots (takeoff, top of climb, top of descent, etc.)
+   - Flight milestone snapshots (takeoff, top of climb, top of descent, analytical distance and flight-level crossings, level-off start/end markers)
    - Used for detailed phase analysis
 
 2. **`CHN-phase-summaries.csv`**
    - Fuel burn per flight phase
    - Columns: `SOURCE_UID`, `FLTID`, `ADEP`, `ADES`, `TYPE`, `PHASE`, `DURATION_MIN`, `FUEL_KG`, `DISTANCE_NM`
 
-3. **`CHN-phase-level-descriptors.csv`**
+3. **`CHN-level-segments.parquet`** / **`.csv`**
+   - One row per derived level-off interval
+   - Linked to paired `LVL_START` / `LVL_END` milestones via `LEVEL_SEGMENT_ID`
+   - Includes duration, distance, fuel burn, altitude band, and climb/enroute/descent context
+
+4. **`CHN-phase-level-descriptors.csv`**
    - Climb/descent smoothness metrics
    - Level time, level share, vertical rate statistics
 
 ### Quality Control Outputs
 
-4. **`CHN-fuel-flow-unit-qc.csv`**
+5. **`CHN-fuel-flow-unit-qc.csv`**
    - One row per flight comparing the kg/h and lb/h assumptions
    - Includes inferred unit, confidence, candidate fuel totals, and review flag
 
-5. **`CHN-qar-fuel-flow-qc.csv`**
+6. **`CHN-qar-fuel-flow-qc.csv`**
    - Fuel flow spike detection report
    - Shows raw vs. cleaned fuel totals per flight
 
-6. **`CHN-flight-phase-code-diagnostics.csv`**
+7. **`CHN-flight-phase-code-diagnostics.csv`**
    - Maps raw `FLIGHT_PHASE` codes to harmonized phases
    - Helps verify phase detection accuracy
 
-7. **`profile-plots/*.png`**
+8. **`profile-plots/*.png`**
    - Altitude profile visualizations (sample flights)
    - Useful for visual verification of milestone detection
 
-8. **`PROCESSING-SUMMARY.txt`**
+9. **`PROCESSING-SUMMARY.txt`**
    - Processing statistics
    - Route pair coverage summary
    - File inventory
@@ -223,6 +228,8 @@ The processing methodology is documented in the report's technical note (Chapter
 
 - **Phase detection:** Uses ICAO vertical flight efficiency convention (GANP/PEG methodology)
 - **Top of climb/descent:** Detected from altitude profile smoothing + vertical rate analysis
+- **Analytical milestones:** Distance anchors use cumulative flown distance (`D040`, `D100`, `D200`, `A200`, `A100`, `A040`). Flight-level anchors use standard-pressure altitude (`D_FL075`, `D_FL100`, `D_FL180`, `A_FL180`, `A_FL100`, `A_FL075`).
+- **Level-offs:** Candidate level-off intervals are detected with a 300 ft/min vertical-rate rule and written as paired `LVL_START` / `LVL_END` milestones plus a separate `CHN-level-segments.csv` table.
 - **Fuel flow unit QC:** The helper compares kg/h and lb/h assumptions and flags ambiguous flights
 - **Fuel flow spike QC:** Isolated spikes are detected and smoothed (raw values preserved for audit)
 - **Harmonization:** Chinese QAR and European G2G data processed to common "milestone" format

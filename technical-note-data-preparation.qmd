@@ -142,6 +142,8 @@ The current target milestone families are:
 - arrival-side flight-level crossings, for example `A_FL180`, `A_FL100`, and `A_FL075`;
 - derived level-segment boundaries, `LVL_START` and `LVL_END`.
 
+The CHN helper now writes this convention directly when Lingling processes raw one-file-per-flight QAR CSVs. Older processed CHN packages may still contain the previous non-padded labels `D40` and `A40`, and may contain aggregate level descriptors rather than paired `LVL_START` / `LVL_END` milestones.
+
 The `D` and `A` distance milestones are analytical along-track anchors. They should be derived from cumulative flown distance where available:
 
 - departure side: `DIST_FLOWN_NM`;

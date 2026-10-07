@@ -46,6 +46,7 @@
 # The script creates these files in the output folder:
 #   • CHN-canonical-milestones.parquet  (milestone snapshots)
 #   • CHN-phase-summaries.csv           (fuel burn per phase)
+#   • CHN-level-segments.csv            (paired level-off intervals)
 #   • CHN-phase-level-descriptors.csv   (climb/descent smoothness)
 #   • CHN-fuel-flow-unit-qc.csv         (kg/h vs lb/h plausibility check)
 #   • CHN-qar-fuel-flow-qc.csv          (quality control report)
@@ -283,6 +284,10 @@ milestones <- purrr::map(trajectories, fuel_chn_milestones, airport_meta = airpo
 cat("Calculating phase summaries...\n")
 phases <- fuel_phase_summaries(milestones)
 
+# Reconstruct paired level segments from LVL_START/LVL_END milestones
+cat("Reconstructing level-off segments...\n")
+level_segments <- fuel_level_segments_from_milestones(milestones)
+
 # Calculate level descriptors (smoothness)
 cat("Calculating vertical smoothness metrics...\n")
 level_descriptors <- fuel_level_descriptors(dplyr::bind_rows(trajectories), phases)
@@ -330,6 +335,10 @@ arrow::write_parquet(phases, file.path(output_dir, "CHN-phase-summaries.parquet"
 readr::write_csv(phases, file.path(output_dir, "CHN-phase-summaries.csv"))
 cat("Saved: CHN-phase-summaries.csv\n")
 
+arrow::write_parquet(level_segments, file.path(output_dir, "CHN-level-segments.parquet"))
+readr::write_csv(level_segments, file.path(output_dir, "CHN-level-segments.csv"))
+cat("Saved: CHN-level-segments.csv\n")
+
 readr::write_csv(level_descriptors, file.path(output_dir, "CHN-phase-level-descriptors.csv"))
 cat("Saved: CHN-phase-level-descriptors.csv\n")
 
@@ -367,6 +376,7 @@ summary_stats <- list(
   flights_processed = dplyr::n_distinct(milestones$SOURCE_UID),
   milestone_records = nrow(milestones),
   phase_records = nrow(phases),
+  level_segments = nrow(level_segments),
   airports = unique(c(phases$ADEP, phases$ADES)),
   aircraft_types = unique(phases$TYPE)
 )
@@ -374,6 +384,7 @@ summary_stats <- list(
 cat("Flights processed:     ", summary_stats$flights_processed, "\n")
 cat("Milestone records:     ", summary_stats$milestone_records, "\n")
 cat("Phase records:         ", summary_stats$phase_records, "\n")
+cat("Level segments:        ", summary_stats$level_segments, "\n")
 cat("Airports covered:      ", paste(summary_stats$airports, collapse = ", "), "\n")
 cat("Aircraft types:        ", paste(summary_stats$aircraft_types, collapse = ", "), "\n")
 cat("Fuel unit review rows: ", sum(unit_qc$review_required, na.rm = TRUE), "\n")
@@ -404,6 +415,7 @@ summary_report <- c(
   paste("  Flights processed:", summary_stats$flights_processed),
   paste("  Milestone records:", summary_stats$milestone_records),
   paste("  Phase records:", summary_stats$phase_records),
+  paste("  Level segments:", summary_stats$level_segments),
   "",
   "FUEL-FLOW UNIT CHECK:",
   paste("  Unit mode:", fuel_flow_unit),
@@ -416,6 +428,7 @@ summary_report <- c(
   "OUTPUT FILES:",
   "  • CHN-canonical-milestones.parquet/.csv",
   "  • CHN-phase-summaries.parquet/.csv",
+  "  • CHN-level-segments.parquet/.csv",
   "  • CHN-phase-level-descriptors.csv",
   "  • CHN-flight-phase-code-diagnostics.csv",
   "  • CHN-fuel-flow-unit-qc.csv",
@@ -426,7 +439,8 @@ summary_report <- c(
   "  1. Review the profile-plots/*.png files to verify milestone detection",
   "  2. Check CHN-fuel-flow-unit-qc.csv for kg/h vs lb/h unit inference",
   "  3. Check CHN-qar-fuel-flow-qc.csv for fuel flow spike corrections",
-  "  4. Send the entire output folder to the report team for integration",
+  "  4. Check CHN-level-segments.csv for derived level-off intervals",
+  "  5. Send the entire output folder to the report team for integration",
   "",
   "For questions, contact the China-Europe report coordination team."
 )

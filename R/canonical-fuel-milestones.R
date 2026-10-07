@@ -67,6 +67,42 @@ fuel_last_index <- function(x) {
   if (length(idx) == 0) NA_integer_ else idx[length(idx)]
 }
 
+fuel_first_up_crossing_index <- function(value, threshold, row_min = 1L, row_max = length(value)) {
+  row_id <- seq_along(value)
+  previous <- dplyr::lag(value)
+  in_window <- row_id >= row_min & row_id <= row_max
+  idx <- which(in_window & !is.na(previous) & !is.na(value) & previous < threshold & value >= threshold)
+
+  if (length(idx) > 0) {
+    idx[1]
+  } else {
+    fuel_first_index(in_window & !is.na(value) & value >= threshold)
+  }
+}
+
+fuel_last_down_crossing_index <- function(value, threshold, row_min = 1L, row_max = length(value)) {
+  row_id <- seq_along(value)
+  previous <- dplyr::lag(value)
+  in_window <- row_id >= row_min & row_id <= row_max
+  idx <- which(in_window & !is.na(previous) & !is.na(value) & previous > threshold & value <= threshold)
+
+  if (length(idx) > 0) {
+    idx[length(idx)]
+  } else {
+    fuel_last_index(in_window & !is.na(value) & value <= threshold)
+  }
+}
+
+fuel_milestone_group <- function(mst) {
+  dplyr::case_when(
+    mst %in% c("AOBT", "ERWY", "ATOT", "DLTO", "TOC", "TOD", "ALTO", "ALDT", "XRWY", "AIBT") ~ "operational_profile",
+    grepl("^[DA][0-9]{3}$", mst) | mst %in% c("D100", "D200", "A100", "A200") ~ "distance_anchor",
+    grepl("^[DA]_FL[0-9]{3}$", mst) ~ "flight_level_anchor",
+    mst %in% c("LVL_START", "LVL_END") ~ "level_segment",
+    TRUE ~ "source_event"
+  )
+}
+
 fuel_roll_median <- function(x, k = 11) {
   if (!requireNamespace("zoo", quietly = TRUE) || length(x) < 3) {
     return(x)
@@ -520,8 +556,37 @@ fuel_vfe_toc_tod <- function(trj, dlto, alto) {
 }
 
 fuel_snapshot_rows <- function(trj, milestone_index) {
-  milestone_index |>
+  if (!"DIST_FROM_DEP_NM" %in% names(trj)) trj$DIST_FROM_DEP_NM <- NA_real_
+  if (!"DIST_TO_ARR_NM" %in% names(trj)) trj$DIST_TO_ARR_NM <- NA_real_
+
+  total_flown_nm <- suppressWarnings(max(trj$DIST_FLOWN_NM, na.rm = TRUE))
+  if (!is.finite(total_flown_nm)) total_flown_nm <- NA_real_
+
+  trj <- trj |>
+    dplyr::mutate(
+      TOTAL_FLOWN_NM = total_flown_nm,
+      DIST_REMAINING_NM = dplyr::if_else(
+        is.na(.data$TOTAL_FLOWN_NM),
+        NA_real_,
+        pmax(.data$TOTAL_FLOWN_NM - .data$DIST_FLOWN_NM, 0)
+      )
+    )
+
+  idx <- milestone_index |>
     dplyr::filter(!is.na(.data$ROW_ID)) |>
+    dplyr::mutate(
+      MST_GROUP = if ("MST_GROUP" %in% names(milestone_index)) .data$MST_GROUP else NA_character_,
+      MST_METHOD = if ("MST_METHOD" %in% names(milestone_index)) .data$MST_METHOD else NA_character_,
+      LEVEL_SEGMENT_ID = if ("LEVEL_SEGMENT_ID" %in% names(milestone_index)) .data$LEVEL_SEGMENT_ID else NA_character_,
+      LEVEL_DURATION_SEC = if ("LEVEL_DURATION_SEC" %in% names(milestone_index)) .data$LEVEL_DURATION_SEC else NA_real_,
+      LEVEL_DISTANCE_NM = if ("LEVEL_DISTANCE_NM" %in% names(milestone_index)) .data$LEVEL_DISTANCE_NM else NA_real_,
+      LEVEL_FUEL_KG = if ("LEVEL_FUEL_KG" %in% names(milestone_index)) .data$LEVEL_FUEL_KG else NA_real_,
+      LEVEL_CONTEXT_PHASE = if ("LEVEL_CONTEXT_PHASE" %in% names(milestone_index)) .data$LEVEL_CONTEXT_PHASE else NA_character_,
+      MST_GROUP = dplyr::coalesce(.data$MST_GROUP, fuel_milestone_group(.data$MST)),
+      MST_METHOD = dplyr::coalesce(.data$MST_METHOD, "derived_chn_qar_profile")
+    )
+
+  idx |>
     dplyr::inner_join(
       trj |>
         dplyr::mutate(ROW_ID = dplyr::row_number()),
@@ -531,13 +596,126 @@ fuel_snapshot_rows <- function(trj, milestone_index) {
       SOURCE_UID, FLTID, ADEP, ADES, TYPE,
       TIME, LAT, LON, ALT_FT,
       MST,
+      MST_GROUP, MST_METHOD,
       TOT_FUEL_KG, TOT_FUEL_KG_ORIGINAL, DIST_FLOWN_NM,
-      DIST_FROM_DEP_NM = dplyr::coalesce(.data$DIST_FROM_DEP_NM, NA_real_),
-      DIST_TO_ARR_NM = dplyr::coalesce(.data$DIST_TO_ARR_NM, NA_real_),
+      TOTAL_FLOWN_NM, DIST_REMAINING_NM,
+      DIST_FROM_DEP_NM, DIST_TO_ARR_NM,
       FLIGHT_PHASE_RAW = dplyr::coalesce(.data$FLIGHT_PHASE_RAW, NA_character_),
+      LEVEL_SEGMENT_ID, LEVEL_DURATION_SEC, LEVEL_DISTANCE_NM,
+      LEVEL_FUEL_KG, LEVEL_CONTEXT_PHASE,
       ROW_ID
     ) |>
     dplyr::arrange(.data$TIME, .data$ROW_ID, .data$MST)
+}
+
+fuel_level_segment_candidates <- function(trj, start_row = 1L, end_row = nrow(trj), min_duration_sec = 10) {
+  if (is.na(start_row)) start_row <- 1L
+  if (is.na(end_row)) end_row <- nrow(trj)
+
+  profile <- fuel_vertical_profile(trj) |>
+    dplyr::mutate(
+      ROW_ID = dplyr::row_number(),
+      IS_LEVEL_CANDIDATE = .data$IS_LEVEL &
+        .data$ROW_ID >= start_row &
+        .data$ROW_ID <= end_row &
+        .data$ALT_FT >= 3000
+    )
+
+  if (!any(profile$IS_LEVEL_CANDIDATE, na.rm = TRUE)) {
+    return(tibble::tibble())
+  }
+
+  profile |>
+    dplyr::mutate(
+      LEVEL_RUN_ID = cumsum(.data$IS_LEVEL_CANDIDATE != dplyr::lag(.data$IS_LEVEL_CANDIDATE, default = FALSE))
+    ) |>
+    dplyr::filter(.data$IS_LEVEL_CANDIDATE) |>
+    dplyr::summarise(
+      START_ROW_ID = max(1L, min(.data$ROW_ID, na.rm = TRUE) - 1L),
+      END_ROW_ID = max(.data$ROW_ID, na.rm = TRUE),
+      LEVEL_DURATION_SEC = sum(.data$DT_SEC_PREV, na.rm = TRUE),
+      .by = LEVEL_RUN_ID
+    ) |>
+    dplyr::filter(.data$LEVEL_DURATION_SEC >= min_duration_sec) |>
+    dplyr::mutate(
+      LEVEL_SEGMENT_ORDER = dplyr::row_number(),
+      LEVEL_SEGMENT_ID = sprintf("%s-LVL%03d", trj$SOURCE_UID[[1]], .data$LEVEL_SEGMENT_ORDER)
+    ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      START_DIST_FLOWN_NM = trj$DIST_FLOWN_NM[.data$START_ROW_ID],
+      END_DIST_FLOWN_NM = trj$DIST_FLOWN_NM[.data$END_ROW_ID],
+      START_FUEL_KG = trj$TOT_FUEL_KG[.data$START_ROW_ID],
+      END_FUEL_KG = trj$TOT_FUEL_KG[.data$END_ROW_ID],
+      START_ALT_FT = trj$ALT_FT[.data$START_ROW_ID],
+      END_ALT_FT = trj$ALT_FT[.data$END_ROW_ID],
+      LEVEL_DISTANCE_NM = .data$END_DIST_FLOWN_NM - .data$START_DIST_FLOWN_NM,
+      LEVEL_FUEL_KG = .data$END_FUEL_KG - .data$START_FUEL_KG,
+      LEVEL_ALTITUDE_FT = stats::median(trj$ALT_FT[.data$START_ROW_ID:.data$END_ROW_ID], na.rm = TRUE)
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::select(
+      LEVEL_SEGMENT_ID, LEVEL_SEGMENT_ORDER,
+      START_ROW_ID, END_ROW_ID,
+      LEVEL_DURATION_SEC, LEVEL_DISTANCE_NM, LEVEL_FUEL_KG,
+      LEVEL_ALTITUDE_FT, START_ALT_FT, END_ALT_FT,
+      START_DIST_FLOWN_NM, END_DIST_FLOWN_NM
+    )
+}
+
+fuel_level_context_phase <- function(level_start, level_end, toc, tod) {
+  dplyr::case_when(
+    !is.na(toc) & level_end <= toc ~ "CLIMB",
+    !is.na(tod) & level_start >= tod ~ "DESCENT",
+    TRUE ~ "ENROUTE"
+  )
+}
+
+fuel_level_segments_from_milestones <- function(milestones) {
+  required_cols <- c("SOURCE_UID", "MST", "LEVEL_SEGMENT_ID", "TIME", "ROW_ID")
+  if (!all(required_cols %in% names(milestones))) {
+    return(tibble::tibble())
+  }
+
+  starts <- milestones |>
+    dplyr::filter(.data$MST == "LVL_START", !is.na(.data$LEVEL_SEGMENT_ID)) |>
+    dplyr::select(
+      SOURCE_UID, FLTID, ADEP, ADES, TYPE, LEVEL_SEGMENT_ID,
+      LEVEL_CONTEXT_PHASE,
+      START_TIME = TIME, START_ROW_ID = ROW_ID,
+      START_ALT_FT = ALT_FT, START_DIST_FLOWN_NM = DIST_FLOWN_NM,
+      START_FUEL_KG = TOT_FUEL_KG
+    )
+
+  ends <- milestones |>
+    dplyr::filter(.data$MST == "LVL_END", !is.na(.data$LEVEL_SEGMENT_ID)) |>
+    dplyr::select(
+      SOURCE_UID, LEVEL_SEGMENT_ID,
+      END_TIME = TIME, END_ROW_ID = ROW_ID,
+      END_ALT_FT = ALT_FT, END_DIST_FLOWN_NM = DIST_FLOWN_NM,
+      END_FUEL_KG = TOT_FUEL_KG,
+      LEVEL_DURATION_SEC, LEVEL_DISTANCE_NM, LEVEL_FUEL_KG
+    )
+
+  starts |>
+    dplyr::inner_join(ends, by = c("SOURCE_UID", "LEVEL_SEGMENT_ID")) |>
+    dplyr::mutate(
+      DURATION_SEC = dplyr::coalesce(
+        .data$LEVEL_DURATION_SEC,
+        as.numeric(difftime(.data$END_TIME, .data$START_TIME, units = "secs"))
+      ),
+      DISTANCE_NM = dplyr::coalesce(.data$LEVEL_DISTANCE_NM, .data$END_DIST_FLOWN_NM - .data$START_DIST_FLOWN_NM),
+      FUEL_KG = dplyr::coalesce(.data$LEVEL_FUEL_KG, .data$END_FUEL_KG - .data$START_FUEL_KG),
+      ALTITUDE_BAND_FT = round(((.data$START_ALT_FT + .data$END_ALT_FT) / 2) / 1000) * 1000
+    ) |>
+    dplyr::select(
+      SOURCE_UID, FLTID, ADEP, ADES, TYPE, LEVEL_SEGMENT_ID, LEVEL_CONTEXT_PHASE,
+      START_TIME, END_TIME, START_ROW_ID, END_ROW_ID,
+      START_ALT_FT, END_ALT_FT, ALTITUDE_BAND_FT,
+      START_DIST_FLOWN_NM, END_DIST_FLOWN_NM, DISTANCE_NM,
+      START_FUEL_KG, END_FUEL_KG, FUEL_KG, DURATION_SEC
+    ) |>
+    dplyr::arrange(.data$SOURCE_UID, .data$START_TIME, .data$LEVEL_SEGMENT_ID)
 }
 
 fuel_chn_milestones <- function(trj, airport_meta = NULL) {
@@ -547,7 +725,16 @@ fuel_chn_milestones <- function(trj, airport_meta = NULL) {
 
 	  trj <- trj |>
 	    dplyr::arrange(.data$TIME) |>
-	    dplyr::mutate(ROW_ID = dplyr::row_number())
+	    dplyr::mutate(
+	      ROW_ID = dplyr::row_number(),
+	      TOTAL_FLOWN_NM = max(.data$DIST_FLOWN_NM, na.rm = TRUE),
+	      TOTAL_FLOWN_NM = dplyr::if_else(is.finite(.data$TOTAL_FLOWN_NM), .data$TOTAL_FLOWN_NM, NA_real_),
+	      DIST_REMAINING_NM = dplyr::if_else(
+	        is.na(.data$TOTAL_FLOWN_NM),
+	        NA_real_,
+	        pmax(.data$TOTAL_FLOWN_NM - .data$DIST_FLOWN_NM, 0)
+	      )
+	    )
 
 	  phase_num <- suppressWarnings(as.numeric(trj$FLIGHT_PHASE_RAW))
 	  dep_ground_alt <- stats::median(utils::head(trj$ALT_FT, min(300, nrow(trj))), na.rm = TRUE)
@@ -575,6 +762,17 @@ fuel_chn_milestones <- function(trj, airport_meta = NULL) {
 	  aldt <- fuel_first_index(seq_len(nrow(trj)) >= alto & (landing | trj$ALT_FT <= 100))
 	  dlto <- fuel_first_index(seq_len(nrow(trj)) >= atot & trj$ALT_FT >= 3000)
 	  vfe <- fuel_vfe_toc_tod(trj, dlto = dlto, alto = alto)
+	  aldt_for_window <- if (!is.na(aldt)) aldt else nrow(trj)
+
+	  level_segments <- fuel_level_segment_candidates(
+	    trj,
+	    start_row = dplyr::coalesce(atot, 1L),
+	    end_row = aldt_for_window,
+	    min_duration_sec = 10
+	  ) |>
+	    dplyr::mutate(
+	      LEVEL_CONTEXT_PHASE = fuel_level_context_phase(.data$START_ROW_ID, .data$END_ROW_ID, vfe$TOC, vfe$TOD)
+	    )
 
 	  idx <- tibble::tribble(
 	    ~MST, ~ROW_ID,
@@ -582,22 +780,65 @@ fuel_chn_milestones <- function(trj, airport_meta = NULL) {
 	    "ERWY", erwy,
 	    "ATOT", atot,
 	    "DLTO", dlto,
-	    "D40", if ("DIST_FROM_DEP_NM" %in% names(trj)) fuel_first_index(trj$DIST_FROM_DEP_NM >= 40) else NA_integer_,
-	    "D100", if ("DIST_FROM_DEP_NM" %in% names(trj)) fuel_first_index(trj$DIST_FROM_DEP_NM >= 100) else NA_integer_,
-	    "D200", if ("DIST_FROM_DEP_NM" %in% names(trj)) fuel_first_index(trj$DIST_FROM_DEP_NM >= 200) else NA_integer_,
+	    "D040", fuel_first_index(trj$DIST_FLOWN_NM >= 40),
+	    "D100", fuel_first_index(trj$DIST_FLOWN_NM >= 100),
+	    "D200", fuel_first_index(trj$DIST_FLOWN_NM >= 200),
+	    "D_FL075", fuel_first_up_crossing_index(trj$ALT_FT, 7500, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
+	    "D_FL100", fuel_first_up_crossing_index(trj$ALT_FT, 10000, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
+	    "D_FL180", fuel_first_up_crossing_index(trj$ALT_FT, 18000, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
 	    "TOC", vfe$TOC,
 	    "TOD", vfe$TOD,
-	    "A200", if ("DIST_TO_ARR_NM" %in% names(trj)) fuel_first_index(seq_len(nrow(trj)) > atot & trj$DIST_TO_ARR_NM <= 200) else NA_integer_,
-	    "A100", if ("DIST_TO_ARR_NM" %in% names(trj)) fuel_first_index(seq_len(nrow(trj)) > atot & trj$DIST_TO_ARR_NM <= 100) else NA_integer_,
-	    "A40", if ("DIST_TO_ARR_NM" %in% names(trj)) fuel_first_index(seq_len(nrow(trj)) > atot & trj$DIST_TO_ARR_NM <= 40) else NA_integer_,
+	    "A_FL180", fuel_last_down_crossing_index(trj$ALT_FT, 18000, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
+	    "A_FL100", fuel_last_down_crossing_index(trj$ALT_FT, 10000, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
+	    "A_FL075", fuel_last_down_crossing_index(trj$ALT_FT, 7500, row_min = dplyr::coalesce(atot, 1L), row_max = aldt_for_window),
+	    "A200", fuel_first_index(seq_len(nrow(trj)) > dplyr::coalesce(atot, 1L) & trj$DIST_REMAINING_NM <= 200),
+	    "A100", fuel_first_index(seq_len(nrow(trj)) > dplyr::coalesce(atot, 1L) & trj$DIST_REMAINING_NM <= 100),
+	    "A040", fuel_first_index(seq_len(nrow(trj)) > dplyr::coalesce(atot, 1L) & trj$DIST_REMAINING_NM <= 40),
     "ALTO", alto,
     "ALDT", aldt,
     "XRWY", if (any(taxi_in, na.rm = TRUE)) fuel_first_index(taxi_in) else fuel_last_index(landing),
     "AIBT", nrow(trj)
-  )
+  ) |>
+	    dplyr::mutate(
+	      MST_GROUP = fuel_milestone_group(.data$MST),
+	      MST_METHOD = dplyr::case_when(
+	        .data$MST %in% c("D040", "D100", "D200", "A200", "A100", "A040") ~ "derived_along_track_distance",
+	        grepl("^[DA]_FL", .data$MST) ~ "derived_pressure_altitude_crossing",
+	        TRUE ~ "derived_chn_qar_profile"
+	      )
+	    )
 
-	  fuel_snapshot_rows(trj, idx) |>
-	    dplyr::distinct(.data$SOURCE_UID, .data$MST, .keep_all = TRUE)
+	  level_idx <- if (nrow(level_segments) > 0) {
+	    dplyr::bind_rows(
+	      level_segments |>
+	        dplyr::transmute(
+	          MST = "LVL_START",
+	          ROW_ID = .data$START_ROW_ID,
+	          MST_GROUP = "level_segment",
+	          MST_METHOD = "derived_vrate_300fpm_min10s",
+	          LEVEL_SEGMENT_ID, LEVEL_DURATION_SEC, LEVEL_DISTANCE_NM,
+	          LEVEL_FUEL_KG, LEVEL_CONTEXT_PHASE
+	        ),
+	      level_segments |>
+	        dplyr::transmute(
+	          MST = "LVL_END",
+	          ROW_ID = .data$END_ROW_ID,
+	          MST_GROUP = "level_segment",
+	          MST_METHOD = "derived_vrate_300fpm_min10s",
+	          LEVEL_SEGMENT_ID, LEVEL_DURATION_SEC, LEVEL_DISTANCE_NM,
+	          LEVEL_FUEL_KG, LEVEL_CONTEXT_PHASE
+	        )
+	    )
+	  } else {
+	    tibble::tibble(
+	      MST = character(), ROW_ID = integer(), MST_GROUP = character(), MST_METHOD = character(),
+	      LEVEL_SEGMENT_ID = character(), LEVEL_DURATION_SEC = numeric(),
+	      LEVEL_DISTANCE_NM = numeric(), LEVEL_FUEL_KG = numeric(), LEVEL_CONTEXT_PHASE = character()
+	    )
+	  }
+
+	  fuel_snapshot_rows(trj, dplyr::bind_rows(idx, level_idx)) |>
+	    dplyr::distinct(.data$SOURCE_UID, .data$MST, .data$ROW_ID, .data$LEVEL_SEGMENT_ID, .keep_all = TRUE)
 }
 
 fuel_eur_milestones <- function(segments, flight_metadata) {
@@ -626,10 +867,10 @@ fuel_eur_milestones <- function(segments, flight_metadata) {
 
   relabel_flow_mst <- function(x) {
     dplyr::case_when(
-      x == "F40" ~ "D40",
+      x == "F40" ~ "D040",
       x == "F100" ~ "D100",
       x == "L100" ~ "A100",
-      x == "L40" ~ "A40",
+      x == "L40" ~ "A040",
       TRUE ~ x
     )
   }
@@ -638,7 +879,7 @@ fuel_eur_milestones <- function(segments, flight_metadata) {
     dplyr::filter(!is.na(.data$MILESTONE)) |>
     tidyr::separate_longer_delim(.data$MILESTONE, delim = "/") |>
     dplyr::mutate(MST = relabel_flow_mst(.data$MILESTONE)) |>
-	    dplyr::filter(.data$MST %in% c("D40", "D100", "TOC", "TOD", "A100", "A40", "FL100", "LVL", "FIR", "AUA")) |>
+	    dplyr::filter(.data$MST %in% c("D040", "D100", "TOC", "TOD", "A100", "A040", "FL100", "LVL", "FIR", "AUA")) |>
 	    dplyr::select(SAM_ID, ROW_ID, MST)
 
   derived <- trj |>
