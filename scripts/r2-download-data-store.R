@@ -16,20 +16,16 @@ message("Downloading FuelBurnEstimation Data Store from R2")
 message("===============================================\n")
 
 # Get local data store path
-data_store <- Sys.getenv("FUELBURN_DATA_STORE", unset = "")
-
-if (data_store == "") {
-  stop(
-    "FUELBURN_DATA_STORE not set.\n",
-    "Set it in .Renviron to your local data store path.",
-    call. = FALSE
-  )
-}
+data_store <- r2_data_store()
 
 message("R2 bucket: ", r2_bucket())
 message("Local data store: ", data_store)
 message("Timestamp: ", Sys.time())
 message("\n")
+
+# Ensure the local cache has the expected folder skeleton, including optional
+# source folders that may not have files in R2 yet.
+r2_ensure_data_store_dirs(data_store)
 
 # Check what's available in R2
 message("Checking R2 bucket contents...")
@@ -48,29 +44,35 @@ print(r2_files |> select(Key, Size_MB, LastModified))
 
 message("\n")
 
-# Define files to download
-download_files <- tibble::tribble(
-  ~r2_path, ~local_path, ~required, ~description,
-  "raw/eur/EUR-canonical-milestones-summer2025.parquet",
-  file.path(data_store, "raw/eur/EUR-canonical-milestones-summer2025.parquet"),
-  TRUE,
-  "EUR raw canonical milestones",
+manifest_available <- "manifest/current-artifacts.csv" %in% r2_files$Key
+if (manifest_available) {
+  message("Authoritative manifest found: manifest/current-artifacts.csv")
+  manifest <- r2_download_current_manifest(data_store)
+  download_files <- manifest |>
+    filter(.data$status == "current") |>
+    transmute(
+      r2_path = .data$key,
+      local_path = file.path(data_store, .data$key),
+      required = .data$required,
+      description = .data$description,
+      expected_sha256 = .data$sha256
+    )
+} else {
+  warning(
+    "Authoritative manifest not found. Falling back to registered required files without checksum verification."
+  )
+  download_files <- r2_artifact_registry() |>
+    filter(.data$required) |>
+    transmute(
+      r2_path = .data$key,
+      local_path = file.path(data_store, .data$key),
+      required = .data$required,
+      description = .data$description,
+      expected_sha256 = NA_character_
+    )
+}
 
-  "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
-  file.path(data_store, "derived/eur/canonical-milestones-eur-2026-harmonized.parquet"),
-  TRUE,
-  "EUR harmonized milestones (2026 convention)",
-
-  "raw/chn/CHN-canonical-milestones.parquet",
-  file.path(data_store, "raw/chn/CHN-canonical-milestones.parquet"),
-  FALSE,
-  "CHN raw canonical milestones",
-
-  "derived/chn/CHN-canonical-milestones-harmonized.parquet",
-  file.path(data_store, "derived/chn/CHN-canonical-milestones-harmonized.parquet"),
-  FALSE,
-  "CHN harmonized milestones"
-) |>
+download_files <- download_files |>
   mutate(
     in_r2 = r2_path %in% r2_files$Key,
     local_exists = file.exists(local_path)
@@ -110,6 +112,12 @@ download_results <- download_files |>
   mutate(
     downloaded = tryCatch({
       r2_download(r2_path, local_path, overwrite = TRUE)
+      if (!is.na(expected_sha256)) {
+        actual_sha256 <- unname(as.character(tools::sha256sum(local_path)))
+        if (!identical(actual_sha256, expected_sha256)) {
+          stop("Checksum mismatch for ", r2_path, call. = FALSE)
+        }
+      }
       TRUE
     }, error = function(e) {
       message("  ✗ Download failed: ", e$message)

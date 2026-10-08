@@ -1,132 +1,136 @@
 # FuelBurnEstimation
 
-This repository is the 2026 workshop for the development, validation, and documentation of a flight-phase fuel-burn estimation workflow for multi-regional benchmarking.
+This repository is the 2026 workshop for the development, validation, and
+documentation of a flight-phase fuel-burn estimation workflow for multi-regional
+benchmarking.
 
-The immediate goal is a simple Quarto paper that can render to MS Word and PDF, plus a technical note that documents the data preparation pipeline step by step.
+The immediate goal is a simple Quarto paper that can render to MS Word and PDF,
+plus a technical note that documents the data preparation pipeline step by step.
 
 ## Current Setup
 
 - `paper.qmd` is the lightweight paper draft.
-- `technical-note-data-preparation.qmd` is the process note for source data, cleaning, milestone generation, and analysis datasets.
-- `R/` contains reusable helper functions, initially lifted from the 2025 ICNS CHN-EUR fuel-burn work.
+- `technical-note-data-preparation.qmd` is the process note for source data,
+  cleaning, milestone generation, and analysis datasets.
+- `R/` contains reusable helper functions.
 - `scripts/` contains reproducible data-preparation scripts.
-- `R/canonical-fuel-milestones.R` and `scripts/prepare-chn-qar-canonical.R` are ported from the 2025/2026 CHN-EUR workflow that helped Lingling process one-file-per-flight QAR data locally.
-- The CHN QAR reader now writes `CHN-fuel-flow-unit-qc.csv` to compare kg/h and lb/h fuel-flow assumptions before producing kilogram-based canonical outputs.
-- `data-raw/` and `data-derived/` are intentionally ignored by Git except for placeholders.
-- `notes/canonical-milestone-model.md` captures the enriched milestone convention for along-track distance anchors, pressure-altitude flight-level crossings, level segments, intervals, and lookup-table inputs.
-- `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
-- `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
+- `data-raw/` and `data-derived/` are intentionally ignored by Git except for
+  placeholders.
+- `notes/canonical-milestone-model.md` captures the enriched milestone
+  convention for along-track distance anchors, pressure-altitude flight-level
+  crossings, level segments, intervals, and lookup-table inputs.
 
 ## Data Sharing via Cloudflare R2
 
-**R2 is the source of truth** for data artifacts. Each machine maintains a local cache synced from R2.
+R2 is the source of truth for shared data artifacts. Each machine maintains a
+local cache synced from R2; OneDrive is no longer part of the workflow.
 
-### R2 Bucket Structure
-```
+```text
 r2://paper-fuel-burn-estimation/
 ├── raw/eur/         EUR canonical milestones (source data)
 ├── raw/chn/         CHN canonical milestones (source data)
 ├── derived/eur/     EUR harmonized milestones (2026 convention)
 ├── derived/chn/     CHN harmonized milestones (2026 convention)
-├── manifest/        Data inventory and validation reports
+├── manifest/        Authoritative manifest, inventory, and validation reports
 └── handover/        Cross-machine sync status summaries
 ```
 
-### Setup (One-Time per Machine)
+### Setup
 
-1. **Install R package**:
-   ```r
-   install.packages("paws.storage")
-   ```
+Install the R dependency:
 
-2. **Copy `.Renviron.example` to `.Renviron`**
-
-3. **Configure `.Renviron`**:
-   ```r
-   # Local data store (your working cache)
-   FUELBURN_DATA_STORE=/path/to/local/data-store
-   
-   # R2 credentials (from https://dash.cloudflare.com → R2 → API Tokens)
-   R2_ACCESS_KEY_ID=<your-key>
-   R2_SECRET_ACCESS_KEY=<your-secret>
-   R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com
-   R2_BUCKET=paper-fuel-burn-estimation
-   ```
-
-### Workflow
-
-**Download data from R2** (first time or to sync latest):
-```sh
-Rscript scripts/r2-download-data-store.R
+```r
+install.packages("paws.storage")
 ```
 
-**Work locally**:
-```sh
-# Validate local cache
-Rscript scripts/00-check-data-store.R
+Copy `.Renviron.example` to `.Renviron` and configure:
 
-# Process data using local cache
-Rscript scripts/03-audit-eur-canonical-milestones.R
-Rscript scripts/04-harmonize-eur-milestones.R
+```r
+FUELBURN_DATA_STORE=/path/to/local/data-store
+R2_ACCESS_KEY_ID=<your-key>
+R2_SECRET_ACCESS_KEY=<your-secret>
+R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com
+R2_BUCKET=paper-fuel-burn-estimation
 ```
 
-**Upload results to R2** (share with team):
-```sh
-Rscript scripts/r2-upload-data-store.R
-```
+Never commit `.Renviron` or real R2 credentials.
 
-**Check what's in R2**:
+### Contributor Workflow
+
 ```sh
 Rscript scripts/r2-list-files.R
+Rscript scripts/r2-sync-status.R
+Rscript scripts/r2-download-data-store.R
+Rscript scripts/00-check-data-store.R
 ```
 
-### R2 Helper Functions
+`r2-sync-status.R` compares the local cache with
+`manifest/current-artifacts.csv`. `r2-download-data-store.R` verifies downloaded
+files against manifest SHA-256 hashes when the manifest is present.
 
-**R package** (`R/r2-storage.R`):
-- `r2_upload()` - Upload file to R2
-- `r2_download()` - Download file from R2
-- `r2_list()` - List bucket contents
-- `r2_exists()` - Check if file exists
-- `r2_delete()` - Delete file from R2
+### Maintainer Workflow
 
-**Scripts**:
-- `scripts/r2-upload-data-store.R` - Upload local cache to R2
-- `scripts/r2-download-data-store.R` - Download R2 data to local cache
-- `scripts/r2-list-files.R` - List all files in R2 bucket
+After processing or updating artifacts locally:
+
+```sh
+Rscript scripts/00-check-data-store.R
+Rscript scripts/r2-upload-data-store.R
+Rscript scripts/r2-publish-manifest.R --dry-run
+Rscript scripts/r2-publish-manifest.R
+Rscript scripts/r2-sync-status.R
+```
+
+`scripts/r2-upload-data-store.R` uploads registered artifacts and publishes the
+authoritative manifest. `scripts/r2-publish-manifest.R` can refresh only the
+manifest when needed.
+
+### Authoritative Manifest
+
+`manifest/current-artifacts.csv` is the lightweight source of truth for data
+artifacts. A data artifact is authoritative only when it is listed there with
+`status == "current"` and its local SHA-256 hash matches.
+
+The manifest records:
+
+- object key
+- source and stage (`raw`, `derived`)
+- required flag
+- version label
+- SHA-256 hash and byte size
+- producing script
+- input artifact keys
+- manifest timestamp and machine/user metadata
 
 ## Local Data Store
 
-Each machine maintains a local data store (cache synced from R2):
+Each machine maintains a local cache:
 
-```
+```text
 FUELBURN_DATA_STORE/
-├── raw/eur/         EUR canonical milestones (source data)
-├── raw/chn/         CHN canonical milestones (source data)
-├── derived/eur/     EUR harmonized milestones (2026 convention)
-├── derived/chn/     CHN harmonized milestones (2026 convention)
-├── manifest/        Data inventory and validation reports
-└── handover/        Cross-machine sync status summaries
+├── raw/eur/
+├── raw/chn/
+├── derived/eur/
+├── derived/chn/
+├── manifest/
+└── handover/
 ```
 
-**Checker script** (`scripts/00-check-data-store.R`):
-- Validates folder structure and file presence
-- Checks parquet file integrity (row/column counts)
-- Creates manifest CSV with file metadata
-- Generates handover summary for collaboration
+`scripts/00-check-data-store.R` validates folder structure, required file
+presence, parquet row/column counts, and writes local manifest/handover outputs.
 
 ## EUR Milestone Harmonization
 
-EUR PRU data uses legacy milestone labels that need harmonization to the 2026 enriched convention:
+EUR PRU data uses legacy milestone labels that need harmonization to the 2026
+enriched convention:
 
-- `scripts/03-audit-eur-canonical-milestones.R` audits the local EUR canonical milestone parquet against the enriched milestone convention.
-- `R/eur-milestone-harmonization.R` provides functions for renaming, mapping, and deriving canonical milestone labels.
-- `scripts/04-harmonize-eur-milestones.R` applies the full harmonization pipeline:
-  1. Renames distance labels: `F40`→`D040`, `L40`→`A040`, `F100`→`D100`, `L100`→`A100`
-  2. Maps `FL100` to direction-aware `D_FL100`/`A_FL100` based on phase context
-  3. Derives new FL crossing milestones: `D_FL075`, `D_FL180`, `A_FL075`, `A_FL180`
-  4. Reconstructs `LVL` events into paired `LVL_START`/`LVL_END` milestones
+- `scripts/03-audit-eur-canonical-milestones.R` audits the local EUR canonical
+  milestone parquet against the enriched milestone convention.
+- `R/eur-milestone-harmonization.R` provides functions for renaming, mapping,
+  and deriving canonical milestone labels.
+- `scripts/04-harmonize-eur-milestones.R` applies the harmonization pipeline.
 
-Output: Local `derived/eur/` then uploaded to R2
+Output is written to the local `derived/eur/` cache and can then be uploaded to
+R2 by a maintainer.
 
 ## Reference Project
 
@@ -139,25 +143,16 @@ Set `FUELBURN_2025_PROJECT` if the reference project lives elsewhere.
 ## First Commands
 
 ```sh
-# Download data from R2 (first time on new machine)
+Rscript scripts/r2-list-files.R
+Rscript scripts/r2-sync-status.R
 Rscript scripts/r2-download-data-store.R
-
-# Validate local data store
 Rscript scripts/00-check-data-store.R
 
-# List R2 bucket contents
-Rscript scripts/r2-list-files.R
-
-# Render documentation
 quarto render paper.qmd --to html
 quarto render technical-note-data-preparation.qmd --to html
 
-# Data validation and processing
 Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
 Rscript scripts/04-harmonize-eur-milestones.R
-
-# Upload results to R2 (share with team)
-Rscript scripts/r2-upload-data-store.R
 ```

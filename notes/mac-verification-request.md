@@ -1,131 +1,97 @@
 # Mac Verification Request
 
-Hi! We've set up Cloudflare R2 for cross-machine data sharing. Could you verify the workflow from a clean local cache?
+Hi! We've set up Cloudflare R2 for cross-machine data sharing. Could you verify
+the workflow from a clean local cache?
 
-## Setup (One-Time)
+## Setup
 
-1. **Pull latest code:**
-   ```sh
-   cd /path/to/FuelBurnEstimation
-   git pull
-   ```
+1. Pull latest code:
 
-2. **Configure `.Renviron`:**
-   ```sh
-   cp .Renviron.example .Renviron
-   # Edit .Renviron with your favorite editor
-   ```
+```sh
+cd /path/to/FuelBurnEstimation
+git pull
+```
 
-3. **Set these variables in `.Renviron`:**
-   ```r
-   # Local cache directory (NOT OneDrive - just a normal local folder)
-   FUELBURN_DATA_STORE=/Users/<you>/RProjects/FuelBurnEstimation/data-store
-   
-   # R2 credentials (get from Windows team out-of-band - NEVER commit these)
-   R2_ACCESS_KEY_ID=<r2-access-key-id>
-   R2_SECRET_ACCESS_KEY=<r2-secret-access-key>
-   R2_ENDPOINT=<r2-endpoint-url>
-   R2_BUCKET=paper-fuel-burn-estimation
-   ```
+2. Configure `.Renviron`:
 
-4. **Install required R package:**
-   ```sh
-   Rscript -e "install.packages('paws.storage')"
-   ```
+```sh
+cp .Renviron.example .Renviron
+```
+
+3. Set these variables in `.Renviron`:
+
+```r
+# Local cache directory (not OneDrive)
+FUELBURN_DATA_STORE=/Users/<you>/RProjects/FuelBurnEstimation/data-store
+
+# R2 credentials (share separately; never commit real credentials)
+R2_ACCESS_KEY_ID=<r2-access-key-id>
+R2_SECRET_ACCESS_KEY=<r2-secret-access-key>
+R2_ENDPOINT=<r2-endpoint-url>
+R2_BUCKET=paper-fuel-burn-estimation
+```
+
+4. Install the required R package:
+
+```sh
+Rscript -e "install.packages('paws.storage')"
+```
 
 ## Verification Commands
 
-Run these three commands in order:
+Run these commands in order:
 
 ```sh
-# 1. Check R2 bucket is reachable
 Rscript scripts/r2-list-files.R
-
-# 2. Download data from R2
+Rscript scripts/r2-sync-status.R
 Rscript scripts/r2-download-data-store.R
-
-# 3. Validate local cache
 Rscript scripts/00-check-data-store.R
 ```
 
 ## Expected Results
 
-### 1. `r2-list-files.R`
+`r2-list-files.R` should show the R2 bucket and about 22 MB of data artifacts,
+including:
 
-**Should show:**
-- ✓ Bucket is reachable
-- ✓ Lists 4 files:
-  - `derived/eur/canonical-milestones-eur-2026-harmonized.parquet` (11.7 MB)
-  - `handover/handover-2026-10-07.txt` (~0 MB)
-  - `manifest/data-store-manifest-2026-10-07.csv` (~0 MB)
-  - `raw/eur/EUR-canonical-milestones-summer2025.parquet` (10.0 MB)
-- ✓ Total: 4 files, ~21.71 MB
+- `raw/eur/EUR-canonical-milestones-summer2025.parquet`
+- `derived/eur/canonical-milestones-eur-2026-harmonized.parquet`
+- `manifest/current-artifacts.csv`
 
-### 2. `r2-download-data-store.R`
+`r2-sync-status.R` should read `manifest/current-artifacts.csv` and report the
+required artifacts as either `current` or `missing-local`. If the local cache is
+empty, `missing-local` is expected before download.
 
-**Should show:**
-- ✓ Downloads EUR raw canonical milestones (10.03 MB)
-- ✓ Downloads EUR harmonized milestones (11.68 MB)
-- ✓ "CHN raw" reported as "✗ not in R2" (expected - optional)
-- ✓ "CHN harmonized" reported as "✗ not in R2" (expected - optional)
-- ✓ Manifest and handover files downloaded
-- ✓ Final message: "Download complete: 2/2 files downloaded from R2"
+`r2-download-data-store.R` should download the two required EUR files and verify
+their SHA-256 hashes against the authoritative manifest.
 
-### 3. `00-check-data-store.R`
+`00-check-data-store.R` should show:
 
-**Should show:**
-- ✓ Folder structure: 8/8 directories OK
-- ✓ EUR raw: 10.03 MB, **431,901 rows, 15 columns**
-- ✓ EUR harmonized: 11.68 MB, **554,212 rows, 17 columns**
-- ✓ Final message: **"All checks passed - data store ready for analysis"**
+- EUR raw: 431,901 rows, 15 columns
+- EUR harmonized: 554,212 rows, 17 columns
+- Final message: `All checks passed - data store ready for analysis`
 
 ## What to Report Back
 
 Please report:
 
-1. **OS**: macOS version (e.g., "macOS 14.1 Sonoma")
-
-2. **Run environment**: Terminal, RStudio, or both?
-
-3. **FUELBURN_DATA_STORE path** (redact username if sensitive):
-   ```
-   Example: /Users/<redacted>/RProjects/FuelBurnEstimation/data-store
-   ```
-
-4. **Command results**: Did all three commands complete successfully?
-   - [ ] `r2-list-files.R` - showed 4 files, 21.71 MB?
-   - [ ] `r2-download-data-store.R` - downloaded 2/2 files?
-   - [ ] `00-check-data-store.R` - "All checks passed"?
-
-5. **Row/column counts matched?**
-   - [ ] EUR raw: 431,901 rows, 15 columns?
-   - [ ] EUR harmonized: 554,212 rows, 17 columns?
-
-6. **Security check**:
-   - [ ] No R2 credentials appeared in console output?
-   - [ ] `.Renviron` file NOT committed to git?
-   - [ ] Git status shows `.Renviron` as untracked or ignored?
+- macOS version.
+- Whether you ran from Terminal, RStudio, or both.
+- `FUELBURN_DATA_STORE` path, with username redacted if needed.
+- Whether all four commands completed successfully.
+- Whether the row/column counts matched.
+- Whether any credentials appeared in console output.
+- Whether `.Renviron` is ignored or untracked in Git.
 
 ## Troubleshooting
 
-**If `r2-list-files.R` fails:**
-- Check R2 credentials in `.Renviron`
-- Verify `paws.storage` package is installed
-- Check internet connectivity
+If `r2-list-files.R` fails, check R2 credentials, internet connectivity, and
+that `paws.storage` is installed.
 
-**If downloads fail:**
-- Check `FUELBURN_DATA_STORE` path exists and is writable
-- Verify R2 bucket name matches exactly
+If `r2-sync-status.R` reports `missing-local`, run:
 
-**If validation fails:**
-- Re-run download with: `Rscript scripts/r2-download-data-store.R`
-- Check disk space (need ~25 MB free)
+```sh
+Rscript scripts/r2-download-data-store.R
+```
 
-## Success Criteria
-
-✅ All three scripts run without errors  
-✅ Row/column counts match expected values  
-✅ No credentials exposed in output  
-✅ Local cache at non-OneDrive location  
-
-Once verified, both Windows and Mac can work independently and sync via R2! 🎉
+If validation fails, rerun the download and check that the local cache path is
+writable and has at least 25 MB free.

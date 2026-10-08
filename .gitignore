@@ -20,6 +20,8 @@ desktop.ini
 !/data-raw/.gitkeep
 /data-derived/*
 !/data-derived/.gitkeep
+/.fuelburn-data-store
+/.fuelburn-data-store/
 
 # Temporary extraction folders used by helper scripts
 /tmp_unzip/

@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Upload local data store to Cloudflare R2
 #
-# This script uploads data artifacts from the local data store (OneDrive or local)
+# This script uploads registered data artifacts from the local data store
 # to R2 for cross-machine sharing.
 
 suppressPackageStartupMessages({
@@ -15,46 +15,21 @@ source(here("R", "r2-storage.R"))
 message("Uploading FuelBurnEstimation Data Store to R2")
 message("============================================\n")
 
-# Get local data store path
-data_store <- Sys.getenv("FUELBURN_DATA_STORE", unset = "")
-
-if (data_store == "") {
-  stop(
-    "FUELBURN_DATA_STORE not set.\n",
-    "Set it in .Renviron to your local data store path.",
-    call. = FALSE
-  )
-}
+data_store <- r2_data_store()
+r2_ensure_data_store_dirs(data_store)
 
 message("Local data store: ", data_store)
 message("R2 bucket: ", r2_bucket())
 message("Timestamp: ", Sys.time())
 message("\n")
 
-# Define files to upload
-# Structure: local_path, r2_path, required
-upload_files <- tibble::tribble(
-  ~local_path, ~r2_path, ~required, ~description,
-  file.path(data_store, "raw/eur/EUR-canonical-milestones-summer2025.parquet"),
-  "raw/eur/EUR-canonical-milestones-summer2025.parquet",
-  TRUE,
-  "EUR raw canonical milestones",
-
-  file.path(data_store, "derived/eur/canonical-milestones-eur-2026-harmonized.parquet"),
-  "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
-  TRUE,
-  "EUR harmonized milestones (2026 convention)",
-
-  file.path(data_store, "raw/chn/CHN-canonical-milestones.parquet"),
-  "raw/chn/CHN-canonical-milestones.parquet",
-  FALSE,
-  "CHN raw canonical milestones",
-
-  file.path(data_store, "derived/chn/CHN-canonical-milestones-harmonized.parquet"),
-  "derived/chn/CHN-canonical-milestones-harmonized.parquet",
-  FALSE,
-  "CHN harmonized milestones"
-) |>
+upload_files <- r2_artifact_registry() |>
+  transmute(
+    local_path = file.path(data_store, .data$key),
+    r2_path = .data$key,
+    required = .data$required,
+    description = .data$description
+  ) |>
   mutate(
     exists = file.exists(local_path),
     size_mb = ifelse(exists, round(file.info(local_path)$size / 1024^2, 2), NA_real_)
@@ -133,4 +108,17 @@ if (n_uploaded == n_total) {
   warning("⚠ Partial upload: ", n_uploaded, "/", n_total, " files uploaded")
 }
 
+message("\nPublishing authoritative manifest...")
+manifest <- r2_build_manifest(data_store, require_required = TRUE, include_optional = TRUE)
+manifest_path <- r2_write_manifest(manifest, data_store)
+r2_upload(manifest_path, "manifest/current-artifacts.csv")
+
+archive_manifest <- file.path(
+  "manifest",
+  "archive",
+  sprintf("artifacts-%s.csv", format(Sys.time(), "%Y%m%d-%H%M%S"))
+)
+r2_upload(manifest_path, archive_manifest)
+
+message("✓ Authoritative manifest published: manifest/current-artifacts.csv")
 message("\nVerify upload with: Rscript scripts/r2-list-files.R")

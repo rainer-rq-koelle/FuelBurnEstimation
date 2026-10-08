@@ -1,28 +1,34 @@
 # Copy to .Renviron for local machine-specific settings.
 # Do not commit .Renviron itself.
 
-# Location of the 2025 reference project on this machine (optional)
+# Location of the 2025 reference project on this machine (optional).
 # macOS example:
 # FUELBURN_2025_PROJECT=/Users/<user>/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
 #
 # Windows example:
 # FUELBURN_2025_PROJECT=C:/Users/<user>/Documents/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
 
-# Local data store (cache synced from R2)
-# R2 is the source of truth - this is just your local working copy
+# Local data-store cache synced from R2.
+# R2 is the source of truth; this is just your machine-local working copy.
 # Windows:
-FUELBURN_DATA_STORE=C:/Users/<user>/dev/RProjects/FuelBurnEstimation/data-store
+# FUELBURN_DATA_STORE=C:/Users/<user>/dev/RProjects/FuelBurnEstimation/data-store
+#
 # macOS:
 # FUELBURN_DATA_STORE=/Users/<user>/RProjects/FuelBurnEstimation/data-store
 
-# Cloudflare R2 Storage (PRIMARY SYNC METHOD)
-# Get credentials from: https://dash.cloudflare.com → R2 → Manage R2 API Tokens
-# ⚠️ SENSITIVE: Never commit these to Git - keep them only in .Renviron
+# Cloudflare R2 Storage (primary sync method).
+# Get credentials from: https://dash.cloudflare.com -> R2 -> Manage R2 API Tokens
+# SENSITIVE: Never commit real credentials to Git.
 R2_ACCESS_KEY_ID=<your-access-key-id>
 R2_SECRET_ACCESS_KEY=<your-secret-access-key>
 R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
 R2_BUCKET=paper-fuel-burn-estimation
 
-# Optional: force CHN QAR fuel-flow units when known
-# Leave unset for automatic kg/h vs lb/h inference
+# Optional explicit artifact paths. By default, scripts use FUELBURN_DATA_STORE.
+# FUELBURN_EUR_CANONICAL_MILESTONES=/path/to/data-store/raw/eur/EUR-canonical-milestones-summer2025.parquet
+# FUELBURN_EUR_HARMONIZED_MILESTONES=/path/to/data-store/derived/eur/canonical-milestones-eur-2026-harmonized.parquet
+# FUELBURN_EUR_MILESTONE_AUDIT_DIR=/path/to/local/audit-output
+
+# Optional: force CHN QAR fuel-flow units when known.
+# Leave unset for automatic kg/h vs lb/h inference.
 # CHN_QAR_FUEL_FLOW_UNIT=auto
