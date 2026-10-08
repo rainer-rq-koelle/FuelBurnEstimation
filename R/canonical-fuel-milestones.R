@@ -608,6 +608,23 @@ fuel_snapshot_rows <- function(trj, milestone_index) {
     dplyr::arrange(.data$TIME, .data$ROW_ID, .data$MST)
 }
 
+fuel_empty_level_segments <- function() {
+  tibble::tibble(
+    LEVEL_SEGMENT_ID = character(),
+    LEVEL_SEGMENT_ORDER = integer(),
+    START_ROW_ID = integer(),
+    END_ROW_ID = integer(),
+    LEVEL_DURATION_SEC = numeric(),
+    LEVEL_DISTANCE_NM = numeric(),
+    LEVEL_FUEL_KG = numeric(),
+    LEVEL_ALTITUDE_FT = numeric(),
+    START_ALT_FT = numeric(),
+    END_ALT_FT = numeric(),
+    START_DIST_FLOWN_NM = numeric(),
+    END_DIST_FLOWN_NM = numeric()
+  )
+}
+
 fuel_level_segment_candidates <- function(trj, start_row = 1L, end_row = nrow(trj), min_duration_sec = 10) {
   if (is.na(start_row)) start_row <- 1L
   if (is.na(end_row)) end_row <- nrow(trj)
@@ -622,7 +639,7 @@ fuel_level_segment_candidates <- function(trj, start_row = 1L, end_row = nrow(tr
     )
 
   if (!any(profile$IS_LEVEL_CANDIDATE, na.rm = TRUE)) {
-    return(tibble::tibble())
+    return(fuel_empty_level_segments())
   }
 
   profile |>
