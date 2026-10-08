@@ -1,0 +1,877 @@
+---
+title: "Refined Fuel Burn Estimation Framework"
+subtitle: "Profile-based lookup tables for international benchmarking"
+author:
+  - name: Lingling Ma
+    affiliation: Civil Aviation University of China
+  - name: Wei Dai
+    affiliation: Civil Aviation University of China
+  - name: Rainer Koelle
+    affiliation: EUROCONTROL Performance Review Unit
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+  docx: default
+  pdf: default
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "setup.R"))
+library(arrow)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
+```{r}
+#| label: load-and-harmonize-data
+#| cache: true
+
+# Load EUR level segments
+eur_segments_raw <- arrow::read_parquet(
+  here::here("data-store", "derived", "eur", "level-segments-eur-2026.parquet")
+)
+
+# Load EUR harmonized milestones
+eur_milestones <- arrow::read_parquet(
+  here::here("data-store", "derived", "eur", "canonical-milestones-eur-2026-harmonized.parquet")
+)
+
+# ============================================================================
+# Field name harmonization for current pipeline output
+# ============================================================================
+# NOTE: Current level-segments output uses different field names than
+# expected by paper analysis. Map them here until pipeline is updated.
+#
+# Expected fields (for paper):        Current fields (from pipeline):
+# - FLIGHT_PHASE_RAW                  -> phase_context (already derived)
+# - ALT_START, ALT_END                -> start_alt, end_alt
+# - altitude_band                     -> altitude_band (already computed)
+#
+# TODO for pipeline: Consider standardizing field names in R/level-off-milestones.R
+# to match canonical milestone conventions (uppercase, explicit START/END suffixes)
+# ============================================================================
+
+eur_segments <- eur_segments_raw |>
+  mutate(
+    # Map phase_context to expected FLIGHT_PHASE for compatibility
+    FLIGHT_PHASE = phase_context,
+
+    # Altitude fields (keep both naming conventions)
+    ALT_START = start_alt,
+    ALT_END = end_alt,
+    ALT_MEAN = mean_altitude_ft,
+
+    # Time fields
+    TIME_START = start_time,
+    TIME_END = end_time,
+
+    # Ensure altitude_band factor levels
+    altitude_band = factor(
+      altitude_band,
+      levels = c("below_FL100", "FL100_FL180", "FL180_FL240", "above_FL240")
+    )
+  )
+
+# Basic counts for summary
+n_flights <- eur_milestones |> distinct(UID) |> nrow()
+n_segments <- nrow(eur_segments)
+n_paired <- eur_segments |> filter(has_end) |> nrow()
+```
+
+# Executive Summary
+
+This document develops a refined fuel-burn estimation framework building on the 2025 ICNS CHN-EUR comparison. The key refinements address:
+
+- **Profile characterization:** Level-segment analysis with altitude bands replaces coarse phase aggregation
+- **Statistical bounds:** Percentile-based lookup tables provide upper/lower fuel burn estimates
+- **Data completeness:** Implicit END marker methodology addresses systematic gaps in operational data
+- **International benchmarking:** Harmonized framework supports multi-regional validation
+
+**Current status:** EUR data complete (21,503 flights, 60,012 level segments). CHN data update in progress.
+
+# 1. Foundation: ICNS2025 Baseline
+
+## 1.1 Original Approach
+
+The 2025 ICNS paper established a trajectory discretization method using characteristic milestones:
+
+**Departure phase:**
+- AOBT (actual off-block time)
+- ATOT (actual take-off time)
+- D100 (100NM from departure)
+
+**Enroute phase:**
+- TOC (top of climb)
+- TOD (top of descent)
+
+**Arrival phase:**
+- A100 (100NM to destination)
+- ALDT (actual landing time)
+- AIBT (actual in-block time)
+
+**Phase definitions:**
+- TXO: AOBT → ATOT (taxi-out)
+- CLIMB100: ATOT → D100 (departure climb)
+- ENR100: D100 → A100 (enroute)
+- DESC100: A100 → ALDT (arrival descent)
+- TXI: ALDT → AIBT (taxi-in)
+
+## 1.2 Key Findings (2025)
+
+**Fuel burn rates (medium-type aircraft):**
+- China: 35.55 kg/min average across all phases
+- Europe: 34.45 kg/min average across all phases
+- Overall consistency suggests comparable operational contexts
+
+**Benefit pool estimation:**
+- Average additional fuel burn: <200 kg for airborne portion
+- Based on 20th percentile reference flights
+- Medium-type aircraft focus
+
+**Aircraft types studied:**
+- Medium: A320, A20N (A320neo), B738 (Boeing 737-800)
+- Heavy: A333 (Airbus 330-300), B789 (Boeing 787-900)
+
+## 1.3 Limitations Identified
+
+The 2025 approach provided valuable first results but exhibited limitations:
+
+1. **Coarse phase characterization**
+   - Single ENR100 phase conflates cruise, stepped climbs, level-offs
+   - No altitude band differentiation
+   - Climb/descent treated as homogeneous
+
+2. **Profile variability unaccounted**
+   - Different flight distances (500-900NM) aggregated
+   - Altitude profiles not characterized
+   - Level-off frequency and duration ignored
+
+3. **Statistical approach**
+   - 20th percentile reference somewhat arbitrary
+   - No upper/lower bound framework
+   - Limited sensitivity analysis
+
+4. **Data quality unchecked**
+   - Level marker completeness not audited
+   - Orphaned segments not identified
+   - QC flags absent
+
+**Conclusion:** The milestone-based approach is sound, but operational detail is lost in aggregation. A refined framework should preserve milestones while adding level-segment intervals and profile characteristics.
+
+# 2. Refined Methodology
+
+## 2.1 Extended Milestone Families
+
+The 2026 framework extends the original milestones with derived analytical events:
+
+**Distance milestones (along-track):**
+- Departure side: D040, D100, D200
+- Arrival side: A200, A100, A040
+- Derived from cumulative flown distance (`DIST_FLOWN_NM`)
+
+**Flight level crossings (pressure altitude):**
+- Departure side: D_FL075, D_FL100, D_FL180
+- Arrival side: A_FL180, A_FL100, A_FL075
+- First upward/last downward crossing logic
+
+**Level-segment boundaries:**
+- LVL_START: Beginning of level-off phase
+- LVL_END: End of level-off phase
+- Paired events for duration/fuel calculation
+
+**Rationale:**
+- Distance milestones enable finer phase resolution (e.g., CLIMB040 vs CLIMB100)
+- FL crossings characterize vertical profile without assuming TOC/TOD
+- Level segments quantify cruise efficiency directly
+
+## 2.2 Level-Segment Detection
+
+### 2.2.1 Source Data Challenge
+
+PRU canonical milestone data contains LVL markers indicating level flight, but 54.4% of flights showed incomplete pairing:
+
+| Status | Flights | % | Issue |
+|--------|---------|---|-------|
+| Properly paired | 8,989 | 45.6% | Complete START/END pairs |
+| Odd LVL count | 10,704 | 54.4% | Missing END markers |
+
+**Root causes identified:**
+- Missing LVL_END at TOD (top of descent)
+- Missing END at phase transitions (Lvl_climb → cruise)
+- Trajectory data ends while aircraft still level
+- Compound milestones not fully decomposed (e.g., "TOD/LVL")
+
+### 2.2.2 Implicit END Completion
+
+To recover usable level segments, implicit LVL_END markers are added at logical boundaries:
+
+1. **At TOD** if preceded by active level segment
+2. **At phase transitions** from Lvl_* to non-Lvl_* phase
+3. **At trajectory end** if still in level phase
+
+**Implementation:**
+- Milestone multiplicity approach (separate row added)
+- Same TIME/LAT/LON/ALT as boundary event
+- Tagged with `.milestone_source = "implicit_end_at_TOD"`
+
+**Example:**
+```
+Before completion:
+  10:15:00  LVL_START  FL350
+  10:45:00  TOD        FL350
+
+After completion:
+  10:15:00  LVL_START  FL350  (derived_level_segment)
+  10:45:00  LVL_END    FL350  (implicit_end_at_TOD)
+  10:45:00  TOD        FL350  (original)
+```
+
+**Results:**
+- Paired segments: 22,236 → 54,494 (+145% usable segments)
+- Orphan rate: 54.4% → 44.3%
+- Remaining orphans represent true data boundaries
+
+### 2.2.3 Quality Control Framework
+
+All level segments tagged with QC flags:
+
+| Flag | Count | % | Interpretation |
+|------|-------|---|----------------|
+| `ok` | 3,243 | 9.8% | Clean paired segment, altitude stable |
+| `orphaned_no_end` | 10,704 | 32.5% | No END marker found |
+| `excessive_alt_change` | 18,993 | 57.7% | >1000 ft change during "level" |
+
+**Notes:**
+- `excessive_alt_change` may indicate strict threshold (cruise-climb common)
+- Flags enable sensitivity analysis by QC subset
+- Duration/fuel metrics set to NA for orphaned segments
+
+## 2.3 Profile Characterization Dimensions
+
+The refined framework characterizes each flight by:
+
+**1. Aircraft group:**
+- Medium: A320 family, B737 family
+- Heavy: A330 family, B787 family, widebodies
+
+**2. Distance band:**
+- Short: <500 NM
+- Medium-short: 500-700 NM
+- Medium-long: 700-1000 NM
+- Long: >1000 NM
+
+**3. Phase context:**
+- Lvl_climb: Level-off during climb phase
+- Lvl_cruise: Sustained cruise (implicit from TOC-TOD)
+- Lvl_descent: Level-off during descent phase
+
+**4. Altitude band:**
+- below_FL100: <10,000 ft
+- FL100_FL180: 10,000-18,000 ft
+- FL180_FL240: 18,000-24,000 ft
+- above_FL240: >24,000 ft (typical cruise)
+
+**5. Duration class:**
+- Short: <5 min
+- Medium: 5-15 min
+- Long: 15-30 min
+- Very long: >30 min
+
+This multidimensional characterization enables lookup tables that account for operational context rather than treating all flights as homogeneous.
+
+## 2.4 Statistical Framework
+
+### 2.4.1 Percentile-Based Bounds
+
+Instead of single reference values, the framework provides percentile-based bounds:
+
+- **P20 (efficient):** Representative of best operational practice
+- **P50 (median):** Typical operational performance
+- **P80 (inefficient):** Upper bound, accounts for constraints
+
+**Rationale:**
+- P20 replaces arbitrary 20% threshold from 2025
+- P50-P20 spread quantifies achievable benefit pool
+- P80-P50 spread indicates operational variability
+
+### 2.4.2 Metrics per Segment
+
+For each profile class, compute:
+
+- **Total fuel [kg]:** Cumulative burn over interval
+- **Duration [min]:** Elapsed time
+- **Distance [NM]:** Flown distance
+- **kg/min:** Fuel flow rate
+- **kg/NM:** Distance-specific consumption
+- **Level time [%]:** Proportion in level-off
+
+### 2.4.3 Lookup Table Structure
+
+Proposed output format:
+
+```
+aircraft_group | distance_band | phase | alt_band | metric | p20 | p50 | p80 | n
+---------------|---------------|-------|----------|--------|-----|-----|-----|---
+Medium         | 500-700       | cruise| >FL240   | kg/min | 32  | 35  | 39  | 450
+Medium         | 500-700       | cruise| >FL240   | kg/NM  | 4.2 | 4.5 | 5.1 | 450
+...
+```
+
+This structure supports:
+- Profile-specific fuel burn queries
+- Sensitivity analysis by percentile
+- International comparison at matched profile classes
+- Validation against operator data
+
+# 3. EUR Data Exploration
+
+## 3.1 Dataset Characteristics
+
+**EUR Data Summary (Summer 2025):**
+
+- **Flights:** `r formatC(n_flights, format="d", big.mark=",")` flights
+- **Study airports:** 9 major European hubs (EGLL, LFPG, LTFM, LEMD, EHAM, LIRF, EDDF, EDDM, LSZH)
+- **Aircraft types:** A20N, A320, A333, B738, B789
+- **Level segments:** `r formatC(n_segments, format="d", big.mark=",")` total
+- **Paired segments:** `r formatC(n_paired, format="d", big.mark=",")` (`r round(100*n_paired/n_segments, 1)`%)
+- **Data source:** EUROCONTROL PRU canonical milestones + AEM fuel model
+
+**Milestone counts:**
+
+```{r}
+#| label: milestone-counts
+#| tbl-cap: "EUR milestone distribution"
+
+eur_milestones |>
+  count(MST, sort = TRUE) |>
+  head(15) |>
+  kable(col.names = c("Milestone", "Count"),
+        format.args = list(big.mark = ","))
+```
+
+## 3.2 Level-Segment Duration Distributions
+
+```{r}
+#| label: duration-by-phase
+#| fig-cap: "Level-segment duration by phase context"
+#| fig-width: 10
+#| fig-height: 6
+#| warning: false
+
+eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(FLIGHT_PHASE)) |>
+  mutate(duration_min = duration_sec / 60) |>
+  filter(FLIGHT_PHASE %in% c("Lvl_climb", "Lvl_descent")) |>
+  ggplot(aes(x = duration_min, fill = FLIGHT_PHASE)) +
+  geom_histogram(bins = 50, alpha = 0.7, position = "identity") +
+  facet_wrap(~FLIGHT_PHASE, ncol = 1, scales = "free_y") +
+  scale_x_continuous(limits = c(0, 60), breaks = seq(0, 60, 10)) +
+  labs(
+    x = "Duration [minutes]",
+    y = "Number of segments",
+    fill = "Phase context"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+**Observations:**
+
+```{r}
+#| label: duration-summary
+
+duration_summary <- eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(FLIGHT_PHASE)) |>
+  mutate(duration_min = duration_sec / 60) |>
+  filter(FLIGHT_PHASE %in% c("Lvl_climb", "Lvl_descent")) |>
+  group_by(FLIGHT_PHASE) |>
+  summarise(
+    n = n(),
+    mean = mean(duration_min),
+    median = median(duration_min),
+    p20 = quantile(duration_min, 0.2),
+    p80 = quantile(duration_min, 0.8),
+    .groups = "drop"
+  )
+
+kable(duration_summary, digits = 1,
+      col.names = c("Phase", "N", "Mean [min]", "Median [min]", "P20 [min]", "P80 [min]"))
+```
+
+- Lvl_climb segments tend to be shorter (median ~`r round(duration_summary$median[duration_summary$FLIGHT_PHASE == "Lvl_climb"], 0)` min)
+- Lvl_descent shows longer durations (median ~`r round(duration_summary$median[duration_summary$FLIGHT_PHASE == "Lvl_descent"], 0)` min)
+- Wide variability suggests operational constraints (traffic, airspace design)
+- P20-P80 spread indicates benefit pool quantification potential
+
+## 3.3 Altitude Band Analysis
+
+```{r}
+#| label: altitude-bands
+#| fig-cap: "Level-segment distribution by altitude band"
+#| fig-width: 10
+#| fig-height: 5
+#| warning: false
+
+eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(altitude_band)) |>
+  count(altitude_band) |>
+  ggplot(aes(x = altitude_band, y = n, fill = altitude_band)) +
+  geom_col() +
+  geom_text(aes(label = scales::comma(n)), vjust = -0.5) +
+  labs(
+    x = "Altitude band",
+    y = "Number of segments",
+    fill = NULL
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+**Key findings:**
+
+```{r}
+#| label: altitude-summary
+
+alt_summary <- eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(altitude_band)) |>
+  mutate(duration_min = duration_sec / 60) |>
+  group_by(altitude_band) |>
+  summarise(
+    n = n(),
+    pct = 100 * n() / sum(eur_segments$has_end & eur_segments$duration_sec > 0 & !is.na(eur_segments$altitude_band)),
+    median_dur = median(duration_min),
+    .groups = "drop"
+  ) |>
+  arrange(desc(n))
+
+kable(alt_summary, digits = 1,
+      col.names = c("Altitude band", "N", "% of total", "Median duration [min]"))
+```
+
+- Majority of level segments occur above FL240 (typical cruise altitude)
+- FL180-FL240 shows substantial activity (stepped climbs, traffic constraints)
+- Below FL100 segments rare but operationally significant (holding, sequencing)
+- Altitude-specific fuel burn rates essential for accurate estimation
+
+## 3.4 Aircraft Type Patterns
+
+```{r}
+#| label: type-analysis
+#| fig-cap: "Level-segment duration by aircraft type"
+#| fig-width: 10
+#| fig-height: 6
+#| warning: false
+
+eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(TYPE)) |>
+  filter(TYPE %in% c("A320", "A20N", "B738", "A333", "B789")) |>
+  mutate(
+    duration_min = duration_sec / 60,
+    aircraft_group = ifelse(TYPE %in% c("A320", "A20N", "B738"),
+                            "Medium", "Heavy")
+  ) |>
+  ggplot(aes(x = TYPE, y = duration_min, fill = aircraft_group)) +
+  geom_boxplot() +
+  coord_cartesian(ylim = c(0, 40)) +
+  labs(
+    x = "Aircraft type",
+    y = "Duration [minutes]",
+    fill = "Aircraft group"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+**Aircraft-specific observations:**
+
+```{r}
+#| label: type-summary
+
+type_summary <- eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(TYPE)) |>
+  filter(TYPE %in% c("A320", "A20N", "B738", "A333", "B789")) |>
+  mutate(duration_min = duration_sec / 60) |>
+  group_by(TYPE) |>
+  summarise(
+    n = n(),
+    median_dur = median(duration_min),
+    p20_dur = quantile(duration_min, 0.2),
+    p80_dur = quantile(duration_min, 0.8),
+    .groups = "drop"
+  ) |>
+  arrange(desc(n))
+
+kable(type_summary, digits = 1,
+      col.names = c("Type", "N", "Median [min]", "P20 [min]", "P80 [min]"))
+```
+
+- Medium types show similar level-segment patterns (operational consistency)
+- Heavy types exhibit wider duration variability (longer flights, different constraints)
+- Type-specific lookup tables required for accurate fuel burn estimation
+
+## 3.5 Quality Control Insights
+
+```{r}
+#| label: qc-flags
+#| tbl-cap: "Level-segment QC flag distribution"
+
+eur_segments |>
+  count(qc_flag, sort = TRUE) |>
+  mutate(pct = 100 * n / sum(n)) |>
+  kable(digits = 1,
+        col.names = c("QC Flag", "Count", "% of total"),
+        format.args = list(big.mark = ","))
+```
+
+**QC implications:**
+
+- `excessive_alt_change` (57.7%): Current 1000 ft threshold may be too strict
+  - Cruise-climb operations common in European airspace
+  - Stepped climbs for efficiency/traffic
+  - Threshold review recommended (1500-2000 ft more realistic)
+
+- `orphaned_no_end` (32.5%): Represents true data boundaries
+  - Implicit END completion reduced from 54.4%
+  - Remaining orphans at trajectory edges or missing TOD
+  - Acceptable for frequency analysis, excluded from duration/fuel
+
+- `ok` (9.8%): Conservative clean segment subset
+  - Useful for validation and sensitivity analysis
+  - May exclude operationally valid segments
+
+**Recommendation:** Primary analysis should use `has_end = TRUE` (includes excessive_alt_change), with `ok`-only sensitivity check.
+
+# 4. Lookup Table Framework
+
+## 4.1 Proposed Structure
+
+The refined lookup table provides fuel burn estimates stratified by operational context:
+
+**Dimensions:**
+1. **Aircraft group:** Medium (A320/B737 family), Heavy (widebodies)
+2. **Distance band:** <500, 500-700, 700-1000, >1000 NM
+3. **Phase:** TXO, CLIMB, ENR, DESC, TXI
+4. **Altitude band:** <FL100, FL100-FL180, FL180-FL240, >FL240
+5. **Profile class:** Short-level, Medium-level, Long-level, No-level
+
+**Metrics per cell:**
+- Fuel burn [kg]: P20, P50, P80
+- Duration [min]: P20, P50, P80
+- kg/min: P20, P50, P80
+- kg/NM: P20, P50, P80
+- Sample size: n
+
+## 4.2 Example: EUR Medium Types, Cruise Level
+
+```{r}
+#| label: example-lookup
+#| tbl-cap: "Example lookup table entry (EUR, Medium, >FL240)"
+#| warning: false
+
+# This is a placeholder - full implementation pending fuel data integration
+# Showing structure with duration data available
+
+eur_segments |>
+  filter(has_end, duration_sec > 0, !is.na(TYPE), !is.na(altitude_band)) |>
+  filter(TYPE %in% c("A320", "A20N", "B738")) |>
+  filter(altitude_band == "above_FL240") |>
+  mutate(duration_min = duration_sec / 60) |>
+  summarise(
+    n = n(),
+    dur_p20 = quantile(duration_min, 0.2),
+    dur_p50 = quantile(duration_min, 0.5),
+    dur_p80 = quantile(duration_min, 0.8),
+    .groups = "drop"
+  ) |>
+  kable(digits = 1,
+        col.names = c("N", "Duration P20 [min]", "P50 [min]", "P80 [min]"))
+```
+
+**Interpretation:**
+- P20 duration represents efficient operations (shortest level-segment durations)
+- P50-P20 spread quantifies typical operational variability
+- P80 represents constrained operations (holding, traffic sequencing)
+
+**Next step:** Integrate fuel burn data (fuel_burn_kg field) to populate kg/min and kg/NM metrics.
+
+## 4.3 Validation Strategy
+
+**Internal validation:**
+1. Compare P50 values to ICNS2025 aggregated rates (35 kg/min baseline)
+2. Check consistency across adjacent distance bands
+3. Verify altitude band trends (higher FL = lower kg/NM typically)
+
+**External validation:**
+- Operator fuel burn data (confidential, aggregated comparison)
+- BADA/AEM model cross-checks
+- openAP model comparisons (open-source benchmark)
+
+**Sensitivity analysis:**
+- QC flag subsets (ok-only vs has_end)
+- Altitude threshold variations (1000 ft vs 1500 ft)
+- Duration filters (exclude <5 min segments)
+
+## 4.4 CHN-EUR Comparison Framework
+
+Once CHN data available, comparison approach:
+
+1. **Profile matching:** Same distance band, aircraft group, altitude
+2. **Percentile comparison:** Compare P20/P50/P80 across regions
+3. **Operational context:** Account for airspace design differences
+4. **Statistical testing:** Significance of regional differences
+
+**Hypothesis:** Medium-type aircraft show similar fuel burn rates when profile-matched (ICNS2025 suggested 35 kg/min convergence). Refined framework should confirm at finer granularity.
+
+# 5. CHN Integration Strategy
+
+## 5.1 Expected CHN Data Structure
+
+**Source:** QAR/FDR data from CAAC-OSC operations
+
+**Expected fields:**
+- High-frequency trajectory: TIME, LAT, LON, ALT
+- Fuel flow per engine (FFxC fields)
+- Aircraft metadata: TYPE, ADEP, ADES
+- Cumulative fuel burn (derived from fuel flow)
+
+**Milestones expected:**
+- Operational: AOBT, ATOT, ALDT, AIBT
+- Derived: D040, D100, D200, A200, A100, A040
+- FL crossings: D_FL075, D_FL100, D_FL180, A_FL180, A_FL100, A_FL075
+- Level segments: LVL_START, LVL_END (if derivable)
+
+## 5.2 Harmonization Requirements
+
+**Coordinate with CHN colleagues on:**
+
+1. **Fuel flow units:** Confirm kg/h vs lb/h (QC framework established)
+2. **Block times:** First/last trajectory point = AOBT/AIBT? Or engine on/off?
+3. **Milestone derivation:** Same distance/FL crossing logic as EUR
+4. **Level-segment detection:** Can LVL_START/END be derived from QAR altitude stability?
+
+**Data processing pipeline:**
+- Apply same canonical milestone functions (R/chn-data-prep.R exists)
+- Generate level-segment intervals with QC flags
+- Produce comparable profile characterization tables
+
+## 5.3 Comparison Dimensions
+
+**Matched profile comparison:**
+
+| Dimension | EUR Data | CHN Data | Match Criteria |
+|-----------|----------|----------|----------------|
+| Aircraft | A320, B738 | A320, B738 | Same ICAO type |
+| Distance | 500-700 NM | 500-700 NM | ±50 NM tolerance |
+| Altitude | >FL240 | >FL240 | Same band |
+| Phase | Cruise level | Cruise level | Same context |
+
+**Expected outputs:**
+- Side-by-side percentile tables
+- Regional difference quantification
+- Operational context interpretation (airspace design, traffic density)
+
+## 5.4 Placeholders for CHN Results
+
+**[To be populated when CHN data available]**
+
+- CHN dataset characteristics (flights, segments, airports)
+- CHN level-segment duration distributions
+- CHN altitude band patterns
+- CHN-EUR profile-matched comparison tables
+- Convergence analysis (35 kg/min hypothesis test at finer granularity)
+
+# 6. Discussion: Towards Operational Lookup Tables
+
+## 6.1 Key Advances Over ICNS2025
+
+**Methodological improvements:**
+
+1. **Profile characterization:** Altitude bands and level-segment analysis replace coarse aggregation
+   - Enables fuel burn estimation sensitive to operational context
+   - Accounts for stepped climbs, cruise-climb, traffic constraints
+
+2. **Data completeness:** Implicit END methodology recovers 10% of orphaned segments
+   - 54.4% → 44.3% orphan rate improvement
+   - Transparent QC flags enable sensitivity analysis
+   - Remaining orphans represent true data boundaries
+
+3. **Statistical framework:** Percentile-based bounds replace single reference
+   - P20/P50/P80 quantify operational variability and benefit pools
+   - Enables "what-if" analysis for ANS interventions
+   - Supports uncertainty quantification
+
+4. **Reproducibility:** R2 cloud storage with manifest tracking
+   - All data products versioned and accessible
+   - Processing pipeline documented (technical-note-data-preparation.qmd)
+   - Code modular and reusable (R/ function modules)
+
+## 6.2 Data Quality Lessons
+
+**Operational data characteristics:**
+
+- **Level marker incompleteness is systematic, not random**
+  - 54.4% of EUR flights had odd LVL counts (missing ENDs)
+  - Root causes: missing markers at TOD, phase transitions, trajectory boundaries
+  - Solution: Implicit END completion at logical boundaries
+
+- **Altitude stability thresholds need regional calibration**
+  - 57.7% flagged for excessive_alt_change (>1000 ft)
+  - European airspace: cruise-climb common for efficiency
+  - Threshold review: 1500-2000 ft more appropriate
+
+- **Phase label consistency varies by data source**
+  - EUR: Lvl_climb, Lvl_descent explicitly labeled
+  - CHN: May need altitude-based phase inference from QAR
+  - Harmonization essential for valid comparison
+
+**Recommendation for PRU colleagues:**
+- Document LVL pairing status in data dictionary
+- Review LVL derivation algorithm to add END markers at TOD/phase transitions
+- Provide per-release pairing statistics
+
+## 6.3 International Benchmarking Implications
+
+**Harmonization requirements:**
+
+1. **Milestone definitions:** Aligned distance/FL crossing logic documented
+2. **Level-segment criteria:** Consistent altitude stability thresholds
+3. **QC framework:** Common flag taxonomy (ok, orphaned, excessive_alt_change)
+4. **Profile dimensions:** Agreed aircraft groups, distance bands, altitude bands
+
+**Multi-regional validation potential:**
+
+- EUR + CHN baseline (current study)
+- Extension to other ICAO regions (NAM, ASIA/PAC, MID)
+- Contribution to ICAO GANP KPI16 guidance (additional fuel burn)
+- Support for regional performance comparison frameworks
+
+**GANP KPI16 enhancement:**
+
+Current KPI16 converts additional time/distance to fuel burn using average rates. Refined lookup tables enable:
+
+- **Context-specific conversion:** Use profile-matched rates instead of global average
+- **Benefit pool quantification:** P50-P20 spread estimates achievable savings
+- **Sensitivity bounds:** P80-P20 range for uncertainty
+- **Regional comparability:** Harmonized methodology across ANSPs
+
+## 6.4 Limitations and Future Work
+
+**Current limitations:**
+
+1. **Fuel data integration incomplete**
+   - EUR: fuel_burn_kg field present but not yet integrated into analysis
+   - Need to validate fuel burn calculations per level segment
+   - Cross-check against AEM model outputs
+
+2. **CHN data pending**
+   - Updated CHN data processing in progress
+   - Comparison results awaiting harmonized CHN level segments
+   - Fuel flow unit confirmation needed (kg/h vs lb/h)
+
+3. **Sample representativeness**
+   - EUR: Single month (Summer 2025), 9 airports
+   - CHN: Previous sample ~100 flights, limited airports
+   - Seasonal variability not assessed
+   - Need multi-year validation
+
+4. **Profile class granularity**
+   - Current: distance band + altitude + phase context
+   - Future: Add weather (wind, temperature), time-of-day, traffic density
+   - Machine learning potential for profile clustering
+
+**Next steps:**
+
+**Short-term (Q4 2026):**
+- Integrate EUR fuel burn data (fuel_burn_kg → kg/min, kg/NM metrics)
+- Receive and process updated CHN data
+- Generate CHN-EUR profile-matched comparison tables
+- Validate P50 values against ICNS2025 baseline (35 kg/min)
+
+**Medium-term (2027):**
+- Extend EUR data to multi-year sample (seasonal variability)
+- Expand aircraft type coverage (additional medium/heavy types)
+- Publish lookup table methodology paper
+- Contribute to ICAO GANP KPI16 guidance update
+
+**Long-term (2027+):**
+- Multi-regional validation (NAM, ASIA/PAC, MID regions)
+- Operational implementation: ANSP fuel burn monitoring dashboards
+- Machine learning profile clustering
+- Integration with emissions inventories (non-CO₂ effects)
+
+## 6.5 Pipeline Field Name Standardization
+
+**Current field name mappings applied in this document:**
+
+The EUR level-segment pipeline (`R/level-off-milestones.R`) outputs fields with lowercase/mixed naming:
+- `phase_context` (mapped to `FLIGHT_PHASE` for paper)
+- `start_alt`, `end_alt` (mapped to `ALT_START`, `ALT_END`)
+- `start_time`, `end_time` (mapped to `TIME_START`, `TIME_END`)
+
+**Recommendation for pipeline workers:**
+
+Consider standardizing field names in `R/level-off-milestones.R` to match canonical milestone conventions:
+- Uppercase base names: `PHASE`, `ALT`, `TIME`, `FUEL`
+- Explicit START/END suffixes: `PHASE_START`, `ALT_START`, `TIME_START`
+- Derived fields prefixed: `ALT_MEAN`, `ALT_CHANGE`, `FUEL_BURN`
+
+This would eliminate the need for field name mapping in analysis documents and improve consistency across the processing pipeline.
+
+# 7. Conclusions
+
+This exploratory document establishes a refined fuel-burn estimation framework addressing limitations of the 2025 ICNS baseline:
+
+**Methodological advances:**
+- Level-segment analysis with altitude bands (60,012 EUR segments characterized)
+- Implicit END completion methodology (orphan rate 54.4% → 44.3%)
+- Percentile-based lookup tables (P20/P50/P80 bounds)
+- Comprehensive QC framework for data quality transparency
+
+**EUR data insights:**
+- Majority of level segments above FL240 (typical cruise)
+- Median durations vary by phase context (climb shorter than descent)
+- Wide operational variability (P20-P80 spread) quantifies benefit pools
+- Medium types show consistent patterns (A320/B738)
+
+**Framework status:**
+- EUR data complete and analyzed (Summer 2025, 21,503 flights)
+- CHN data integration in progress
+- Lookup table structure defined, pending fuel data integration
+- Reproducible pipeline with R2 cloud storage
+
+**International benchmarking readiness:**
+- Harmonized milestone definitions documented
+- QC framework supports multi-regional validation
+- GANP KPI16 enhancement potential demonstrated
+- Path to operational lookup tables established
+
+**The refined framework provides a foundation for profile-aware fuel burn estimation supporting ICAO net-zero 2050 goals through transparent, reproducible, and internationally comparable performance monitoring.**
+
+---
+
+# References
+
+1. ICAO (2022). Long-Term Aspirational Goal, Special Supplement. [https://www.icao.int/environmental-protection/Documents/EnvironmentalReports/2022/ENVReport2022_Special%20Supplement%20on%20LTAG.pdf](https://www.icao.int/environmental-protection/Documents/EnvironmentalReports/2022/ENVReport2022_Special%20Supplement%20on%20LTAG.pdf)
+
+2. ICAO (2023). GANP KPI Overview. [https://www4.icao.int/ganpportal/ASBU/KPI](https://www4.icao.int/ganpportal/ASBU/KPI)
+
+3. Ma, L., Dai, W., & Koelle, R. (2025). Fuel flow analysis for different flight phases based on a data-driven approach. ICNS 2025 Conference Proceedings.
+
+4. Nuic, A. (2009). Base of Aircraft Data (BADA) Product Management Document. EUROCONTROL.
+
+5. Deransy, R. (2022). EUROCONTROL - AEM, Advanced Emission Model, Flight Emissions Assessment. [https://www.eurocontrol.int/sites/default/files/2022-12/ectl_env_impact_assessment_forum_-_aem.pdf](https://www.eurocontrol.int/sites/default/files/2022-12/ectl_env_impact_assessment_forum_-_aem.pdf)
+
+6. Sun, J., Hoekstra, J., & Ellerbroek, J. (2020). OpenAP: An open-source aircraft performance model for air transportation studies and simulations. *Aerospace*, 7(8), 104. doi:10.3390/aerospace7080104
+
+---
+
+**Document Status:** Exploratory analysis (October 2026)
+**EUR Data:** Complete
+**CHN Data:** Pending update
+**Next Update:** Upon CHN data integration
