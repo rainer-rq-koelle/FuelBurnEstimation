@@ -16,20 +16,36 @@ suppressPackageStartupMessages({
   library(purrr)
 })
 
+source(here("R", "eur-level-segments.R"))
 source(here("R", "eur-milestone-harmonization.R"))
 
 message("Harmonizing EUR canonical milestones to 2026 convention...")
 message("Working directory: ", here())
 
+data_store <- Sys.getenv("FUELBURN_DATA_STORE", unset = "")
+default_input <- if (data_store != "") {
+  expanded_file <- file.path(path.expand(data_store), "raw/eur/EUR-canonical-milestones-expanded-summer2025.parquet")
+  compact_file <- file.path(path.expand(data_store), "raw/eur/EUR-canonical-milestones-summer2025.parquet")
+  if (file.exists(expanded_file)) expanded_file else compact_file
+} else {
+  here("data-derived", "canonical-milestones-eur-2025-summer.parquet")
+}
+
+default_output <- if (data_store != "") {
+  file.path(path.expand(data_store), "derived/eur/canonical-milestones-eur-2026-harmonized.parquet")
+} else {
+  here("data-derived", "canonical-milestones-eur-2026-harmonized.parquet")
+}
+
 # Input/output paths
 eur_file <- Sys.getenv(
   "FUELBURN_EUR_CANONICAL_MILESTONES",
-  unset = here("data-derived", "canonical-milestones-eur-2025-summer.parquet")
+  unset = default_input
 )
 
 output_file <- Sys.getenv(
   "FUELBURN_EUR_HARMONIZED_MILESTONES",
-  unset = here("data-derived", "canonical-milestones-eur-2026-harmonized.parquet")
+  unset = default_output
 )
 
 summary_dir <- here("data-derived", "eur-harmonization-summary")
@@ -52,19 +68,30 @@ message("Summary directory: ", summary_dir)
 eur <- arrow::read_parquet(eur_file) |>
   as_tibble()
 
+pick_col <- function(data, candidates, required = TRUE) {
+  out <- candidates[candidates %in% names(data)][1]
+  if (is.na(out) && required) {
+    stop("Missing required column. Expected one of: ", paste(candidates, collapse = ", "), call. = FALSE)
+  }
+  out
+}
+
+uid_col <- pick_col(eur, c("UID", "SOURCE_UID"))
+mst_col <- pick_col(eur, c("MST", "milestone"))
+alt_col <- pick_col(eur, c("ALT", "ALT_FT", "altitude_ft"))
+phase_col <- pick_col(eur, c("PHASE", "FLIGHT_PHASE_RAW", "phase"))
+time_col <- pick_col(eur, c("TIME", "timestamp"), required = FALSE)
+row_col <- pick_col(eur, c("ROW_ID", "row_id"), required = FALSE)
+
 message("\nOriginal data:")
 message("  Rows: ", nrow(eur))
-message("  Flights: ", n_distinct(eur$UID))
-message("  Unique milestones: ", n_distinct(eur$MST))
+message("  Flights: ", n_distinct(eur[[uid_col]]))
+message("  Unique milestones: ", n_distinct(eur[[mst_col]]))
 message("  Available columns: ", paste(names(eur), collapse = ", "))
 
 # Determine available ordering columns (standardized convention)
-order_cols <- c("UID")
-if ("ROW_ID" %in% names(eur)) {
-  order_cols <- c(order_cols, "ROW_ID")
-} else if ("TIME" %in% names(eur)) {
-  order_cols <- c(order_cols, "TIME")
-}
+order_cols <- c(uid_col, row_col, time_col)
+order_cols <- order_cols[!is.na(order_cols)]
 
 message("\nUsing ordering columns: ", paste(order_cols, collapse = ", "))
 
@@ -76,17 +103,17 @@ original_counts <- eur |>
 # Apply harmonization
 eur_harmonized <- harmonize_eur_milestones(
   eur,
-  uid_col = "UID",
-  mst_col = "MST",
-  alt_col = "ALT",
-  phase_col = "PHASE",
+  uid_col = uid_col,
+  mst_col = mst_col,
+  alt_col = alt_col,
+  phase_col = phase_col,
   order_cols = order_cols
 )
 
 message("\nHarmonized data:")
 message("  Rows: ", nrow(eur_harmonized))
-message("  Flights: ", n_distinct(eur_harmonized$UID))
-message("  Unique milestones: ", n_distinct(eur_harmonized$MST))
+message("  Flights: ", n_distinct(eur_harmonized[[uid_col]]))
+message("  Unique milestones: ", n_distinct(eur_harmonized[[mst_col]]))
 
 # Capture harmonized milestone distribution
 harmonized_counts <- eur_harmonized |>

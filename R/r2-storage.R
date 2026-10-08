@@ -88,12 +88,26 @@ r2_artifact_registry <- function() {
     ~key, ~source, ~stage, ~required, ~version, ~produced_by_script, ~input_artifacts, ~description,
     "raw/eur/EUR-canonical-milestones-summer2025.parquet",
     "EUR/PRU", "raw", TRUE, "summer2025", "external-pru-source", "",
-    "EUR raw canonical milestones",
+    "EUR compact raw canonical milestones with compound MST labels",
+
+    "raw/eur/EUR-canonical-milestones-expanded-summer2025.parquet",
+    "EUR/PRU", "raw", TRUE, "summer2025-expanded", "external-pru-source", "",
+    "EUR expanded raw canonical milestones with single MST roles and distance fields",
 
     "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
     "EUR/PRU", "derived", TRUE, "2026-harmonized", "scripts/04-harmonize-eur-milestones.R",
-    "raw/eur/EUR-canonical-milestones-summer2025.parquet",
+    "raw/eur/EUR-canonical-milestones-expanded-summer2025.parquet",
     "EUR harmonized milestones in the 2026 convention",
+
+    "derived/eur/level-segments-eur-2026.parquet",
+    "EUR/PRU", "derived", TRUE, "2026-level-segments", "scripts/05-build-eur-level-segments.R",
+    "raw/eur/EUR-canonical-milestones-expanded-summer2025.parquet",
+    "EUR level-segment intervals reconstructed from LVL-bearing PRU milestones",
+
+    "derived/eur/level-segment-duration-summary-eur-2026.csv",
+    "EUR/PRU", "derived", TRUE, "2026-level-segments", "scripts/05-build-eur-level-segments.R",
+    "derived/eur/level-segments-eur-2026.parquet",
+    "EUR level-segment duration and quality summary",
 
     "raw/chn/CHN-canonical-milestones.parquet",
     "CHN/QAR", "raw", FALSE, "pending", "scripts/prepare-chn-qar-canonical.R", "",

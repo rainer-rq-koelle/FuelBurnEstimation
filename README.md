@@ -29,7 +29,7 @@ local cache synced from R2; OneDrive is no longer part of the workflow.
 r2://paper-fuel-burn-estimation/
 ├── raw/eur/         EUR canonical milestones (source data)
 ├── raw/chn/         CHN canonical milestones (source data)
-├── derived/eur/     EUR harmonized milestones (2026 convention)
+├── derived/eur/     EUR harmonized milestones and level-segment products
 ├── derived/chn/     CHN harmonized milestones (2026 convention)
 ├── manifest/        Authoritative manifest, inventory, and validation reports
 └── handover/        Cross-machine sync status summaries
@@ -128,6 +128,11 @@ enriched convention:
 - `R/eur-milestone-harmonization.R` provides functions for renaming, mapping,
   and deriving canonical milestone labels.
 - `scripts/04-harmonize-eur-milestones.R` applies the harmonization pipeline.
+- `R/eur-level-segments.R` reconstructs phase-aware EUR level intervals from
+  `LVL` tokens, including composite labels such as `F100/LVL`.
+- `scripts/05-build-eur-level-segments.R` writes
+  `derived/eur/level-segments-eur-2026.parquet` and
+  `derived/eur/level-segment-duration-summary-eur-2026.csv`.
 
 Output is written to the local `derived/eur/` cache and can then be uploaded to
 R2 by a maintainer.
@@ -155,4 +160,5 @@ Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
 Rscript scripts/04-harmonize-eur-milestones.R
+Rscript scripts/05-build-eur-level-segments.R
 ```

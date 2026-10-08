@@ -23,13 +23,17 @@
 #' @return Character vector with renamed labels
 #' @export
 rename_distance_milestones <- function(mst_label) {
-  dplyr::case_when(
-    mst_label == "F40" ~ "D040",
-    mst_label == "F100" ~ "D100",
-    mst_label == "L40" ~ "A040",
-    mst_label == "L100" ~ "A100",
-    TRUE ~ mst_label
-  )
+  purrr::map_chr(mst_label, function(label) {
+    tokens <- unlist(strsplit(label, "/", fixed = TRUE), use.names = FALSE)
+    mapped <- dplyr::case_when(
+      tokens %in% c("F40", "D40") ~ "D040",
+      tokens %in% c("F100") ~ "D100",
+      tokens %in% c("L40", "A40") ~ "A040",
+      tokens %in% c("L100") ~ "A100",
+      TRUE ~ tokens
+    )
+    paste(unique(mapped), collapse = "/")
+  })
 }
 
 #' Map FL100 to direction-aware labels based on phase
@@ -39,12 +43,7 @@ rename_distance_milestones <- function(mst_label) {
 #' @return Character vector with direction-aware FL100 labels
 #' @export
 map_fl100_direction <- function(mst_label, phase) {
-  dplyr::case_when(
-    mst_label == "FL100" & stringr::str_detect(stringr::str_to_lower(phase), "climb") ~ "D_FL100",
-    mst_label == "FL100" & stringr::str_detect(stringr::str_to_lower(phase), "descent|approach") ~ "A_FL100",
-    mst_label == "FL100" ~ "FL100_REVIEW",  # Flag ambiguous cases
-    TRUE ~ mst_label
-  )
+  canonicalize_eur_milestone_tokens(mst_label, phase)
 }
 
 #' Derive direction-aware flight-level crossing milestones

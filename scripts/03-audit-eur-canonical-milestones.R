@@ -10,12 +10,23 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
+source(here("R", "eur-level-segments.R"))
+
 message("Auditing EUR canonical milestones...")
 message("Working directory: ", here())
 
+data_store <- Sys.getenv("FUELBURN_DATA_STORE", unset = "")
+default_eur_file <- if (data_store != "") {
+  expanded_file <- file.path(path.expand(data_store), "raw/eur/EUR-canonical-milestones-expanded-summer2025.parquet")
+  compact_file <- file.path(path.expand(data_store), "raw/eur/EUR-canonical-milestones-summer2025.parquet")
+  if (file.exists(expanded_file)) expanded_file else compact_file
+} else {
+  here("data-derived", "canonical-milestones-eur-2025-summer.parquet")
+}
+
 eur_file <- Sys.getenv(
   "FUELBURN_EUR_CANONICAL_MILESTONES",
-  unset = here("data-derived", "canonical-milestones-eur-2025-summer.parquet")
+  unset = default_eur_file
 )
 
 audit_dir <- Sys.getenv(
@@ -76,6 +87,21 @@ label_counts <- eur |>
 
 readr::write_csv(label_counts, file.path(audit_dir, "milestone-label-counts.csv"))
 
+phase_values <- if (!is.na(phase_col)) eur[[phase_col]] else rep(NA_character_, nrow(eur))
+
+raw_token_counts <- eur |>
+  mutate(MST_RAW_TOKEN = .data[[mst_col]]) |>
+  tidyr::separate_longer_delim(MST_RAW_TOKEN, delim = "/") |>
+  count(MST_RAW_TOKEN, sort = TRUE)
+
+token_counts <- eur |>
+  mutate(MST_CANONICAL_TOKEN = canonicalize_eur_milestone_tokens(.data[[mst_col]], phase_values)) |>
+  tidyr::separate_longer_delim(MST_CANONICAL_TOKEN, delim = "/") |>
+  count(MST_CANONICAL_TOKEN, sort = TRUE)
+
+readr::write_csv(raw_token_counts, file.path(audit_dir, "milestone-token-counts-raw.csv"))
+readr::write_csv(token_counts, file.path(audit_dir, "milestone-token-counts-canonicalized.csv"))
+
 target_labels <- tibble::tribble(
   ~source_label, ~canonical_label, ~family, ~recommended_action,
   "D40", "D040", "distance", "rename existing label",
@@ -97,11 +123,18 @@ target_labels <- tibble::tribble(
 )
 
 label_audit <- target_labels |>
-  left_join(label_counts, by = c("source_label" = "MST")) |>
+  left_join(raw_token_counts, by = c("source_label" = "MST_RAW_TOKEN")) |>
+  rename(source_n = n) |>
+  mutate(canonical_lookup_label = if_else(str_detect(.data$canonical_label, "/"), NA_character_, .data$canonical_label)) |>
+  left_join(token_counts, by = c("canonical_lookup_label" = "MST_CANONICAL_TOKEN")) |>
+  rename(canonical_token_n = n) |>
   mutate(
-    n = tidyr::replace_na(n, 0L),
-    present = n > 0
+    source_n = tidyr::replace_na(.data$source_n, 0L),
+    canonical_token_n = tidyr::replace_na(.data$canonical_token_n, 0L),
+    source_present = .data$source_n > 0,
+    canonical_token_present = .data$canonical_token_n > 0
   ) |>
+  select(-canonical_lookup_label) |>
   arrange(family, source_label)
 
 readr::write_csv(label_audit, file.path(audit_dir, "milestone-convention-audit.csv"))
@@ -111,7 +144,7 @@ print(label_audit, n = Inf)
 
 if (!is.na(phase_col)) {
   fl100_phase_context <- eur |>
-    filter(.data[[mst_col]] == "FL100") |>
+    filter(has_milestone_token(.data[[mst_col]], "FL100")) |>
     mutate(
       inferred_direction = case_when(
         str_detect(str_to_lower(.data[[phase_col]]), "climb") ~ "candidate_D_FL100",
@@ -252,7 +285,7 @@ print(flight_level_summary)
 
 level_phase_context <- if (!is.na(phase_col)) {
   eur |>
-    filter(.data[[mst_col]] == "LVL") |>
+    filter(has_milestone_token(.data[[mst_col]], "LVL")) |>
     count(phase = .data[[phase_col]], sort = TRUE)
 } else {
   tibble(note = "No phase column available.")

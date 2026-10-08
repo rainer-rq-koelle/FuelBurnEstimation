@@ -206,3 +206,18 @@ The next iteration should check how far the already processed PRU data conforms 
 6. Only after this audit, decide which PRU processing needs to be rerun on another machine and which transformations can be applied to the already processed files.
 
 This keeps source-specific preparation reproducible while allowing the paper to use harmonised analytical milestones, intervals, and lookup tables.
+
+## EUR PRU preparatory status
+
+The reproducible EUR preparatory scripts now use the R2-backed local data store
+when `FUELBURN_DATA_STORE` is configured. `scripts/03-audit-eur-canonical-milestones.R`
+audits raw and canonicalized slash-separated milestone tokens, distance
+monotonicity, and pressure-altitude flight-level support. `scripts/04-harmonize-eur-milestones.R`
+writes the enriched canonical milestone table, and
+`scripts/05-build-eur-level-segments.R` writes a separate phase-aware
+level-segment interval table plus duration and quality summaries.
+
+The level-segment table intentionally keeps orphan terminal `LVL` events and
+other quality flags visible. Reporting thresholds should therefore be chosen
+from `derived/eur/level-segment-duration-summary-eur-2026.csv`, not embedded in
+the extraction step.
