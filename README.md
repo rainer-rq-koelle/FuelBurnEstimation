@@ -17,9 +17,73 @@ The immediate goal is a simple Quarto paper that can render to MS Word and PDF, 
 - `notes/reference-data-inventory.csv` can be regenerated from the 2025 project with `Rscript scripts/00-inventory-reference-data.R`.
 - `notes/handover-2026-10-05.md` captures the first conceptual milestone: source-specific preparation, harmonised milestone outputs, and level-segment characterisation as a paper-level analytical decision.
 
-## OneDrive Data Store
+## Cross-Machine Data Sharing (Cloudflare R2)
 
-Large data artifacts are stored in OneDrive for automatic cross-machine sync:
+Data artifacts are shared via **Cloudflare R2** (S3-compatible storage) to overcome corporate OneDrive sync restrictions.
+
+### R2 Bucket Structure
+```
+r2://paper-fuel-burn-estimation/
+├── raw/eur/         EUR canonical milestones (source data)
+├── raw/chn/         CHN canonical milestones (source data)
+├── derived/eur/     EUR harmonized milestones (2026 convention)
+├── derived/chn/     CHN harmonized milestones (2026 convention)
+├── manifest/        Data inventory and validation reports
+└── handover/        Cross-machine sync status summaries
+```
+
+### Setup (One-Time per Machine)
+
+1. **Copy `.Renviron.example` to `.Renviron`**
+2. **Set local data store path**:
+   ```r
+   FUELBURN_DATA_STORE=/path/to/local/data/store
+   ```
+3. **Add R2 credentials** (get from https://dash.cloudflare.com → R2 → API Tokens):
+   ```r
+   R2_ACCESS_KEY_ID=<your-key>
+   R2_SECRET_ACCESS_KEY=<your-secret>
+   R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com
+   R2_BUCKET=paper-fuel-burn-estimation
+   ```
+
+### Workflow
+
+**On source machine (Windows):**
+```sh
+# Upload data to R2
+Rscript scripts/r2-upload-data-store.R
+
+# Verify upload
+Rscript scripts/r2-list-files.R
+```
+
+**On destination machine (Mac):**
+```sh
+# Download data from R2
+Rscript scripts/r2-download-data-store.R
+
+# Verify local data
+Rscript scripts/00-check-data-store.R
+```
+
+### R2 Helper Functions
+
+**R package** (`R/r2-storage.R`):
+- `r2_upload()` - Upload file to R2
+- `r2_download()` - Download file from R2
+- `r2_list()` - List bucket contents
+- `r2_exists()` - Check if file exists
+- `r2_delete()` - Delete file from R2
+
+**Scripts**:
+- `scripts/r2-upload-data-store.R` - Upload local data store to R2
+- `scripts/r2-download-data-store.R` - Download R2 data to local machine
+- `scripts/r2-list-files.R` - List all files in R2 bucket
+
+## Local Data Store
+
+Each machine maintains a local data store (OneDrive sync or local directory):
 
 ```
 FUELBURN_DATA_STORE/
@@ -30,11 +94,6 @@ FUELBURN_DATA_STORE/
 ├── manifest/        Data inventory and validation reports
 └── handover/        Cross-machine sync status summaries
 ```
-
-**Setup:**
-1. Copy `.Renviron.example` to `.Renviron`
-2. Set `FUELBURN_DATA_STORE` to your local OneDrive path
-3. Run `Rscript scripts/00-check-data-store.R` to validate setup
 
 **Checker script** (`scripts/00-check-data-store.R`):
 - Validates folder structure and file presence
@@ -54,7 +113,7 @@ EUR PRU data uses legacy milestone labels that need harmonization to the 2026 en
   3. Derives new FL crossing milestones: `D_FL075`, `D_FL180`, `A_FL075`, `A_FL180`
   4. Reconstructs `LVL` events into paired `LVL_START`/`LVL_END` milestones
 
-Output: `data-derived/canonical-milestones-eur-2026-harmonized.parquet` or OneDrive `derived/eur/`
+Output: `data-derived/canonical-milestones-eur-2026-harmonized.parquet` or local data store `derived/eur/`
 
 ## Reference Project
 
@@ -68,8 +127,14 @@ For machine-specific settings, copy `.Renviron.example` to `.Renviron` and edit 
 ## First Commands
 
 ```sh
-# Validate OneDrive data store
+# Download data from R2 (first time on new machine)
+Rscript scripts/r2-download-data-store.R
+
+# Validate local data store
 Rscript scripts/00-check-data-store.R
+
+# List R2 bucket contents
+Rscript scripts/r2-list-files.R
 
 # Render documentation
 quarto render paper.qmd --to html
@@ -80,5 +145,7 @@ Rscript scripts/00-inventory-reference-data.R
 Rscript scripts/test-eur-canonical-import.R
 Rscript scripts/03-audit-eur-canonical-milestones.R
 Rscript scripts/04-harmonize-eur-milestones.R
-Rscript scripts/90-check-data-store.R
+
+# Upload data to R2 (after processing)
+Rscript scripts/r2-upload-data-store.R
 ```

@@ -12,7 +12,7 @@
 # Leave unset for automatic kg/h vs lb/h inference.
 # CHN_QAR_FUEL_FLOW_UNIT=auto
 
-# Shared data store (OneDrive recommended for cross-machine sync)
+# Shared data store (local path for OneDrive or other sync folder)
 # FUELBURN_DATA_STORE=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data
 
 # EUR canonical milestone parquet (raw data)
@@ -26,3 +26,11 @@
 # Optional: output folder for the EUR milestone audit CSV files.
 # Defaults to data-derived/eur-canonical-milestone-audit.
 # FUELBURN_EUR_MILESTONE_AUDIT_DIR=/path/to/local/audit-output
+
+# Cloudflare R2 Storage (S3-compatible)
+# Get credentials from: https://dash.cloudflare.com → R2 → Manage R2 API Tokens
+# ⚠️ SENSITIVE: Never commit these to Git - keep them only in .Renviron
+# R2_ACCESS_KEY_ID=<your-access-key-id>
+# R2_SECRET_ACCESS_KEY=<your-secret-access-key>
+# R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
+# R2_BUCKET=<your-bucket-name>
