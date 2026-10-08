@@ -87,8 +87,8 @@ r2_artifact_registry <- function() {
   tibble::tribble(
     ~key, ~source, ~stage, ~required, ~version, ~produced_by_script, ~input_artifacts, ~description,
     "raw/eur/EUR-canonical-milestones-summer2025.parquet",
-    "EUR/PRU", "raw", TRUE, "summer2025", "external-pru-source", "",
-    "EUR raw canonical milestones",
+    "EUR/PRU", "raw", TRUE, "summer2025-TBD-verify-V4", "external-pru-source", "",
+    "EUR raw canonical milestones (PRU query version TBD - verify V4)",
 
     "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
     "EUR/PRU", "derived", TRUE, "2026-harmonized", "scripts/04-harmonize-eur-milestones.R",

@@ -20,6 +20,62 @@ Analysis of PRU canonical milestone data reveals **systematic incompleteness in 
 
 **Issue:** More than half of flights with LVL markers have incomplete pairing, preventing accurate level-segment duration and fuel burn calculations.
 
+## Data Provenance
+
+### Source Dataset
+
+**File:** `EUR-canonical-milestones-summer2025.parquet`  
+**Origin:** EUROCONTROL Performance Review Unit (PRU)  
+**Period:** Summer 2025  
+**Coverage:** 21,503 flights, 431,901 milestone records
+
+### Query Version
+
+**Status:** ⚠️ **To Be Confirmed**
+
+The specific PRU table query version (V4 vs V5) used to extract this dataset is **not documented** in the current data handover. This information is important for:
+
+1. **Reproducibility:** Future analysts need to know which PRU query to use
+2. **Methodology validation:** Different query versions may produce different milestone completeness
+3. **Issue attribution:** LVL pairing issues may be version-specific
+4. **Feedback targeting:** PRU improvements should target the correct query pipeline
+
+**Planned verification:** Re-extract milestone data from PRU `xxxxxx_V4` table and compare:
+- Milestone counts by type
+- LVL marker distribution
+- Pairing completeness
+- Field availability
+
+This will confirm whether the analyzed dataset was generated from V4 or V5 query and whether query version affects LVL marker completeness.
+
+### Data Characteristics
+
+**Milestone types present:**
+- Backbone milestones: AOBT, ERWY, ATOT, TOC, TOD, ALDT, AIBT (complete)
+- Distance milestones: D40, D100, A40, A100 (legacy naming)
+- Altitude milestones: FL100 (generic, needs direction mapping)
+- Level markers: LVL (55,176 markers, incomplete pairing)
+- Airspace boundaries: FIR, AUA (supplementary)
+
+**Compound milestones:** Source uses slash-separated multiplicity (e.g., `"TOC/LVL"`, `"LVL/FL100"`)
+
+**Fields available:**
+- Core trajectory: TIME, LAT, LON, ALT
+- Fuel: TOT_FUEL_KG (total fuel remaining)
+- Phase: FLIGHT_PHASE_RAW (includes `Lvl_climb`, `Lvl_descent`)
+- Metadata: ADEP, ADES, TYPE, OPERATOR
+
+### Quality Assessment
+
+| Dimension | Status | Comment |
+|-----------|--------|---------|
+| **Coverage** | ✓ Good | 21,503 flights for summer period |
+| **Completeness** | ⚠️ Moderate | Core milestones complete, LVL pairing incomplete |
+| **Timeliness** | ✓ Good | Recent data (Summer 2025) |
+| **Documentation** | ⚠️ Needs improvement | Query version not specified |
+
+---
+
 ---
 
 ## Background: LVL Markers in PRU Data
