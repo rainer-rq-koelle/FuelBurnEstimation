@@ -21,10 +21,10 @@ Hi! We've set up Cloudflare R2 for cross-machine data sharing. Could you verify 
    # Local cache directory (NOT OneDrive - just a normal local folder)
    FUELBURN_DATA_STORE=/Users/<you>/RProjects/FuelBurnEstimation/data-store
    
-   # R2 credentials (get from Windows team or Cloudflare dashboard)
-   R2_ACCESS_KEY_ID=9177e8163e24e0eed0124ae10bb9bc98
-   R2_SECRET_ACCESS_KEY=106b56250d9e99e68c758a07f4b78d1027a1002ecd91483611c2a52e22c7a7c7
-   R2_ENDPOINT=https://a861206fbbb4aa25c26a4812f360674d.r2.cloudflarestorage.com
+   # R2 credentials (get from Windows team out-of-band - NEVER commit these)
+   R2_ACCESS_KEY_ID=<r2-access-key-id>
+   R2_SECRET_ACCESS_KEY=<r2-secret-access-key>
+   R2_ENDPOINT=<r2-endpoint-url>
    R2_BUCKET=paper-fuel-burn-estimation
    ```
 
