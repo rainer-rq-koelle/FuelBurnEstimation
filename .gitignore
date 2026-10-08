@@ -25,3 +25,4 @@ desktop.ini
 /tmp_unzip/
 
 **/*.quarto_ipynb
+data-store/

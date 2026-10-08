@@ -1,36 +1,28 @@
 # Copy to .Renviron for local machine-specific settings.
 # Do not commit .Renviron itself.
 
-# Location of the 2025 reference project on this machine.
+# Location of the 2025 reference project on this machine (optional)
 # macOS example:
 # FUELBURN_2025_PROJECT=/Users/<user>/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
 #
 # Windows example:
 # FUELBURN_2025_PROJECT=C:/Users/<user>/Documents/RProjects/paper-2025-ICNS-CHN-EUR-fuelburn
 
-# Optional: force CHN QAR fuel-flow units when known.
-# Leave unset for automatic kg/h vs lb/h inference.
-# CHN_QAR_FUEL_FLOW_UNIT=auto
+# Local data store (cache synced from R2)
+# R2 is the source of truth - this is just your local working copy
+# Windows:
+FUELBURN_DATA_STORE=C:/Users/<user>/dev/RProjects/FuelBurnEstimation/data-store
+# macOS:
+# FUELBURN_DATA_STORE=/Users/<user>/RProjects/FuelBurnEstimation/data-store
 
-# Shared data store (local path for OneDrive or other sync folder)
-# FUELBURN_DATA_STORE=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data
-
-# EUR canonical milestone parquet (raw data)
-# Used by scripts/03-audit-eur-canonical-milestones.R and test-eur-canonical-import.R
-# FUELBURN_EUR_CANONICAL_MILESTONES=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data/raw/eur/EUR-canonical-milestones-summer2025.parquet
-
-# EUR harmonized milestone parquet (derived data)
-# Used by scripts/04-harmonize-eur-milestones.R
-# FUELBURN_EUR_HARMONIZED_MILESTONES=C:/Users/<user>/OneDrive - EUROCONTROL/__DATA/FuelBurnEstimation-data/derived/eur/canonical-milestones-eur-2026-harmonized.parquet
-
-# Optional: output folder for the EUR milestone audit CSV files.
-# Defaults to data-derived/eur-canonical-milestone-audit.
-# FUELBURN_EUR_MILESTONE_AUDIT_DIR=/path/to/local/audit-output
-
-# Cloudflare R2 Storage (S3-compatible)
+# Cloudflare R2 Storage (PRIMARY SYNC METHOD)
 # Get credentials from: https://dash.cloudflare.com → R2 → Manage R2 API Tokens
 # ⚠️ SENSITIVE: Never commit these to Git - keep them only in .Renviron
-# R2_ACCESS_KEY_ID=<your-access-key-id>
-# R2_SECRET_ACCESS_KEY=<your-secret-access-key>
-# R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
-# R2_BUCKET=<your-bucket-name>
+R2_ACCESS_KEY_ID=<your-access-key-id>
+R2_SECRET_ACCESS_KEY=<your-secret-access-key>
+R2_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
+R2_BUCKET=paper-fuel-burn-estimation
+
+# Optional: force CHN QAR fuel-flow units when known
+# Leave unset for automatic kg/h vs lb/h inference
+# CHN_QAR_FUEL_FLOW_UNIT=auto
