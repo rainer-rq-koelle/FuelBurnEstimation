@@ -95,6 +95,21 @@ r2_artifact_registry <- function() {
     "raw/eur/EUR-canonical-milestones-summer2025.parquet",
     "EUR harmonized milestones in the 2026 convention",
 
+    "derived/eur/level-segments-eur-2026.parquet",
+    "EUR/PRU", "derived", TRUE, "2026", "scripts/05-derive-eur-level-segments.R",
+    "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
+    "EUR level-segment intervals with QC flags",
+
+    "derived/eur/level-segment-duration-summary-eur-2026.csv",
+    "EUR/PRU", "derived", FALSE, "2026", "scripts/05-derive-eur-level-segments.R",
+    "derived/eur/level-segments-eur-2026.parquet",
+    "EUR level-segment duration distribution summary",
+
+    "derived/eur/level-segment-qc-eur-2026.csv",
+    "EUR/PRU", "derived", FALSE, "2026", "scripts/05-derive-eur-level-segments.R",
+    "derived/eur/level-segments-eur-2026.parquet",
+    "EUR level-segment QC detail by phase and altitude",
+
     "raw/chn/CHN-canonical-milestones.parquet",
     "CHN/QAR", "raw", FALSE, "pending", "scripts/prepare-chn-qar-canonical.R", "",
     "CHN raw canonical milestones",
