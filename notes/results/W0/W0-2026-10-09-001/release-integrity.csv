@@ -1,0 +1,8 @@
+key,required,version,local_exists,hash_matches
+processed/chn/CHN-canonical-milestones-summer2025.parquet,TRUE,summer2025,TRUE,TRUE
+processed/chn/CHN-level-segments-summer2025.parquet,TRUE,summer2025,TRUE,TRUE
+processed/chn/CHN-phase-summaries-summer2025.parquet,FALSE,summer2025,TRUE,TRUE
+processed/eur/EUR-canonical-milestones-summer2025.parquet,TRUE,FIXED-summer2025,TRUE,TRUE
+processed/eur/EUR-level-segments-summer2025.parquet,TRUE,FIXED-summer2025,TRUE,TRUE
+raw/eur/g2g-flight-metadata-2025-summer-FIXED.parquet,FALSE,FIXED,TRUE,TRUE
+raw/eur/g2g-segment-details-2025-summer-FIXED.parquet,FALSE,FIXED,TRUE,TRUE
