@@ -86,37 +86,81 @@ r2_data_store_dirs <- function() {
 r2_artifact_registry <- function() {
   tibble::tribble(
     ~key, ~source, ~stage, ~required, ~version, ~produced_by_script, ~input_artifacts, ~description,
-    "raw/eur/EUR-canonical-milestones-summer2025.parquet",
-    "EUR/PRU", "raw", TRUE, "summer2025-TBD-verify-V4", "external-pru-source", "",
-    "EUR raw canonical milestones (PRU query version TBD - verify V4)",
 
-    "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
-    "EUR/PRU", "derived", TRUE, "2026-harmonized", "scripts/04-harmonize-eur-milestones.R",
-    "raw/eur/EUR-canonical-milestones-summer2025.parquet",
-    "EUR harmonized milestones in the 2026 convention",
+    # ===================================================================
+    # EUR PRODUCTION DATA (FIXED Pipeline - 0% orphans)
+    # ===================================================================
 
-    "derived/eur/level-segments-eur-2026.parquet",
-    "EUR/PRU", "derived", TRUE, "2026", "scripts/05-derive-eur-level-segments.R",
-    "derived/eur/canonical-milestones-eur-2026-harmonized.parquet",
-    "EUR level-segment intervals with QC flags",
+    "processed/eur/EUR-canonical-milestones-summer2025.parquet",
+    "EUR/PRU", "production", TRUE, "FIXED-summer2025", "scripts/08-create-harmonized-analytical-datasets.R",
+    "data-store/raw/eur/EUR-canonical-milestones-summer2025-ENRICHED.parquet",
+    "EUR production canonical milestones - FIXED pipeline with CHN-compatible schema (21 cols, 0% orphans)",
 
-    "derived/eur/level-segment-duration-summary-eur-2026.csv",
-    "EUR/PRU", "derived", FALSE, "2026", "scripts/05-derive-eur-level-segments.R",
-    "derived/eur/level-segments-eur-2026.parquet",
-    "EUR level-segment duration distribution summary",
+    "processed/eur/EUR-level-segments-summer2025.parquet",
+    "EUR/PRU", "production", TRUE, "FIXED-summer2025", "scripts/08-create-harmonized-analytical-datasets.R",
+    "data-store/derived/eur/level-segments-eur-2026-ENRICHED.parquet",
+    "EUR production level segments - FIXED pipeline (31 cols, 100% complete, 0% orphans)",
 
-    "derived/eur/level-segment-qc-eur-2026.csv",
-    "EUR/PRU", "derived", FALSE, "2026", "scripts/05-derive-eur-level-segments.R",
-    "derived/eur/level-segments-eur-2026.parquet",
-    "EUR level-segment QC detail by phase and altitude",
+    # ===================================================================
+    # CHN PRODUCTION DATA
+    # ===================================================================
 
-    "raw/chn/CHN-canonical-milestones.parquet",
-    "CHN/QAR", "raw", FALSE, "pending", "scripts/prepare-chn-qar-canonical.R", "",
-    "CHN raw canonical milestones",
+    "processed/chn/CHN-canonical-milestones-summer2025.parquet",
+    "CHN/QAR", "production", TRUE, "summer2025", "scripts/process-chn-summer2025-update.R",
+    "",
+    "CHN production canonical milestones - Summer 2025 (21 cols, compatible with EUR)",
 
-    "derived/chn/CHN-canonical-milestones-harmonized.parquet",
-    "CHN/QAR", "derived", FALSE, "pending", "pending", "raw/chn/CHN-canonical-milestones.parquet",
-    "CHN harmonized milestones"
+    "processed/chn/CHN-level-segments-summer2025.parquet",
+    "CHN/QAR", "production", TRUE, "summer2025", "scripts/process-chn-summer2025-update.R",
+    "",
+    "CHN production level segments - Summer 2025 (31 cols)",
+
+    "processed/chn/CHN-phase-summaries-summer2025.parquet",
+    "CHN/QAR", "production", FALSE, "summer2025", "scripts/process-chn-summer2025-update.R",
+    "",
+    "CHN phase summaries - Summer 2025",
+
+    # ===================================================================
+    # EUR RAW DATA (FIXED extraction)
+    # ===================================================================
+
+    "raw/eur/EUR-canonical-milestones-summer2025-ENRICHED.parquet",
+    "EUR/PRU", "raw", FALSE, "FIXED-enriched", "scripts/06-enrich-eur-canonical.R",
+    "data-store/raw/eur/EUR-canonical-milestones-summer2025-FIXED.parquet",
+    "EUR enriched canonical milestones - FIXED extraction with metadata (21 cols)",
+
+    "raw/eur/g2g-flight-metadata-2025-summer-FIXED.parquet",
+    "EUR/PRU", "raw", FALSE, "FIXED", "external-pru-query",
+    "",
+    "EUR G2G flight metadata - FIXED extraction (LOBT bug corrected)",
+
+    "raw/eur/g2g-segment-details-2025-summer-FIXED.parquet",
+    "EUR/PRU", "raw", FALSE, "FIXED", "external-pru-query",
+    "",
+    "EUR G2G segment details - FIXED extraction (LOBT bug corrected)",
+
+    # ===================================================================
+    # EUR DERIVED DATA (FIXED pipeline)
+    # ===================================================================
+
+    "derived/eur/level-segments-eur-2026-ENRICHED.parquet",
+    "EUR/PRU", "derived", FALSE, "FIXED-enriched", "scripts/07-enrich-eur-level-segments.R",
+    "data-store/derived/eur/level-segments-eur-2026.parquet",
+    "EUR enriched level segments with LEVEL_CONTEXT_PHASE (31 cols)",
+
+    # ===================================================================
+    # ARCHIVED DATA (OLD pipeline - pre-LOBT fix)
+    # ===================================================================
+
+    "archive/old-lobt-bug/canonical-milestones-eur-2026-harmonized.parquet",
+    "EUR/PRU", "archive", FALSE, "OLD-2026", "archived-2026-10-09",
+    "",
+    "ARCHIVED: EUR harmonized milestones OLD pipeline (54.4% orphans) - kept for reference",
+
+    "archive/old-lobt-bug/level-segments-eur-2026.parquet",
+    "EUR/PRU", "archive", FALSE, "OLD-2026", "archived-2026-10-09",
+    "",
+    "ARCHIVED: EUR level segments OLD pipeline (9.2% orphans after harmonization) - kept for reference"
   )
 }
 
