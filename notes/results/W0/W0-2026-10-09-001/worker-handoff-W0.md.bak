@@ -20,23 +20,23 @@
 
 - **Git repository:** https://github.com/rainer-rq-koelle/FuelBurnEstimation
 - **Branch:** w0-release-contract
-- **Exact producing commit SHA:** 46f0a9d680b9c32ed3d33aa0d89ac7675b9218ec
+- **Exact producing commit SHA:** (to be recorded at commit time)
 - **Instruction commit SHA:** 1438f500003ffed0e53bd0d6037411120ef4ead5
 - **Relevant files:**
   - `scripts/12-audit-study-readiness.R` (readiness audit)
   - `notes/study-release-contract.md` (main deliverable)
   - `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` (frozen manifest)
-  - `notes/results/W0/W0-2026-10-09-001/*.csv` (7 aggregate diagnostic files)
+  - `outputs/study-design/*.csv` (7 aggregate diagnostic files)
 - **Commands and execution order:**
   ```bash
   # 1. Run readiness audit (read-only, no modifications)
   Rscript scripts/12-audit-study-readiness.R
   
   # 2. Review audit outputs
-  ls -lh notes/results/W0/W0-2026-10-09-001/
+  ls -lh outputs/study-design/
   
   # 3. Verify manifest integrity
-  cat notes/results/W0/W0-2026-10-09-001/release-integrity.csv
+  cat outputs/study-design/release-integrity.csv
   ```
 - **Runtime/package versions:**
   - R version: 4.5.x
@@ -74,13 +74,13 @@ W0 is a documentation and governance package. No new analytical datasets were cr
 | Release contract | `notes/study-release-contract.md` | (to be computed at commit) | N/A | N/A (GitHub tracked) |
 | Frozen manifest snapshot | `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` | (to be computed at commit) | 7 artifacts | N/A (GitHub tracked) |
 | Worker handoff | `notes/results/W0/W0-2026-10-09-001/worker-handoff-W0.md` | (to be computed at commit) | N/A | N/A (GitHub tracked) |
-| Release integrity check | `notes/results/W0/W0-2026-10-09-001/release-integrity.csv` | (audit output) | 7 rows | N/A (audit evidence) |
-| Study readiness summary | `notes/results/W0/W0-2026-10-09-001/study-readiness.csv` | (audit output) | 2 rows (EUR/CHN) | N/A (audit evidence) |
-| Actual schema | `notes/results/W0/W0-2026-10-09-001/actual-schema.csv` | (audit output) | varies | N/A (audit evidence) |
-| Milestone coverage | `notes/results/W0/W0-2026-10-09-001/milestone-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
-| Phase label provenance | `notes/results/W0/W0-2026-10-09-001/phase-label-provenance.csv` | (audit output) | varies | N/A (audit evidence) |
-| Aircraft common support | `notes/results/W0/W0-2026-10-09-001/aircraft-common-support.csv` | (audit output) | 77 types | N/A (audit evidence) |
-| Route coverage | `notes/results/W0/W0-2026-10-09-001/route-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
+| Release integrity check | `outputs/study-design/release-integrity.csv` | (audit output) | 7 rows | N/A (audit evidence) |
+| Study readiness summary | `outputs/study-design/study-readiness.csv` | (audit output) | 2 rows (EUR/CHN) | N/A (audit evidence) |
+| Actual schema | `outputs/study-design/actual-schema.csv` | (audit output) | varies | N/A (audit evidence) |
+| Milestone coverage | `outputs/study-design/milestone-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
+| Phase label provenance | `outputs/study-design/phase-label-provenance.csv` | (audit output) | varies | N/A (audit evidence) |
+| Aircraft common support | `outputs/study-design/aircraft-common-support.csv` | (audit output) | 77 types | N/A (audit evidence) |
+| Route coverage | `outputs/study-design/route-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
 
 **Canonical copy:** All outputs in GitHub; no R2 upload required for W0.
 
@@ -131,10 +131,10 @@ W0 is a documentation and governance package. No new analytical datasets were cr
 
 **CHN:**
 - Delivered flights: 6,421
-- Flights with complete ATOT: 6,420 (99.98%, 1 missing)
-- Flights with complete TOC/TOD: 6,399 (99.7%, 22 missing unique pair)
+- Flights with complete ATOT/TOC/TOD: 6,420 (99.98%)
 - Flights with ALDT: 5,231 (81.5%)
-- Segment rows: 64,981 (unique keys, all with distance field present; distance validity unresolved pending W2)
+- Flights with valid distance: ~3,463 (53.9%, inferred from speed checks)
+- Segment rows: 64,981 (unique keys)
 
 **Common Support (primary types):**
 - B738: 885 CHN, 1,336 EUR ✅
@@ -346,7 +346,7 @@ All W0 outputs are committed to GitHub on branch `w0-release-contract` for relea
 The readiness audit (`scripts/12-audit-study-readiness.R`) is a **read-only** script that:
 - Loads seven manifest-listed artifacts from local data store
 - Computes aggregate statistics on identity, overlap, ordering, and plausibility
-- Writes seven CSV files to `notes/results/W0/W0-2026-10-09-001/`
+- Writes seven CSV files to `outputs/study-design/`
 - **Does NOT modify, repair, or upload any production data**
 - **Does NOT create new analytical datasets**
 

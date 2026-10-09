@@ -5,7 +5,7 @@
 **Worker:** Claude Sonnet 4.5  
 **Completed:** 2026-10-09T13:00:00Z  
 **Instruction Commit:** 1438f500003ffed0e53bd0d6037411120ef4ead5  
-**Producing Commit:** (to be recorded at commit time)
+**Producing-Code Commit:** 46f0a9d680b9c32ed3d33aa0d89ac7675b9218ec
 
 ## Executive Summary
 
@@ -179,7 +179,7 @@ Types with substantial two-region support for initial study:
 - [ ] **Fuel accounting:** Engine summation method, raw vs. cleaned, gap/spike rules
 - [ ] **Cumulative conventions:** Are cumulative values "up to timestamp" or "including next interval"?
 - [ ] **Distance calculation:** Cumulative path from coordinates? Which geodetic model?
-- [ ] **Missing ALDT root cause:** Why are 1,190 landing events absent?
+- [ ] **Missing ALDT investigation:** 1,190 landing events absent (18.5% of flights). W2 diagnostic lead: check batch helper version and flight-level overlap before attributing to specific cause.
 - [ ] **TOC/TOD detector:** Settings, altitude/rate thresholds, window definitions
 - [ ] **Clock reference:** True instants or local wall times?
 
@@ -272,7 +272,7 @@ Types with substantial two-region support for initial study:
 
 ## Minimum Study Scope and Analysis Readiness
 
-### Agreed Minimum Publishable Scope
+### Proposed Minimum Publishable Scope
 
 **Objective:** Test whether independently defined operational profile descriptors improve phase-dependent fuel references beyond exact-aircraft-type/phase coefficients.
 
@@ -544,7 +544,7 @@ Required for Gate A:
 - [x] Critical EUR/CHN validity issues documented
 - [x] Source questions enumerated for W1/W2
 - [x] W1/W2 scope, dependencies, acceptance criteria defined
-- [x] Minimum publishable scope agreed
+- [x] Minimum publishable scope proposed in study plan
 - [x] Unresolved author questions documented
 - [x] Storage locations for all deliverables specified
 
