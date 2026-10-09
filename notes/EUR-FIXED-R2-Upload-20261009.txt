@@ -1,0 +1,69 @@
+
+═══════════════════════════════════════════════════════════════
+EUR FIXED DATA UPLOAD - %Y-%m-%d %H:%M:%S %Z
+═══════════════════════════════════════════════════════════════
+
+SUMMARY
+-------
+EUR Summer 2025 data processed with FIXED pipeline (LOBT bug corrected)
+uploaded to R2 and ready for analysis.
+
+PIPELINE IMPROVEMENTS
+--------------------
+- LOBT Bug Fix: Two-stage SAM_ID extraction ensures complete flights
+- Orphan Rate: 54.4% → 0.0% (-100%)
+- Total Segments: 60,012 → 86,142 (+43.6%)
+- Complete Segments: 100% (all segments have matching LVL_END)
+
+DATA FILES UPLOADED
+-------------------
+1. processed/eur/EUR-canonical-milestones-summer2025.parquet
+   - Rows: 696,076
+   - Flights: 21,503
+   - Size: 21.01 MB
+   - Schema: 21 columns (CHN-compatible)
+   - Enhancements: TOTAL_FLOWN_NM, MST_GROUP, MST_METHOD, DIST_REMAINING_NM
+
+2. processed/eur/EUR-level-segments-summer2025.parquet
+   - Rows: 86,142
+   - Flights: 20,437
+   - Size: 4.50 MB
+   - Schema: 31 columns
+   - Enhancements: LEVEL_CONTEXT_PHASE, MST_GROUP, MST_METHOD
+   - QC: 0% orphans, 100% complete
+
+ARCHIVED FILES
+--------------
+OLD EUR data (pre-LOBT fix) archived to: archive/old-lobt-bug/
+- canonical-milestones-eur-2026-harmonized.parquet (OLD)
+- level-segments-eur-2026.parquet (OLD, 9.2% orphans)
+- QC and summary files
+
+SCHEMA COMPATIBILITY
+--------------------
+EUR and CHN canonical milestones now share common schema:
+- SOURCE_UID, FLTID, ADEP, ADES, TYPE
+- TIME, LAT, LON, ALT_FT
+- MST, MST_GROUP, MST_METHOD
+- TOT_FUEL_KG, TOT_FUEL_KG_ORIGINAL
+- DIST_FLOWN_NM, TOTAL_FLOWN_NM, DIST_REMAINING_NM
+- DIST_FROM_DEP_NM, DIST_TO_ARR_NM
+- FLIGHT_PHASE_RAW, ROW_ID
+
+NEXT STEPS
+----------
+1. ✓ EUR FIXED data uploaded to R2
+2. ✓ OLD data archived
+3. ✓ Data manifest updated
+4. → Verify EUR-CHN joint analysis workflows
+5. → Update technical documentation
+6. → Clean up local intermediate files
+
+CONTACT
+-------
+Generated: %Y-%m-%d %H:%M:%S %Z
+Pipeline: FIXED (LOBT bug corrected)
+Location: r2://paper-fuel-burn-estimation/processed/eur/
+
+═══════════════════════════════════════════════════════════════
+
