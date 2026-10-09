@@ -1,6 +1,6 @@
 ---
-title: "Refined Fuel Burn Estimation Framework"
-subtitle: "Profile-based lookup tables for international benchmarking"
+title: "Profile-aware phase fuel-burn references for international benchmarking"
+subtitle: "Exploratory evidence, study design, and validation gates for AICAP 2027"
 author:
   - name: Lingling Ma
     affiliation: Civil Aviation University of China
@@ -31,7 +31,7 @@ library(tidyr)
 
 ```{r}
 #| label: load-and-harmonize-data
-#| cache: true
+#| cache: false
 
 data_store <- Sys.getenv("FUELBURN_DATA_STORE", unset = here::here(".fuelburn-data-store"))
 
@@ -86,7 +86,7 @@ standardise_level_segments <- function(data, region) {
       } else {
         .data$PHASE_CONTEXT
       },
-      qc_flag = if ("qc_flag" %in% names(data)) .data$qc_flag else "ok",
+      qc_flag = if ("qc_flag" %in% names(data)) .data$qc_flag else "not_assessed",
       duration_min = .data$DURATION_SEC / 60,
       kg_min = .data$FUEL_BURN_KG / .data$duration_min,
       altitude_band = factor(
@@ -110,9 +110,9 @@ dataset_summary <- tibble::tibble(
   flights = c(n_distinct(eur_milestones$SOURCE_UID), n_distinct(chn_milestones$SOURCE_UID)),
   milestones = c(nrow(eur_milestones), nrow(chn_milestones)),
   level_segments = c(nrow(eur_segments), nrow(chn_segments)),
-  clean_segments = c(sum(eur_segments$qc_flag == "ok", na.rm = TRUE), sum(chn_segments$qc_flag == "ok", na.rm = TRUE))
+  source_qc_ok_segments = c(sum(eur_segments$qc_flag == "ok", na.rm = TRUE), sum(chn_segments$qc_flag == "ok", na.rm = TRUE))
 ) |>
-  mutate(clean_share = clean_segments / level_segments)
+  mutate(source_qc_ok_share = source_qc_ok_segments / level_segments)
 
 eur_flights <- dataset_summary$flights[dataset_summary$REGION == "EUR"]
 chn_flights <- dataset_summary$flights[dataset_summary$REGION == "CHN"]
@@ -122,234 +122,97 @@ chn_n_segments <- dataset_summary$level_segments[dataset_summary$REGION == "CHN"
 
 # Executive Summary
 
-This document develops a refined fuel-burn estimation framework building on the 2025 ICNS CHN-EUR comparison. The key refinements address:
+The study aims to establish an enriched, phase-dependent fuel-burn lookup table for international operational performance benchmarking. It connects operator-recorded Chinese QAR fuel flow with stakeholder-endorsed European AEM estimates applied to Network Manager trajectories through a common analytical contract. Harmonisation concerns the meaning of events, intervals, units, and eligibility; identical raw processing is neither available nor required.
 
-- **Profile characterization:** Level-segment analysis with altitude bands replaces coarse phase aggregation
-- **Statistical bounds:** Percentile-based lookup tables provide upper/lower fuel burn estimates
-- **Data completeness:** The FIXED European pipeline and the new Chinese QAR products provide complete level-segment interval tables for first comparative exploration
-- **International benchmarking:** Harmonized framework supports multi-regional validation
+The intended contribution is to test whether operational profile descriptors improve fuel-reference estimates beyond one value per aircraft type and phase. Climb and descent smoothness, cruise altitude exposure, and TOC-to-TOD duration are related but distinct questions. A smooth climb or descent is a candidate low-interruption profile; sustained level cruise is expected. A low fuel-flow percentile is not automatically an efficient profile.
 
-**Current status:** EUR and CHN summer 2025 production products are available through the R2 manifest. The exploratory baseline now covers `r formatC(eur_flights, format="d", big.mark=",")` European flights with `r formatC(eur_n_segments, format="d", big.mark=",")` level segments and `r formatC(chn_flights, format="d", big.mark=",")` Chinese flights with `r formatC(chn_n_segments, format="d", big.mark=",")` level segments.
+**Evidence status, 9 October 2026:** the local release contains `r formatC(eur_flights, format="d", big.mark=",")` EUR flights and `r formatC(chn_flights, format="d", big.mark=",")` CHN flights. File hashes match the manifest, but new interval and distance checks identify unresolved analytical defects. The descriptive figures below are diagnostics of delivered records. No validated international coefficients, regional efficiency ranking, or achievable fuel savings are claimed.
 
-# 1. Foundation: ICNS2025 Baseline
+**Working documents:** this exploratory paper develops the argument and initial evidence; `technical-note-data-preparation.qmd` describes source preparation; `technical-note-methodology.qmd` records analytical decisions and validation studies; `notes/study-worker-plan.md` provides work packages and acceptance gates.
 
-## 1.1 Original Approach
+# 1. Foundation and research contribution
 
-The 2025 ICNS paper established a trajectory discretization method using characteristic milestones:
+## 1.1 What the 2025 paper established
 
-**Departure phase:**
-- AOBT (actual off-block time)
-- ATOT (actual take-off time)
-- D100 (100NM from departure)
+The supplied ICNS2025 paper, *Fuel flow analysis for different flight phases based on a data-driven approach* (Ma, Dai, and Koelle), established a useful milestone architecture and an initial CHN/EUR comparison. Its reported medium-aircraft full-flight regression slopes were 35.55 kg/min in China and 34.45 kg/min in Europe. These are sample-specific regression results, not phase-specific lookup coefficients or validation targets. Its preliminary airborne benefit-pool estimate below 200 kg was explicitly qualified and depended on a 20th-percentile reference and aggregation choices.
 
-**Enroute phase:**
-- TOC (top of climb)
-- TOD (top of descent)
+The previous study used Chinese October 2023 data and European summer 2024 data. The present summer 2025 release offers substantially more Chinese observations and a closer seasonal comparison, subject to actual date and coverage checks. The previous paper also identified unresolved profile variability, heuristic TOC/TOD detection, missing weight/load information, and problematic heavy-aircraft aggregation. Those limitations motivate validation rather than assuming that earlier numerical results should recur.
 
-**Arrival phase:**
-- A100 (100NM to destination)
-- ALDT (actual landing time)
-- AIBT (actual in-block time)
+The legacy partition is TXO (AOBT–ATOT), CLIMB100 (ATOT–D100), ENR100 (D100–A100), DESC100 (A100–ALDT), and TXI (ALDT–AIBT). ENR100 is a distance-defined interval and can contain climbing and descending flight. It must remain distinct from TOC–TOD cruise/enroute analysis.
 
-**Phase definitions:**
-- TXO: AOBT → ATOT (taxi-out)
-- CLIMB100: ATOT → D100 (departure climb)
-- ENR100: D100 → A100 (enroute)
-- DESC100: A100 → ALDT (arrival descent)
-- TXI: ALDT → AIBT (taxi-in)
+## 1.2 Questions and testable contributions
 
-## 1.2 Key Findings (2025)
+| Question | Estimand or comparison | Evidence needed |
+|---|---|---|
+| RQ1: Does climb/descent interruption describe fuel variation? | Conditional phase fuel and fuel rates versus level time, count, and altitude exposure | Validated phase windows, complete profile coverage, and common detector qualification |
+| RQ2: Does enrichment improve a practical lookup? | Held-out error of type × phase baseline versus profile-aware cells | Adequate independent flight support; all tuning confined to development data |
+| RQ3: How do cruise level and TOC–TOD duration relate to fuel? | Within-type/route associations, exposure-specific rates, and whole-airborne fuel | Validated distance, TOC/TOD, altitude exposure, and available confounders |
+| RQ4: Can coefficients transfer between sources? | Source-specific estimates on common support; transfer error | Matched context and explicit measurement/model provenance |
 
-**Fuel burn rates (medium-type aircraft):**
-- China: 35.55 kg/min average across all phases
-- Europe: 34.45 kg/min average across all phases
-- Overall consistency suggests comparable operational contexts
+RQ1 and RQ2 form the primary conference contribution. RQ3 is a focused side study that can enter the paper if validated; RQ4 establishes the limits of international transfer. The design can yield a useful negative finding if enrichment fails to improve prediction or common support is insufficient.
 
-**Benefit pool estimation:**
-- Average additional fuel burn: <200 kg for airborne portion
-- Based on 20th percentile reference flights
-- Medium-type aircraft focus
+# 2. Analytical framework
 
-**Aircraft types studied:**
-- Medium: A320, A20N (A320neo), B738 (Boeing 737-800)
-- Heavy: A333 (Airbus 330-300), B789 (Boeing 787-900)
+## 2.1 Source-specific preparation, common analytical contract
 
-## 1.3 Limitations Identified
+China integrates recorded engine fuel flow; Europe uses AEM model estimates on NM trajectories. Source and region are therefore confounded in this sample. A CHN–EUR coefficient difference cannot identify a regional operational effect separately from measurement/model bias, fleet, route, and operator selection. Where feasible, applying a comparable model configuration to a QAR trajectory provides a bridge study on the same flight. Agreement with the EUR model's own output is an implementation check, not independent validation.
 
-The 2025 approach provided valuable first results but exhibited limitations:
+The analysis contract consists of:
 
-1. **Coarse phase characterization**
-   - Single ENR100 phase conflates cruise, stepped climbs, level-offs
-   - No altitude band differentiation
-   - Climb/descent treated as homogeneous
+1. **Flights:** one row per `(REGION, SOURCE_UID)`; verified type, route direction, dates, source configuration, coverage, and eligibility.
+2. **Milestones:** one row per event role; timestamp, cumulative consumed fuel, cumulative flown distance, altitude reference, and derivation provenance. Several different roles may share a physical trajectory point.
+3. **Phase intervals:** one row per flight and explicitly named phase scheme; ordered boundaries and positive exposure, with fuel and distance differences.
+4. **Level intervals and profile descriptors:** unique paired intervals, phase clipping, non-overlapping time exposure, and independent fuel/distance eligibility flags.
 
-2. **Profile variability unaccounted**
-   - Different flight distances (500-900NM) aggregated
-   - Altitude profiles not characterized
-   - Level-off frequency and duration ignored
+The same column names alone do not meet this contract. The present CHN and EUR schemas differ, and the production EUR milestone table still contains legacy `LVL` and generic `FL100` events.
 
-3. **Statistical approach**
-   - 20th percentile reference somewhat arbitrary
-   - No upper/lower bound framework
-   - Limited sensitivity analysis
+## 2.2 Phase and milestone semantics
 
-4. **Data quality unchecked**
-   - Level marker completeness not audited
-   - Orphaned segments not identified
-   - QC flags absent
+The physical airborne partition is ATOT–TOC (climb), TOC–TOD (enroute), and TOD–ALDT (descent). Retain the 2025 distance partition as a separate reproducibility sensitivity. Never add intervals from these two partitions together. Zero-duration cruise is an explicit short-flight/no-cruise case, not an ordinary rate observation. Missing or unordered boundaries are flagged; missing landing milestones are not silently replaced by in-block times.
 
-**Conclusion:** The milestone-based approach is sound, but operational detail is lost in aggregation. A refined framework should preserve milestones while adding level-segment intervals and profile characteristics.
+Along-track D040/D100/D200 and A200/A100/A040 anchors support a distance partition only after cumulative distance is validated. Geometric distances to airports are separate fields and may be used for a 200 NM airport window. Directional FL crossings are analytical pressure-altitude crossings. AGL windows require field elevation; QNH and pressure altitude must be distinguished, particularly for high-elevation airports such as ZPPP. Rich anchors are diagnostic options, not all mandatory lookup dimensions.
 
-# 2. Refined Methodology
+TOC/TOD rules must distinguish capped initial cruise, later step climbs, and final sustained descent. Their provenance and alternative definitions must be retained. Common phase context should be based on the agreed milestone windows; altitude-only labelling cannot decide that a level-off above FL200 belongs to cruise.
 
-## 2.1 Extended Milestone Families
+## 2.3 Smoothness and profile classes
 
-The 2026 framework extends the original milestones with derived analytical events:
+Level detection and reporting qualification are separate steps. Published EUROCONTROL CCO/CDO work provides a 300 ft/min reference lineage; it does not validate every local duration, smoothing, or altitude-band choice. Reprocess a representative QAR sample at European observation cadence to quantify how sampling affects short level-segment detection.
 
-**Distance milestones (along-track):**
-- Departure side: D040, D100, D200
-- Arrival side: A200, A100, A040
-- Derived from cumulative flown distance (`DIST_FLOWN_NM`)
+For flight i and phase p, measure qualified level time as the length of the **union** of intervals clipped to that phase:
 
-**Flight level crossings (pressure altitude):**
-- Departure side: D_FL075, D_FL100, D_FL180
-- Arrival side: A_FL180, A_FL100, A_FL075
-- First upward/last downward crossing logic
+$$L_{ip}=\left|\bigcup_j ([s_{ij},e_{ij})\cap[a_{ip},b_{ip}))\right|,\qquad S_{ip}=L_{ip}/T_{ip}.$$
 
-**Level-segment boundaries:**
-- LVL_START: Beginning of level-off phase
-- LVL_END: End of level-off phase
-- Paired events for duration/fuel calculation
+Record count, longest interruption, absolute level time, level share, and altitude residence. Use only validated detection coverage to distinguish a true zero from missing evidence. Union time is an audit safeguard; it does not repair incorrect interval pairing or fuel totals. Clip fuel from cumulative fuel at boundaries, with a declared interpolation rule; do not allocate a long interval's fuel by time without checking that approximation.
 
-**Rationale:**
-- Distance milestones enable finer phase resolution (e.g., CLIMB040 vs CLIMB100)
-- FL crossings characterize vertical profile without assuming TOC/TOD
-- Level segments quantify cruise efficiency directly
+For climb and descent, initially call classes **low, typical, and high interruption**. Operational thresholds or development-sample quantiles may define them, but never use the target fuel outcome to assign classes. A no-qualified-level category can be retained where sample support permits. Rename a class “highly efficient” only if matched, out-of-sample fuel evidence supports that interpretation. For cruise, describe altitude exposure and step changes: a long level segment is normal and must not trigger an inefficient label.
 
-## 2.2 Level-Segment Detection
+## 2.4 What the lookup estimates
 
-### 2.2.1 Source-Specific Extraction
+A phase's total fuel is not its fuel rate. For valid fuel F, time T, and flown distance D:
 
-The exploratory paper now starts from the production data products published through the R2 manifest rather than from intermediate EUR-only development files.
+$$r_t=F/T\quad[\mathrm{kg/min}],\qquad r_d=F/D\quad[\mathrm{kg/NM}].$$
 
-For Europe, the FIXED PRU pipeline corrects the earlier LOBT filter issue, preserves single-role milestone rows, and writes a production level-segment table with explicit start/end intervals. For China, the QAR-derived products provide canonical milestones, level-segment intervals, and phase summaries for the selected summer 2025 sample.
+A typical-flight median rate and the exposure-weighted coefficient $\sum F/\sum T$ answer different questions. Publish the aggregation rule. Count independent flights, not only segments; flights with many fragments should not dominate a lookup. Report total phase fuel separately to assess whether low-interruption profiles also have lower matched consumption.
 
-The two source paths are deliberately kept source-specific up to the processed products:
+The initial lookup key is **source/region × exact aircraft type × phase × profile class**, with stage length as a continuous adjustment or a small number of validated bands. Add altitude only where it improves held-out accuracy and support remains sufficient. Aircraft-family fallback requires evidence; A320 and A20N are separate primary types. Taxi requires a separate ground-operation design and is outside the first airborne release.
 
-- EUR/PRU: surveillance-derived G2G extraction, AEM fuel model, enriched canonical milestones, and FIXED level intervals.
-- CHN/QAR: aircraft-recorded trajectory and fuel-flow processing, canonical milestone generation, and QAR-derived level intervals.
+A coefficient multiplied by extra minutes estimates a scenario conversion under the cell's operating conditions. It is not the marginal causal cost of a level-off: alternative flight paths change thrust, speed, altitude, distance, and the distribution of time across phases.
 
-### 2.2.2 Harmonised Analysis Layer
+## 2.5 Percentiles are candidates, not efficiency labels
 
-The common analysis layer keeps a small shared set of level-segment fields:
+P20/P50/P80 describe the conditional distribution inside a defined cell. They are neither confidence limits nor best/standard/worst operational classes. P50–P20 is a distributional spread, not proven achievable savings. P20 fuel rate can select an aircraft descending at low thrust; P20 phase fuel can select a shorter interval, lower weight, or favourable winds. Choosing P20 does not eliminate wind effects.
 
-- `REGION`, `SOURCE_UID`, `ADEP`, `ADES`, and `TYPE`;
-- start/end time, altitude, fuel, and duration;
-- `LEVEL_CONTEXT_PHASE` for broad climb/enroute/descent context;
-- `ALTITUDE_BAND` for vertical profile stratification;
-- source-level QC flags where available.
+Compare median and exposure-weighted coefficients with conditional percentiles at P10/P20/P25 and P75/P80/P90. Assess stability, coverage, and held-out prediction or quantile calibration. A bootstrap confidence interval on a percentile estimates sampling uncertainty; the percentile range describes outcome variability. Neither includes unidentified model bias. A percentile-based reference remains optional if it adds no defensible operational meaning.
 
-This lets the paper compare first-order profile descriptors without pretending that the PRU and QAR extraction mechanics are identical.
+## 2.6 Cruise altitude, duration, and the spurious-results study
 
-### 2.2.3 Quality Control Framework
+The hypothesis that lower cruise levels may consume more fuel is operationally plausible, but its sign and magnitude are conditional on aircraft type, mass, speed, winds, stage length, and attainable levels. Test the association rather than imposing a monotonic lookup. Higher is not universally better.
 
-For this exploratory baseline, quality flags are retained rather than filtered away. The EUR production table marks segments with large altitude changes during a nominal level interval, while the CHN level-segment table currently enters the common layer as `ok`.
+For TOC–TOD retain total fuel, time, flown distance, kg/min, kg/NM, altitude residence, time-weighted altitude, and step changes. Report altitude summaries from validated points or true source intervals; `(TOC altitude + TOD altitude)/2` is not a trajectory mean. Typical maximum altitude is a diagnostic, not a surrogate for exposure.
 
-```{r}
-#| label: level-qc-overview
-#| tbl-cap: "Level-segment QC distribution in the processed EUR/CHN products"
+Separate three comparisons: fixed exposure fuel-rate associations; observed total cruise fuel with duration and distance; and whole-airborne fuel ATOT–ALDT. A longer cruise phase can mean a longer route, but also earlier TOC or later TOD replacing high-thrust climb or powered descent. With $F_{air}=F_{climb}+F_{enroute}+F_{descent}$, an isolated cruise reduction need not reduce whole-flight fuel. Time, distance, and speed are related; avoid treating all as independent controls in an unrestricted regression.
 
-level_segments |>
-  count(REGION, qc_flag, name = "segments") |>
-  group_by(REGION) |>
-  mutate(pct = 100 * segments / sum(segments)) |>
-  ungroup() |>
-  arrange(REGION, desc(segments)) |>
-  kable(
-    digits = 1,
-    col.names = c("Region", "QC flag", "Segments", "% within region"),
-    format.args = list(big.mark = ",")
-  )
-```
-
-The immediate analysis should therefore report both all-segment and clean-segment sensitivities. The next modelling step should decide whether altitude-change flags represent invalid level intervals or operationally meaningful cruise-climb/step-climb behaviour.
-
-## 2.3 Profile Characterization Dimensions
-
-The refined framework characterizes each flight by:
-
-**1. Aircraft group:**
-- Medium: A320 family, B737 family
-- Heavy: A330 family, B787 family, widebodies
-
-**2. Distance band:**
-- Short: <500 NM
-- Medium-short: 500-700 NM
-- Medium-long: 700-1000 NM
-- Long: >1000 NM
-
-**3. Phase context:**
-- CLIMB: Level-off during climb context
-- ENROUTE: Sustained enroute/cruise level context
-- DESCENT: Level-off during descent context
-
-**4. Altitude band:**
-- below_FL100: <10,000 ft
-- FL100_FL180: 10,000-18,000 ft
-- FL180_FL240: 18,000-24,000 ft
-- above_FL240: >24,000 ft (typical cruise)
-
-**5. Duration class:**
-- Short: <5 min
-- Medium: 5-15 min
-- Long: 15-30 min
-- Very long: >30 min
-
-This multidimensional characterization enables lookup tables that account for operational context rather than treating all flights as homogeneous.
-
-## 2.4 Statistical Framework
-
-### 2.4.1 Percentile-Based Bounds
-
-Instead of single reference values, the framework provides percentile-based bounds:
-
-- **P20 (efficient):** Representative of best operational practice
-- **P50 (median):** Typical operational performance
-- **P80 (inefficient):** Upper bound, accounts for constraints
-
-**Rationale:**
-- P20 replaces arbitrary 20% threshold from 2025
-- P50-P20 spread quantifies achievable benefit pool
-- P80-P50 spread indicates operational variability
-
-### 2.4.2 Metrics per Segment
-
-For each profile class, compute:
-
-- **Total fuel [kg]:** Cumulative burn over interval
-- **Duration [min]:** Elapsed time
-- **Distance [NM]:** Flown distance
-- **kg/min:** Fuel flow rate
-- **kg/NM:** Distance-specific consumption
-- **Level time [%]:** Proportion in level-off
-
-### 2.4.3 Lookup Table Structure
-
-Proposed output format:
-
-```
-aircraft_group | distance_band | phase | alt_band | metric | p20 | p50 | p80 | n
----------------|---------------|-------|----------|--------|-----|-----|-----|---
-Medium         | 500-700       | cruise| >FL240   | kg/min | 32  | 35  | 39  | 450
-Medium         | 500-700       | cruise| >FL240   | kg/NM  | 4.2 | 4.5 | 5.1 | 450
-...
-```
-
-This structure supports:
-- Profile-specific fuel burn queries
-- Sensitivity analysis by percentile
-- International comparison at matched profile classes
-- Validation against operator data
+Analyse within type and route direction first, with date/batch and available mass, speed, and weather information. Publish pooled and within-group patterns to reveal mixture reversals. An altitude/duration response surface is a diagnostic if there is enough support; do not extrapolate to levels or durations absent from a route/type cell. Without requested/optimal altitude or a credible counterfactual, observed level differences are not a quantified ATM-imposed altitude penalty.
 
 # 3. EUR and CHN Data Exploration
 
@@ -364,13 +227,13 @@ This structure supports:
 
 ```{r}
 #| label: dataset-summary
-#| tbl-cap: "Processed production data products available for exploratory analysis"
+#| tbl-cap: "Release inventory; source QC labels do not establish analytical validity"
 
 dataset_summary |>
-  mutate(clean_share = 100 * clean_share) |>
+  mutate(source_qc_ok_share = 100 * source_qc_ok_share) |>
   kable(
     digits = 1,
-    col.names = c("Region", "Flights", "Milestone rows", "Level segments", "Clean segments", "Clean share [%]"),
+    col.names = c("Region", "Flights", "Milestone rows", "Level segments", "Source QC ok rows", "Source QC ok share [%]"),
     format.args = list(big.mark = ",")
   )
 ```
@@ -447,7 +310,7 @@ kable(duration_summary, digits = 1,
       format.args = list(big.mark = ","))
 ```
 
-The first comparison shows both source and regional effects. CHN contains many short climb/descent level intervals and longer enroute intervals, while EUR has a larger share of long enroute segments and a wider spread in flagged altitude-changing intervals. These patterns are descriptive at this stage; they should be interpreted together with extraction rules and QC flags.
+These are distributions of the delivered interval rows. EUR repetitions and overlaps, unequal detection methods, and heuristic phase labels prevent an operational regional interpretation. The histogram displays durations up to 60 minutes; longer rows remain in the summary table. Recompute these plots from validated intervals before selecting results for the conference paper.
 
 ## 3.3 Altitude Band Analysis
 
@@ -483,10 +346,13 @@ alt_summary <- level_segments |>
   group_by(REGION, altitude_band) |>
   summarise(
     n = n(),
-    pct = 100 * n() / sum(level_segments$REGION == first(REGION) & level_segments$HAS_END & level_segments$DURATION_SEC > 0 & !is.na(level_segments$altitude_band)),
     median_dur = median(duration_min),
     .groups = "drop"
   ) |>
+  group_by(REGION) |>
+  mutate(pct = 100 * n / sum(n)) |>
+  ungroup() |>
+  select(REGION, altitude_band, n, pct, median_dur) |>
   arrange(REGION, altitude_band)
 
 kable(alt_summary, digits = 1,
@@ -494,9 +360,7 @@ kable(alt_summary, digits = 1,
       format.args = list(big.mark = ","))
 ```
 
-- Above-FL240 intervals dominate both regions, but both datasets also contain substantial lower-altitude level intervals.
-- Below-FL100 and FL100-FL180 segments are operationally important for sequencing, constrained climbs, and arrival management.
-- Altitude-specific fuel burn rates essential for accurate estimation
+These bands are provisional reporting bins. Segment counts do not measure time exposure or establish optimal altitude. An endpoint-average altitude can conceal excursions within an interval; point-based residence times are needed before using altitude as a fuel-rate lookup dimension.
 
 ## 3.4 Aircraft Type Patterns
 
@@ -577,37 +441,63 @@ level_segments |>
         format.args = list(big.mark = ","))
 ```
 
-**QC implications:**
+**QC implications:** `not_assessed` records the absence of delivered CHN QC flags. EUR `ok` is a source flag and does not test uniqueness or overlap. Neither label is a common eligibility rule. Endpoint altitude change also cannot establish within-interval stability. The readiness audit below takes precedence over these source flags.
 
-- EUR currently distinguishes `ok` intervals from intervals with large altitude changes. These should be retained for profile diagnostics and separated in sensitivity checks.
-- CHN intervals currently enter the common layer as `ok`; any CHN-specific stability/QC flags should be added when the QAR level-detection thresholds are finalised.
-- The next analysis step should compare all intervals, clean intervals, and duration-filtered intervals before fixing reporting thresholds.
+# 4. Analytical readiness audit
 
-# 4. Lookup Table Framework
+The following audit reads the local manifest and production artifacts without changing them. It regenerates aggregate diagnostics under `outputs/study-design/`; these outputs contain no flight identifiers. Reproduce independently with `Rscript scripts/12-audit-study-readiness.R`.
 
-## 4.1 Proposed Structure
+```{r}
+#| label: study-readiness-audit
+#| include: false
+invisible(capture.output(source(here::here("scripts", "12-audit-study-readiness.R"), local = TRUE)))
+```
 
-The refined lookup table provides fuel burn estimates stratified by operational context:
+```{r}
+#| label: study-readiness-table
+#| tbl-cap: "Readiness checks on the hash-verified local release; interval rows are not independent flights"
+study_readiness |>
+  select(REGION, flights, segment_rows, distinct_segment_keys,
+         repeated_segment_keys, flights_with_overlapping_intervals,
+         intervals_implied_speed_over_700kt, flights_missing_unique_ALDT) |>
+  pivot_longer(-REGION, names_to = "Check", values_to = "Value") |>
+  pivot_wider(names_from = REGION, values_from = Value) |>
+  kable(format.args = list(big.mark = ","))
+```
 
-**Dimensions:**
-1. **Aircraft group:** Medium (A320/B737 family), Heavy (widebodies)
-2. **Distance band:** <500, 500-700, 700-1000, >1000 NM
-3. **Phase:** TXO, CLIMB, ENR, DESC, TXI
-4. **Altitude band:** <FL100, FL100-FL180, FL180-FL240, >FL240
-5. **Profile class:** Short-level, Medium-level, Long-level, No-level
+All seven local artifacts listed in the manifest match their SHA-256 hashes. This verifies release identity, not scientific validity. Four findings require upstream resolution:
 
-**Metrics per cell:**
-- Fuel burn [kg]: P20, P50, P80
-- Duration [min]: P20, P50, P80
-- kg/min: P20, P50, P80
-- kg/NM: P20, P50, P80
-- Sample size: n
+- **EUR interval identity and overlap:** 86,142 rows represent 47,849 distinct flight/segment keys; 29,631 keys repeat, adding 38,293 rows. Overlap occurs on 18,860 flights. Summed interval exposure is about 20,132 hours versus a union of about 12,802 hours, an inflation of approximately 57% relative to the union. These union hours are diagnostics, not corrected level time. Even `ok` rows can repeat. Inspection of `reconstruct_level_segments()` and `derive_level_segments()` suggests that implicit ends and joins on cumulative start order can yield several ends for one start. This is a candidate mechanism to trace against source segments, not a validated repair.
+- **CHN distance integrity:** 17,955 of 64,981 intervals imply speeds above 700 kt from reported NM and seconds; the median TOC–TOD implied speed is approximately 830 kt. The 700 kt screen is an analyst diagnostic, not an operationally validated exclusion cutoff. Investigate coordinate units, jumps, cumulative-distance construction, time alignment, and batch provenance. Do not repair by assuming a universal unit multiplier. Distance-based matching, kg/NM, and distance-derived milestone placement depend on this check.
+- **Missing boundaries:** CHN has 1,190 flights without ALDT, one without ATOT, and 22 without a unique TOC/TOD pair. Strict ATOT < TOC < TOD < ALDT holds for 5,220 CHN flights and 21,321 EUR flights. These counts are chronology diagnostics before other eligibility checks, not final study samples. Recover events from the source only under a justified shared definition; retain domain-specific samples and selection comparisons.
+- **Semantics and actual schemas:** EUR milestones/segments have 21/31 columns; CHN has 27/22. EUR segments have no delivered segment-distance column. The EUR production milestone file has no `LVL_START`/`LVL_END` and retains generic `FL100`. The enrichment script matches uppercase phase names, while delivered start phases are `Lvl_climb`/`Lvl_descent`, then assigns many high-altitude intervals to ENROUTE. Both source phase assignment and canonical export lineage need review.
 
-## 4.2 Example: Medium-Type Enroute Level Intervals
+CHN AOBT dates cover June, July, and August 2025 (1,954 / 2,228 / 2,239 flights). Existing handover prose that leaves August uncertain is superseded by this field-level observation. Confirm date/time semantics with the source owner: EUR carries `Europe/Paris`, CHN `UTC`; different display zones alone do not establish a timestamp error.
+
+## 4.1 Common support before matching
+
+```{r}
+#| label: aircraft-common-support
+#| tbl-cap: "Shared exact types before quality filtering or distance/altitude matching"
+type_support |>
+  filter(EUR > 0, CHN > 0) |>
+  slice_head(n = 12) |>
+  kable(format.args = list(big.mark = ","))
+```
+
+B738, A320, A321, A20N, and A21N are plausible starting types, subject to quality and context overlap. Widebodies are a separate exploratory stratum because European support is much smaller. B737-MAX remains unresolved without its variant. C919 is CHN-only and cannot support direct international type comparisons. Same-region routes can support adjustment and validation; geographically different route labels cannot be paired as identical routes across regions.
+
+Some earlier notes misname the Chinese airports: ZSSS is Shanghai Hongqiao, and ZLXY is Xi'an Xianyang. Use verified ICAO metadata in analysis. The audit reports ICAO codes to avoid propagation of those labels.
+
+# 5. Lookup demonstration and validation design
+
+## 5.1 Delivered-row diagnostic
+
+The following table retains an initial exploration of the delivered data for traceability. It pools several aircraft types under a provisional medium label and uses the delivered ENROUTE context. EUR repeated intervals and CHN distance/boundary defects remain. These figures must not be distributed as lookup coefficients.
 
 ```{r}
 #| label: example-lookup
-#| tbl-cap: "Example profile lookup cells for medium-type enroute level intervals"
+#| tbl-cap: "Diagnostic summaries of delivered enroute-labelled rows; not validated lookup coefficients"
 #| warning: false
 
 level_segments |>
@@ -634,264 +524,53 @@ level_segments |>
         format.args = list(big.mark = ","))
 ```
 
-**Interpretation:**
-- Duration percentiles describe the level-off profile itself.
-- Median `kg/min` is available in both production tables, but should be treated as exploratory until the phase/segment fuel accounting has been validated side-by-side.
-- The table illustrates the intended lookup-table grain: region, aircraft class, phase context, altitude band, and percentile summary.
+## 5.2 Release schema and sparse-cell handling
 
-## 4.3 Validation Strategy
+A lookup release must include source, exact type, phase scheme, profile definition and version, stage-length support, any altitude dimension, metric and units, estimator, coefficient, percentile summaries where justified, independent flight count, route/date coverage, uncertainty, applicability range, and eligibility/fallback status. Keep source-specific estimates side by side until transfer is supported. A pooled coefficient needs an explicit weighting scheme and sensitivity to that choice.
 
-**Internal validation:**
-1. Compare P50 values to ICNS2025 aggregated rates (35 kg/min baseline)
-2. Check consistency across adjacent distance bands
-3. Verify altitude band trends (higher FL = lower kg/NM typically)
+Use a documented hierarchy: validated profile-specific cell; then the same type/phase cell without the optional profile dimension; then a tested family fallback; otherwise “insufficient support”. Never silently replace an unsupported cell with zero. Cell support thresholds and acceptable uncertainty are study design decisions to trial, not established constants.
 
-**External validation:**
-- Operator fuel burn data (confidential, aggregated comparison)
-- BADA/AEM model cross-checks
-- openAP model comparisons (open-source benchmark)
+## 5.3 Compare nested estimates out of sample
 
-**Sensitivity analysis:**
-- QC flag subsets (all intervals vs ok-only)
-- Altitude threshold variations (1000 ft vs 1500 ft)
-- Duration filters (exclude <5 min segments)
+- **M0:** one coefficient per exact type and phase, with declared aggregation.
+- **M1:** M0 plus validated stage-length context.
+- **M2:** M1 plus climb/descent interruption class or cruise altitude exposure.
 
-## 4.4 CHN-EUR Comparison Framework
+Use the same eligible held-out flights for all model comparisons. Separate development and evaluation by flight, date, and preferably route blocks; keep every segment of one flight in the same split. Derive bin edges, profile quantiles, and any tuning solely on development data. Report MAE, signed bias, and error by type/phase/source; avoid percentage errors for very small fuel totals. For conditional quantiles assess empirical held-out coverage. Cluster uncertainty by flight and examine route/day sensitivity; acknowledge that three Chinese route pairs limit population inference.
 
-With both processed datasets now available, the comparison approach is:
+The decision is whether enrichment adds useful accuracy and interpretability without excessive sparsity. Accept M0/M1 if M2 does not pass. A transfer experiment trains in one source and evaluates in the other on common support, and reports the resulting bias rather than declaring either source ground truth.
 
-1. **Profile matching:** Same distance band, aircraft group, altitude
-2. **Percentile comparison:** Compare P20/P50/P80 across regions
-3. **Operational context:** Account for airspace design differences
-4. **Statistical testing:** Significance of regional differences
+# 6. Parameter trials and evidence boundaries
 
-**Hypothesis:** Medium-type aircraft show similar fuel burn rates when profile-matched (ICNS2025 suggested 35 kg/min convergence). Refined framework should confirm at finer granularity.
+The current FL100/FL180/FL240 bins, distance bands, duration classes, and P20/P80 summaries are exploratory choices. Distinguish four statuses in the decision register: externally referenced definition; operational hypothesis; empirical candidate; and adopted after validation. A published threshold is applicable only with its original vertical reference, measurement window, and detection conditions.
 
-# 5. CHN-EUR Analysis Kick-Off
+Trial detector/reporting parameters on a small labelled sample first: vertical rate 200/300/400 ft/min; qualifying duration 20/30/60/120 seconds; within-interval altitude range 100/200/300 ft; and source-appropriate gap/smoothing settings. These values are proposed sensitivity scenarios, not endorsed settings. A 31-record smoother is not a fixed duration across sampling rates. A five-minute exclusion would remove many climb/descent interruptions and must not become the default without evidence.
 
-## 5.1 Available CHN Data Structure
+For altitude, compare a continuous relationship with the current operational bands and narrower cruise bands only where data support permits. Shift boundaries by ±1,000/2,000 ft as sensitivity trials. For stage length, compare continuous adjustment and simple prespecified bands using validated flown distance, with geometric airport-pair distance as a separately named check. Do not optimise all dimensions or cut points on the full dataset. Store each trial's coverage, stability, and predictive impact in the Technical Note and freeze the selected configuration before final evaluation.
 
-**Source:** QAR/FDR-derived summer 2025 production package from CAAC-OSC operations.
+There are three distinct uncertainty sources: sampling error; sensitivity to definitions/parameters; and source-model/measurement uncertainty. A bootstrap handles the first, not the other two. Smoothness describes operational profiles but does not attribute them to ATM: terrain, procedures, speed management, weather, weight, and operator choices can all matter.
 
-The current R2 handover includes:
+# 7. Conference paper and supporting Technical Note
 
-- `processed/chn/CHN-canonical-milestones-summer2025.parquet`;
-- `processed/chn/CHN-level-segments-summer2025.parquet`;
-- `processed/chn/CHN-phase-summaries-summer2025.parquet`.
+The [organiser's EasyChair call](https://easychair.org/cfp/AICAP-2027), checked on 9 October 2026, specifies **eight pages including references, appendices, and other supplementary content**, IEEE double-column PDF, and a 6 MB file limit. The [official conference page](https://event.ntu.edu.sg/AICAP-2027) confirms submission on **30 October 2026**, acceptance notification on 1 December, and camera-ready submission on 15 December. The supplied NTU call-for-papers subpage was inaccessible during this review; the organiser's EasyChair listing supplies the detailed format requirements.
 
-These products have enough common fields to start profile-matched exploratory analysis against the EUR production products.
+Treat this document as an expandable working paper. The conference manuscript should contain a concise motivation, the common analytical contract, the independent profile definition, one validated lookup demonstration, a nested-model comparison, the most consequential sensitivity result, and measured limitations. Reserve implementation detail, all parameter trials, bridge studies, missing-data diagnostics, and the cruise side study for the Technical Note unless they directly establish the main contribution. The external note must not be assumed to bypass submission rules or replace self-contained methods in the eight pages.
 
-## 5.2 Harmonization Requirements
+Indicative page allocation: title/abstract/introduction 1.0; data and source comparability 1.0; methods 1.5; principal results 2.0; validation/sensitivity 1.0; discussion/conclusion 0.75; references 0.75. This totals eight pages and must be checked in the actual IEEE template. The present Quarto PDF default is not the conference layout.
 
-**Items to lock down before final modelling:**
+# 8. Conclusions and next decision
 
-1. **Fuel accounting:** Confirm the segment fuel-burn interpretation in both sources and decide whether to compare kg/min, kg/NM, or phase-normalised totals first.
-2. **Aircraft type grouping:** Map EUR ICAO types and CHN aircraft-family strings into a common medium/heavy taxonomy.
-3. **Distance bands:** Use `TOTAL_FLOWN_NM` from milestone tables to assign flights to common bands.
-4. **Level-segment QC:** Decide how to treat EUR `excessive_alt_change` flags and whether analogous CHN stability flags should be added.
-5. **Phase context:** Align `CLIMB`, `ENROUTE`, and `DESCENT` labels with paper phase definitions.
+The defensible contribution is a test of phase fuel references enriched by independently defined operational context, with transparent cross-source limitations. The present release is reproducibly identifiable but needs interval, distance, milestone, and phase-semantic validation before coefficient estimation. P20/P50/P80 remain optional distribution summaries. Low-interruption profiles and lower cruise levels are hypotheses whose fuel implications must be demonstrated, rather than encoded in class labels.
 
-## 5.3 Comparison Dimensions
+The worker plan begins with release validation and source-owner checks, then builds phase/profile tables, trials parameter choices, compares lookup accuracy, and completes the altitude/duration side study. No numerical fuel-saving conclusion follows from the delivered-row plots in this exploratory draft.
 
-**Matched profile comparison:**
+# References and evidence
 
-| Dimension | EUR Data | CHN Data | Match Criteria |
-|-----------|----------|----------|----------------|
-| Aircraft | A320, B738 | A320, B738 | Same ICAO type |
-| Distance | 500-700 NM | 500-700 NM | ±50 NM tolerance |
-| Altitude | >FL240 | >FL240 | Same band |
-| Phase | Cruise level | Cruise level | Same context |
+1. Ma, L., Dai, W., and Koelle, R. (2025). *Fuel flow analysis for different flight phases based on a data-driven approach*. Supplied ICNS2025 paper; numerical findings above are attributed to that document.
+2. EUROCONTROL. [Continuous climb and descent operations](https://www.eurocontrol.int/concept/continuous-climb-and-descent-operations). Harmonised definitions and stakeholder context.
+3. EUROCONTROL (2020). [European CCO/CDO Action Plan, Appendix E](https://www.eurocontrol.int/sites/default/files/2020-11/european-cco-cdo-action-plan-appendix-e.pdf). Examples of level-flight definitions and reporting windows; local qualification settings still require validation.
+4. EUROCONTROL. [Advanced Emission Model](https://avenir-catalogue.eurocontrol.int/aem-details.html). Source-model context; record the configuration actually used in this study.
+5. EUROCONTROL (2021). [Data Snapshot 21: Aircraft flying higher, more efficiently and sustainably](https://www.eurocontrol.int/publication/eurocontrol-data-snapshot-21-aircraft-flying-higher-more-efficiently-and-sustainably). Operational motivation for the altitude hypothesis, not proof of a universal altitude effect in this sample.
+6. AICAP 2027. [Organiser's submission guidelines](https://easychair.org/cfp/AICAP-2027) and [official conference dates](https://event.ntu.edu.sg/AICAP-2027), accessed 9 October 2026.
 
-**Expected outputs:**
-- Side-by-side percentile tables
-- Regional difference quantification
-- Operational context interpretation (airspace design, traffic density)
-
-## 5.4 Immediate Analysis Tasks
-
-The next stepping-stone analysis can now be started directly from the processed data:
-
-1. Build a flight-level profile descriptor table: total distance, aircraft group, number of level segments, total level time, level time by phase, and level time by altitude band.
-2. Build matched EUR/CHN lookup cells for aircraft group, distance band, phase context, and altitude band.
-3. Add percentile summaries for duration, fuel, kg/min, and kg/NM.
-4. Run sensitivity checks for EUR all-segment versus `ok`-only subsets.
-5. Compare the resulting P50 and P20 values with the ICNS2025 phase-level baseline.
-
-# 6. Discussion: Towards Operational Lookup Tables
-
-## 6.1 Key Advances Over ICNS2025
-
-**Methodological improvements:**
-
-1. **Profile characterization:** Altitude bands and level-segment analysis replace coarse aggregation
-   - Enables fuel burn estimation sensitive to operational context
-   - Accounts for stepped climbs, cruise-climb, traffic constraints
-
-2. **Data completeness:** Production EUR and CHN level-segment tables now provide complete interval rows for exploratory analysis
-   - EUR FIXED pipeline corrects the earlier imbalance problem
-   - CHN QAR products add a second regional sample with comparable canonical fields
-   - Transparent QC flags enable sensitivity analysis
-
-3. **Statistical framework:** Percentile-based bounds replace single reference
-   - P20/P50/P80 quantify operational variability and benefit pools
-   - Enables "what-if" analysis for ANS interventions
-   - Supports uncertainty quantification
-
-4. **Reproducibility:** R2 cloud storage with manifest tracking
-   - All data products versioned and accessible
-   - Processing pipeline documented (technical-note-data-preparation.qmd)
-   - Code modular and reusable (R/ function modules)
-
-## 6.2 Data Quality Lessons
-
-**Operational data characteristics:**
-
-- **Level-segment semantics remain source-specific**
-  - EUR intervals come from the PRU FIXED extraction and AEM fuel model.
-  - CHN intervals come from QAR-derived trajectory and fuel-flow processing.
-  - The common analysis table should be treated as a harmonised layer, not proof that source detection algorithms are identical.
-
-- **Altitude stability thresholds need regional calibration**
-  - EUR retains `excessive_alt_change` flags for sensitivity analysis.
-  - Some flagged intervals may represent operationally meaningful cruise-climb or step-climb behaviour rather than bad data.
-  - CHN-specific stability flags should be added if the QAR detection process exposes comparable measures.
-
-- **Phase label consistency varies by data source**
-  - EUR and CHN both expose broad level context, but the derivation path differs.
-  - Harmonization is essential before interpreting regional differences as operational effects.
-
-**Recommendation for processing teams:**
-- Keep the R2 manifest as the handover contract.
-- Publish per-release row counts, schema notes, and QC summaries.
-- Keep source-specific extraction details separate from harmonised analysis fields.
-
-## 6.3 International Benchmarking Implications
-
-**Harmonization requirements:**
-
-1. **Milestone definitions:** Aligned distance/FL crossing logic documented
-2. **Level-segment criteria:** Consistent altitude stability thresholds
-3. **QC framework:** Common flag taxonomy (ok, orphaned, excessive_alt_change)
-4. **Profile dimensions:** Agreed aircraft groups, distance bands, altitude bands
-
-**Multi-regional validation potential:**
-
-- EUR + CHN baseline (current study)
-- Extension to other ICAO regions (NAM, ASIA/PAC, MID)
-- Contribution to ICAO GANP KPI16 guidance (additional fuel burn)
-- Support for regional performance comparison frameworks
-
-**GANP KPI16 enhancement:**
-
-Current KPI16 converts additional time/distance to fuel burn using average rates. Refined lookup tables enable:
-
-- **Context-specific conversion:** Use profile-matched rates instead of global average
-- **Benefit pool quantification:** P50-P20 spread estimates achievable savings
-- **Sensitivity bounds:** P80-P20 range for uncertainty
-- **Regional comparability:** Harmonized methodology across ANSPs
-
-## 6.4 Limitations and Future Work
-
-**Current limitations:**
-
-1. **Fuel metric interpretation still needs validation**
-   - Both production level-segment tables include fuel fields, but the first comparison should confirm like-for-like segment fuel accounting.
-   - Cross-check EUR AEM-derived fuel and CHN QAR-derived fuel before making causal claims.
-
-2. **CHN data now available, but harmonisation choices remain**
-   - Aircraft type grouping, phase context, and QC flags need a stable comparison taxonomy.
-   - Fuel flow unit and conversion checks should remain documented as part of the CHN processing provenance.
-
-3. **Sample representativeness**
-   - EUR: Summer 2025 PRU sample across selected European airport pairs
-   - CHN: Summer 2025 China Eastern sample across selected airport pairs
-   - Seasonal variability not assessed
-   - Need multi-year validation
-
-4. **Profile class granularity**
-   - Current: distance band + altitude + phase context
-   - Future: Add weather (wind, temperature), time-of-day, traffic density
-   - Machine learning potential for profile clustering
-
-**Next steps:**
-
-**Short-term (Q4 2026):**
-- Validate EUR/CHN segment fuel metrics and compute kg/min and kg/NM consistently
-- Generate CHN-EUR profile-matched comparison tables
-- Validate P50 values against ICNS2025 baseline (35 kg/min)
-
-**Medium-term (2027):**
-- Extend EUR data to multi-year sample (seasonal variability)
-- Expand aircraft type coverage (additional medium/heavy types)
-- Publish lookup table methodology paper
-- Contribute to ICAO GANP KPI16 guidance update
-
-**Long-term (2027+):**
-- Multi-regional validation (NAM, ASIA/PAC, MID regions)
-- Operational implementation: ANSP fuel burn monitoring dashboards
-- Machine learning profile clustering
-- Integration with emissions inventories (non-CO₂ effects)
-
-## 6.5 Data Handover Standardization
-
-The current R2 manifest now works as the clean synchronisation point for contributors. The exploratory paper relies only on the current production products:
-
-- `processed/eur/EUR-canonical-milestones-summer2025.parquet`;
-- `processed/eur/EUR-level-segments-summer2025.parquet`;
-- `processed/chn/CHN-canonical-milestones-summer2025.parquet`;
-- `processed/chn/CHN-level-segments-summer2025.parquet`;
-- `processed/chn/CHN-phase-summaries-summer2025.parquet`.
-
-Future processing updates should preserve this contract: update the registry, upload the objects, publish the manifest, and verify `r2-sync-status.R` before analysis work proceeds.
-
-# 7. Conclusions
-
-This exploratory document establishes a refined fuel-burn estimation framework addressing limitations of the 2025 ICNS baseline:
-
-**Methodological advances:**
-- Level-segment analysis with altitude bands for both EUR and CHN production products
-- FIXED EUR processing and newly arrived CHN data provide a clean comparative starting point
-- Percentile-based lookup tables (P20/P50/P80 bounds)
-- Comprehensive QC framework for data quality transparency
-
-**Initial data insights:**
-- Both regions have substantial above-FL240 level-segment activity, but lower-altitude intervals are also material.
-- Duration distributions differ by region, phase context, and aircraft mix.
-- EUR QC flags should be retained for sensitivity analysis.
-- CHN data is now ready for first profile-matched exploratory comparisons.
-
-**Framework status:**
-- EUR and CHN production data are loaded from the clean R2 manifest.
-- Lookup table structure defined; next step is fuel metric validation and matched-cell analysis.
-- Reproducible pipeline with R2 cloud storage
-
-**International benchmarking readiness:**
-- Harmonized milestone definitions documented
-- QC framework supports multi-regional validation
-- GANP KPI16 enhancement potential demonstrated
-- Path to operational lookup tables established
-
-**The refined framework provides a foundation for profile-aware fuel burn estimation supporting ICAO net-zero 2050 goals through transparent, reproducible, and internationally comparable performance monitoring.**
-
----
-
-# References
-
-1. ICAO (2022). Long-Term Aspirational Goal, Special Supplement. [https://www.icao.int/environmental-protection/Documents/EnvironmentalReports/2022/ENVReport2022_Special%20Supplement%20on%20LTAG.pdf](https://www.icao.int/environmental-protection/Documents/EnvironmentalReports/2022/ENVReport2022_Special%20Supplement%20on%20LTAG.pdf)
-
-2. ICAO (2023). GANP KPI Overview. [https://www4.icao.int/ganpportal/ASBU/KPI](https://www4.icao.int/ganpportal/ASBU/KPI)
-
-3. Ma, L., Dai, W., & Koelle, R. (2025). Fuel flow analysis for different flight phases based on a data-driven approach. ICNS 2025 Conference Proceedings.
-
-4. Nuic, A. (2009). Base of Aircraft Data (BADA) Product Management Document. EUROCONTROL.
-
-5. Deransy, R. (2022). EUROCONTROL - AEM, Advanced Emission Model, Flight Emissions Assessment. [https://www.eurocontrol.int/sites/default/files/2022-12/ectl_env_impact_assessment_forum_-_aem.pdf](https://www.eurocontrol.int/sites/default/files/2022-12/ectl_env_impact_assessment_forum_-_aem.pdf)
-
-6. Sun, J., Hoekstra, J., & Ellerbroek, J. (2020). OpenAP: An open-source aircraft performance model for air transportation studies and simulations. *Aerospace*, 7(8), 104. doi:10.3390/aerospace7080104
-
----
-
-**Document Status:** Exploratory analysis baseline (October 2026)
-**EUR Data:** Production FIXED pipeline loaded
-**CHN Data:** Summer 2025 production sample loaded
-**Next Update:** Profile-matched fuel-burn lookup-table analysis
+**Status:** study design and delivered-release diagnostics, 9 October 2026. All parameter grids and work assignments are proposals pending study evidence and collaborator review.

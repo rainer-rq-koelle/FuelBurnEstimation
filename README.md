@@ -10,8 +10,14 @@ plus a technical note that documents the data preparation pipeline step by step.
 ## Current Setup
 
 - `paper.qmd` is the lightweight paper draft.
+- `paper-exploratory-2026.qmd` develops the AICAP 2027 argument, delivered-release
+  diagnostics, profile-aware lookup design, and validation gates.
 - `technical-note-data-preparation.qmd` is the process note for source data,
   cleaning, milestone generation, and analysis datasets.
+- `technical-note-methodology.qmd` records analytical definitions, parameter
+  trials, percentile interpretation, validation, and the cruise side study.
+- `notes/study-worker-plan.md` defines work packages, dependencies, acceptance
+  criteria, and the proposed schedule to 30 October 2026.
 - `R/` contains reusable helper functions.
 - `scripts/` contains reproducible data-preparation scripts.
 - `data-raw/` and `data-derived/` are intentionally ignored by Git except for
@@ -21,6 +27,25 @@ plus a technical note that documents the data preparation pipeline step by step.
   crossings, level segments, intervals, and lookup-table inputs.
 
 ## EUR Data Pipeline Status
+
+**Analytical readiness update (9 October 2026):** the FIXED release is available
+and all seven local manifest-listed files match their hashes, but the study
+readiness audit identifies unresolved EUR repeated/overlapping intervals, CHN
+distance/time inconsistencies and missing landing milestones, and differences
+between intended and actual phase/schema semantics. Availability and zero orphan
+rate do not establish analytical validity. The pipeline completion statements
+below describe the earlier delivery checks; the new validation gates take
+precedence for scientific use.
+
+```sh
+Rscript scripts/12-audit-study-readiness.R
+quarto render paper-exploratory-2026.qmd --to html
+quarto render technical-note-methodology.qmd --to html
+```
+
+The audit writes aggregate diagnostics to `outputs/study-design/` without
+modifying production data. Review the exploratory paper and worker plan before
+estimating or publishing fuel-reference coefficients.
 
 **Current:** FIXED pipeline (October 2026)
 - ✅ LOBT bug corrected (two-stage SAM_ID extraction)

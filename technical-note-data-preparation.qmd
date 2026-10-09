@@ -21,6 +21,15 @@ source(here::here("R", "setup.R"))
 
 This note documents the data-preparation workflow for the 2026 fuel-burn study. It is deliberately separate from the paper so that source-data handling, assumptions, and processing steps can be reviewed without overloading the scientific narrative.
 
+Analytical definitions, parameter trials, and side studies are now documented in
+`technical-note-methodology.qmd`; the work packages are in
+`notes/study-worker-plan.md`. The 9 October 2026 readiness audit found unresolved
+EUR interval repetitions/overlaps, CHN distance/time inconsistencies and missing
+ALDT events, and phase/export semantic differences. The availability of a
+hash-verified release does not establish analytical readiness. Run
+`Rscript scripts/12-audit-study-readiness.R` and apply the validation gates in
+those documents before using the products for scientific coefficients.
+
 # Reference Work
 
 The 2025 ICNS CHN-EUR project provides the starting point. The useful components are:
@@ -60,7 +69,9 @@ The pipeline is organised as small, inspectable steps.
 
 1. `scripts/00-inventory-reference-data.R`: source-data inventory.
 2. `scripts/prepare-chn-qar-canonical.R`: CHN QAR conversion into canonical milestone and phase-summary tables.
-3. Future EUR scripts: comparator airport pairs, gate-to-gate milestone extraction, and harmonised phase summaries.
+3. EUR scripts 04–08: milestone harmonisation, interval derivation, enrichment,
+   and export. Their delivered interval and export semantics require the
+   source-level validation described in the methodological note.
 
 The current canonical helper is implemented in `R/canonical-fuel-milestones.R`. It was imported from the earlier CHN-EUR workflow that supported local QAR processing by Lingling and colleagues. The original handover notes are preserved in `notes/`.
 
@@ -151,7 +162,14 @@ The `D` and `A` distance milestones are analytical along-track anchors. They sho
 
 They should therefore not be described as ASMA or TMA rings unless a separate geometric distance to the aerodrome has been computed. The along-track interpretation is better aligned with fuel burn because it follows the route actually flown.
 
-The flight-level milestones are analytical pressure-altitude crossings. For the PRU surveillance-derived data and the CHN QAR-derived data, the vertical reference is treated as standard-pressure altitude, i.e. effectively referenced to 1013.25 hPa. The thresholds are therefore labelled as flight-level-style analytical crossings. Local QNH and field-elevation effects are not corrected at this stage, as they are expected to be negligible for this comparative fuel-burn analysis.
+The flight-level milestones are intended as analytical pressure-altitude crossings
+referenced to 1013.25 hPa. Confirm the actual source vertical references before
+adopting that interpretation. Pressure-altitude bands, QNH altitude, and AGL
+measurement windows are different quantities. Field elevation and local pressure
+effects cannot be assumed negligible for climb/descent comparisons, particularly
+at high-elevation airports such as ZPPP. An AGL window requires appropriate
+airport elevation and a documented conversion; preserve pressure-altitude
+crossings separately.
 
 The deterministic crossing rules should be:
 

@@ -1,0 +1,157 @@
+---
+title: "Technical Note: Profile-aware fuel-burn references"
+subtitle: "Decision register, validation studies, and analytical contract"
+author:
+  - name: Lingling Ma
+  - name: Wei Dai
+  - name: Rainer Koelle
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+# Purpose and evidence status
+
+This note supports the AICAP 2027 study and complements `technical-note-data-preparation.qmd`. It records choices that must be made before phase fuel coefficients can support international benchmarking. The exploratory paper provides the scientific argument and delivered-release diagnostics; `notes/study-worker-plan.md` turns the decisions below into executable work packages. This note is not a report of completed validation or final coefficients.
+
+The central estimand is a fuel reference conditional on aircraft type, phase, and independently observed operational profile. This differs from the causal fuel cost of an ATM restriction. The data can establish conditional associations and prediction accuracy; causal attribution needs additional information or a credible counterfactual.
+
+# Release identity and present blockers
+
+Run `Rscript scripts/12-audit-study-readiness.R`. It reads the local `FUELBURN_DATA_STORE` (default `.fuelburn-data-store`), checks manifest hashes, and writes aggregate CSVs to `outputs/study-design/`. No production artifact is changed or uploaded. The 9 October audit verified all seven manifest-listed local files.
+
+| Observation on the current release | Analytical consequence | Required resolution |
+|---|---|---|
+| EUR: 86,142 segment rows, 47,849 distinct keys, 29,631 repeated keys | Segment rates and counts can overweight repeated intervals | Trace every start/end to source intervals and establish unique pair identity |
+| EUR: overlap on 18,860 flights; summed exposure about 20,132 h versus union about 12,802 h | Summing rows overstates exposure by about 57% relative to union | Resolve source semantics and interval pairing; union alone is not a fuel repair |
+| EUR: 51,611 rows have endpoint altitude changes over 1,000 ft | Many intervals may span vertical motion or wrong boundaries | Inspect full source altitude profiles; distinguish pairing error from true behaviour |
+| CHN: 17,955 segment rows imply >700 kt; median TOC–TOD implied speed about 830 kt | kg/NM, stage length, and distance anchors are unreliable without further checks | Trace coordinates, units, time alignment, cumulative distance, and source batches |
+| CHN: ALDT absent on 1,190 flights; ATOT absent on one; 22 lack a unique TOC/TOD pair | Airborne/descent samples can be selective | Recover documented events or exclude for the affected domain and report attrition |
+| Actual columns: EUR milestones/segments 21/31; CHN 27/22 | Previous schema-equivalence claims are inaccurate | Freeze a semantic contract with source-specific optional fields |
+| EUR segment distance absent; production milestones retain LVL/FL100 | Some advertised canonical products are not exported | Trace export inputs; validate enriched milestone lineage and source interval distance |
+
+The >700 kt threshold is a broad analyst screening scenario, not an adopted flight eligibility boundary. Investigate failure mechanisms and neighbouring screening values before defining a production rule. A plausible speed does not prove a distance is correct.
+
+Potential EUR mechanisms in the current code are alternating LVL reconstruction, multiple implicit ends, and joining ends by cumulative start order. `scripts/07-enrich-eur-level-segments.R` also checks uppercase phase labels while delivered start phases are `Lvl_climb` and `Lvl_descent`, allowing altitude heuristics to dominate. These observations identify where to investigate; they do not establish the correct repair for any flight.
+
+CHN AOBT timestamps span June–August 2025 with 1,954 / 2,228 / 2,239 flights. EUR uses a `Europe/Paris` timezone attribute and CHN `UTC`. Preserve epoch instants when normalising display time and confirm the meaning of recorded clock values with source owners. Do not change timestamps merely because their labels differ.
+
+# Canonical analytical contract
+
+## Identity, units, and provenance
+
+Use `(REGION, SOURCE_UID)` as the flight key. Segment identity includes the flight key and a stable source/derived interval ID. Each interval has one start and one end; repeated distinct event roles at a common time are allowed in the milestone table. A physical trajectory row and an analytical event role are not the same key.
+
+Required metadata includes release hash, source batch, producer script/version, aircraft mapping, altitude reference, time semantics, distance semantics, fuel accounting, and phase/detector version. Keep independent flags for time validity, boundary availability, altitude/detection coverage, distance validity, and fuel validity. An overall QC flag cannot replace these domain-specific checks.
+
+Fuel is cumulative **consumed** kilograms at a timestamp, not fuel remaining in tanks. Verify sign, engine summation, integration units, cleaned/raw flow, and whether recorded cumulative values integrate up to the timestamp or include the following interval. The local QAR helper constructs forward increments and cumulative sums; explicitly test boundary alignment before subtracting snapshot totals. The same alignment check applies to cumulative distance. Retain raw and cleaned totals plus the treatment of gaps and spikes.
+
+Historical kg/h-versus-lb/h plausibility back-tests provide evidence only for the files actually audited. They do not confirm units or cleaning for every new batch. The plausibility score itself uses distance, so invalid distance weakens that component. Obtain batch-level unit declarations and run independent time-based and total-fuel checks.
+
+Exact type mappings include A320-NEO→A20N, A321-NEO→A21N, B737-800→B738, A330-300→A333, and B787-9→B789. Leave B737-MAX unresolved until a variant is established. Avoid a catch-all “Heavy” class for regional jets or business aircraft. Broader family coefficients are fallback candidates requiring their own validation.
+
+## Milestones and intervals
+
+The physical airborne partition is `[ATOT, TOC)`, `[TOC, TOD)`, `[TOD, ALDT]`. The legacy distance partition is ATOT–D100–A100–ALDT. Tag every output with its partition; test additivity within each partition and never sum across them. An equal TOC/TOD is a recorded zero-cruise case, not an invalid full flight, but its cruise rate is undefined. Missing and unordered events are distinct failure reasons.
+
+Calculate time, distance, and consumed fuel differences only when the corresponding boundaries and domains are valid. Do not silently choose among repeated same-role milestones. Set a deterministic resolution rule based on source meaning and flag ambiguous cases. Rate denominators must be positive. A phase with valid fuel/time but unreliable distance may contribute to a clearly labelled kg/min-only sample after relevant phase boundaries are validated.
+
+Half-open intervals prevent boundary double-counting. Clip level intervals at phase and analysis-window boundaries. Source cumulative fuel and distance should be interpolated at those boundaries under an explicit maximum-gap rule. Endpoint proportional allocation is a sensitivity approximation, not the default for changing-thrust phases. Check that phase totals reconcile with ATOT–ALDT and that subordinate exposures never exceed their parent windows.
+
+Along-track distance and geometric radius to an airport are distinct quantities. If noisy coordinates inflate cumulative distance, distance-anchor events can be misplaced even where the milestone exists. Recreating only the lookup distance column will not repair those event locations. Correct the trajectory-level quantity and regenerate dependent events and intervals together.
+
+Pressure-altitude bands and AGL windows require different processing. Confirm the vertical reference supplied in both regions. For high-elevation airports, a fixed pressure altitude does not imply the same height above terrain. Preserve missing FL crossings when a flight never traverses a threshold; do not invent a crossing from its first observed point.
+
+# Methodological decision register
+
+Statuses are **referenced** (external definition with its scope), **operational hypothesis**, **empirical candidate**, and **adopted** (frozen after validation). No candidate below is adopted by this note. Keep the chosen setting, alternatives, evidence, analyst, and date in the final register; record null or adverse results as well as favourable ones.
+
+| ID | Choice and current status | Proposed trials or evidence | Adoption criterion |
+|---|---|---|---|
+| D01 | Physical phases primary; legacy phases sensitivity — design proposal | Boundary source audit; sample plot review; additive fuel check | Agreed interpretation and valid ordered boundaries for included observations |
+| D02 | TOC/TOD detection — empirical candidate | Initial sustained cruise versus maximum-altitude plateau; initial capped cruise/step climbs; duration/window alternatives | Reviewed capped, stepped, short, and missing-data profiles; stable results or explicit uncertainty |
+| D03 | Level vertical rate — 300 ft/min referenced lineage | 200/300/400 ft/min on labelled profiles | Comparable detection at source cadences; false detections and missed holds reported |
+| D04 | Minimum qualified level duration — operational hypothesis | 20/30/60/120 s; retain generous candidates if recoverable | Coverage/resolution supports it; substantive conclusions robust to nearby settings |
+| D05 | Within-level altitude range — operational hypothesis | 100/200/300 ft, separately from endpoint delta | Full-profile check; distinguish noise, climb drift, and actual level holds |
+| D06 | Smoothing/gaps — source-specific candidate | Express smoothing in seconds; downsample QAR; test gaps appropriate to real EUR cadence | No silent interpolation across unobserved intervals; uncertainty documented |
+| D07 | Altitude bands — operational hypotheses | Continuous effect, current FL100/180/240 bands, shifts ±1,000/2,000 ft; finer cruise bands only with support | Operational readability plus stable held-out performance and cell support |
+| D08 | Stage length — candidate | Continuous adjustment versus <500/[500,700)/[700,1000)/≥1000 NM | Validated distance and useful generalisation without cell fragmentation |
+| D09 | Profile classes — candidate | Continuous interruption measures; no-level/low/typical/high; development-only quantiles versus fixed operational cuts | Independent of fuel outcome; class stability, coverage, and interpretable fuel associations |
+| D10 | Percentile references — candidate | P10/P20/P25, P50, P75/P80/P90 versus mean/weighted rate | Stable estimates, calibrated held-out quantiles; no automatic efficiency interpretation |
+| D11 | Sparse cells — design proposal | Trial independent-flight minima 30/50/100 plus uncertainty and route/date diversity | Freeze a rule before final evaluation; retain unsupported status and fallback provenance |
+| D12 | Regional weighting — design proposal | Source-specific primary; common-support weighting; equal-source versus exposure weights if pooling | Explicit target population; report support loss and weighting sensitivity |
+| D13 | Prediction improvement — design proposal | Paired MAE/bias comparison of M0/M1/M2 and coverage lost | Agree practical value before evaluation; a trial target of ≥5% MAE improvement is optional, not a statistical standard |
+
+Start with one-factor screening on a reviewed sample, then test a small number of plausible combined configurations. A full grid over every parameter would consume effort, amplify selection bias, and produce sparse cells. Rules that cannot be re-evaluated from delivered milestones require upstream trajectory data; do not simulate evidence by filtering already-qualified segments.
+
+# Profile descriptors and lookup estimators
+
+For each flight-phase, report absolute union level time, its share of observed eligible phase time, qualified interruption count, longest interruption, and altitude residence. State whether the denominator is the whole phase or an AGL/airport window. A zero is observed only when coverage and detection are sufficient; otherwise use missing/unknown. Do not infer continuity from the absence of delivered level rows.
+
+Climb/descent profile classes reflect interruption, not fuel rank. Cruise descriptors reflect operating altitude, steps, and exposure. Avoid a global scalar “smoothness score” that penalises ordinary level cruise. Where transitions introduce boundary ambiguity, retain a review category and compare sensitivity rather than forcing a class.
+
+For cell c, distinguish the median of per-flight phase rates from the exposure coefficient:
+
+$$\widehat r_{t,c}=\frac{\sum_{i\in c}F_{ip}}{\sum_{i\in c}T_{ip}},\qquad
+\widehat r_{d,c}=\frac{\sum_{i\in c}F_{ip}}{\sum_{i\in c}D_{ip}}.$$
+
+These estimate exposure conversion; typical-flight percentiles estimate a different target. Aggregate segment observations to flight-phase before reporting typical-flight summaries. For altitude-specific exposure rates, retain the appropriate interval or subphase definition and flight clustering. Fuel consumed while level is an observed quantity, not “additional fuel due to level-off”.
+
+Store metric-specific eligibility and counts. For example, `n_flights_kg_min` can differ from `n_flights_kg_nm`. A release cell needs its source, type, phase, profile version, context range, estimator, unit, coefficient, optional outcome percentiles, uncertainty, independent flight count, route/day coverage, support limits, fallback status, and release version.
+
+If comparing an observation to an empirical reference, keep the signed residual `observed fuel - reference fuel` and describe it as a reference gap. Report any positive-part summary separately; truncating negative gaps changes the estimand. A causal benefit pool requires comparable feasible alternatives, not the sum of independently selected low percentiles from incompatible phases. Do not sum phase quantiles and call the result a whole-flight quantile.
+
+# Validation and side studies
+
+## V01 — Event and interval reconstruction
+
+Review representative EUR flights with multiple ends, same-time events, long altitude-changing rows, and short intervals against raw source segment sequence. Establish what LVL actually denotes in the PRU output. Prefer trustworthy source interval IDs and boundaries over odd/even pairing. Every retained interval must be traceable. Re-run full-release identity, overlap, bounds, and cumulative-fuel reconciliation checks after the repair; report unresolved exclusions instead of making all segments appear complete by construction.
+
+## V02 — Distance, time, and fuel accounting
+
+For CHN, compare cumulative path distance to raw coordinates and recorded ground speed on selected flights from every batch, including extreme and apparently normal cases. Check coordinate scales, duplicates, timestamp ordering, jumps, interpolation, metres/kilometres/NM, and integration alignment. Airport-pair great-circle distance is a plausibility lower bound, not a substitute flown path. Inspect raw/cleaned fuel differences and independently verify engine flow integration. For EUR, obtain interval distance from validated source segment fields or aligned cumulative distance, not from nominal aircraft speed.
+
+## V03 — Detection resolution and profile classification
+
+Have operational reviewers inspect profiles spanning capped climbs, stepped cruise, continuous descent, holds, high field elevation, sparse sampling, and short/no cruise. Propose a small stratified review sample (for example 40–60 flights per source, subject to access), keeping it separate from final evaluation. Downsample QAR to representative EUR cadence and quantify shifts in level time/count/class. Fix units, qualification windows, and altitude references before comparing regions. Source-specific QC absence becomes `not_assessed`, not `ok`.
+
+## V04 — Cruise altitude and duration
+
+Primary outcomes are TOC–TOD fuel, kg/min, kg/NM, and whole-airborne fuel. Explanatory descriptors include time-weighted altitude, residence by level/band, duration, flown distance, and step changes. Point or source-interval exposure is required; endpoint averages are insufficient. Use exact type and route direction for the first plots and fits. Consider mass, winds/temperature, speed, batch/day, and operator/cost-index information only where actually available; list unavailable confounders explicitly.
+
+Fit a deliberately small model on common support. For the fuel-rate question, examine conditional altitude associations at comparable exposure/context. For total fuel, model time/distance context without indiscriminately conditioning on variables that mediate the altitude effect; label the target association. Avoid simultaneously treating time, distance, and derived speed as independent predictors. Add duration×altitude interaction only if supported and compare with the simpler specification out of sample.
+
+Recreate the earlier apparently spurious relationship in stages: pooled legacy phases; within-type/route legacy phases; physical TOC–TOD phases; validated distance and boundaries; whole-airborne outcomes. Decompose phase-duration shares and fuel totals. Check whether changing TOC/TOD moves the same consumption between phases, whether aircraft/route mixtures reverse the sign, and whether unequal sampling or missing ALDT selects particular flights. Keep disagreement or sign reversal in the note; do not select the expected trend.
+
+Observed lower levels cannot be called level capping without requested/available/optimal level information. If such information is absent, call the result an altitude association. A BADA/AEM counterfactual study would require documented mass, speed, weather, and feasible trajectory assumptions, with its own sensitivity range.
+
+## V05 — Prediction and transfer
+
+Compare M0 exact type×phase, M1 adding stage-length context, and M2 adding operational profiles on the same eligible flights. Use blocked development/evaluation partitions with all of a flight's records together. Learn thresholds, percentile classes, bins, and shrinkage only on development data. A temporal holdout and leave-route-out sensitivity address different generalisation questions. With three CHN route pairs, report individual held-out route results rather than treating routes as a large random sample.
+
+Report MAE, signed bias, paired error changes, and errors by source/type/phase. Report inclusion coverage and unsupported predictions with each result. Quantiles require calibration checks, such as the proportion of held-out outcomes below each fitted percentile. Sampling intervals may use clustered flight bootstrap; inspect date/route block sensitivity and repeated-aircraft dependence if identifiable. Keep parameter sensitivity and source bias separate from bootstrap uncertainty.
+
+Train/test reversal across CHN and EUR assesses transfer on observed common support. It does not estimate a pure regional performance gap. A bridge study applying a comparable model to QAR trajectories, in the owner's environment where necessary, can isolate some model-versus-recorded-fuel discrepancy. If unavailable, maintain source-specific coefficients and label transfer unvalidated.
+
+# Missing-data and robustness reporting
+
+Maintain a flow table for each source: delivered flights → identity/time checks → valid phase boundaries → fuel/time eligibility → distance eligibility → detector coverage → common-support sample → lookup/holdout sample. Counts can differ by outcome and phase. Report each reason, intersections, and final denominators; do not sum overlapping exclusion counts as though disjoint.
+
+Compare included and excluded flights by source batch, month, type, route direction, duration, and available fuel/time descriptors. The CHN ALDT gap requires particular attention. A complete-case analysis estimates the selected sample unless representativeness is demonstrated. Never impute missing landing times from AIBT or an unrelated milestone without a source-supported rule and sensitivity analysis.
+
+Report common-support loss before and after matching/weighting, covariate balance, cell counts, and effective sample sizes where weighted. Different regions have different routes; matching stage length and type does not remove terrain, winds, operator, or model differences. Regional confidence intervals quantify sampling variation conditional on this design, not representativeness of all China or Europe.
+
+# Publication decisions and sources
+
+The eight-page conference paper should contain the essential definitions, eligibility, source limitations, baseline comparison, and validated principal result. Use this note for the complete decision register, all parameter trials, detector review, bridge analysis, and cruise study. An external Technical Note is not assumed exempt from the conference's supplementary-content rule; confirm how it may be cited or submitted. The present HTML note is a working artifact, not conference-formatted output.
+
+Primary sources consulted on 9 October 2026:
+
+- [AICAP organiser's submission guidelines](https://easychair.org/cfp/AICAP-2027): eight pages inclusive, IEEE double-column, PDF up to 6 MB.
+- [Official AICAP page](https://event.ntu.edu.sg/AICAP-2027): 30 October submission deadline; 1 December notification; 15 December camera ready.
+- [EUROCONTROL CCO/CDO concept](https://www.eurocontrol.int/concept/continuous-climb-and-descent-operations) and [Action Plan Appendix E](https://www.eurocontrol.int/sites/default/files/2020-11/european-cco-cdo-action-plan-appendix-e.pdf): detection/measurement lineage, with windows and local exceptions that must be respected.
+- [EUROCONTROL AEM description](https://avenir-catalogue.eurocontrol.int/aem-details.html): model context; the actual study version/configuration still requires provenance.
+- [EUROCONTROL Data Snapshot 21](https://www.eurocontrol.int/publication/eurocontrol-data-snapshot-21-aircraft-flying-higher-more-efficiently-and-sustainably): altitude motivation, subject to aircraft and operating conditions.
+- Supplied Ma, Dai, and Koelle ICNS2025 paper, reviewed for legacy phases, regression results, and stated limitations.
