@@ -71,16 +71,18 @@ W0 is a documentation and governance package. No new analytical datasets were cr
 
 | Output role | Durable destination and exact key/path | SHA-256 | Rows/flights | Stored hash verified? |
 |---|---|---|---|---|
-| Release contract | `notes/study-release-contract.md` | db1437ee0663027c48c04f21729e03a2b9d70ffd6c366f2639c7c1e81ec3c4a4 | N/A | N/A (GitHub tracked) |
-| Frozen manifest snapshot | `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` | 25e4e1145511997efefbb8f9fe214c6209922e56edbb9c6446b0fbc7c861114e | 7 artifacts | N/A (GitHub tracked) |
-| Worker handoff | `notes/results/W0/W0-2026-10-09-001/worker-handoff-W0.md` | d12b136b114728325cbcd7607f94e564d3f167d8aaf9778298d2f78dd0bd225e | N/A | N/A (GitHub tracked) |
-| Release integrity check | `notes/results/W0/W0-2026-10-09-001/release-integrity.csv` | (audit output) | 7 rows | N/A (audit evidence) |
-| Study readiness summary | `notes/results/W0/W0-2026-10-09-001/study-readiness.csv` | (audit output) | 2 rows (EUR/CHN) | N/A (audit evidence) |
-| Actual schema | `notes/results/W0/W0-2026-10-09-001/actual-schema.csv` | (audit output) | varies | N/A (audit evidence) |
-| Milestone coverage | `notes/results/W0/W0-2026-10-09-001/milestone-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
-| Phase label provenance | `notes/results/W0/W0-2026-10-09-001/phase-label-provenance.csv` | (audit output) | varies | N/A (audit evidence) |
-| Aircraft common support | `notes/results/W0/W0-2026-10-09-001/aircraft-common-support.csv` | (audit output) | 75 types | N/A (audit evidence) |
-| Route coverage | `notes/results/W0/W0-2026-10-09-001/route-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
+| Release contract | `notes/study-release-contract.md` | See W0-deliverables-checksums.txt | N/A | N/A (GitHub tracked) |
+| Frozen manifest snapshot | `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` | See W0-deliverables-checksums.txt | 7 artifacts | N/A (GitHub tracked) |
+| Worker handoff | `notes/results/W0/W0-2026-10-09-001/worker-handoff-W0.md` | See W0-deliverables-checksums.txt | N/A | N/A (GitHub tracked) |
+| Corrections checklist | `notes/results/W0/W0-2026-10-09-001/CORRECTIONS-CHECKLIST.md` | See W0-deliverables-checksums.txt | N/A | N/A (GitHub tracked) |
+| W0 package README | `notes/results/W0/W0-2026-10-09-001/README.md` | See W0-deliverables-checksums.txt | N/A | N/A (GitHub tracked) |
+| Release integrity check | `notes/results/W0/W0-2026-10-09-001/release-integrity.csv` | See W0-deliverables-checksums.txt | 7 rows | N/A (audit evidence) |
+| Study readiness summary | `notes/results/W0/W0-2026-10-09-001/study-readiness.csv` | See W0-deliverables-checksums.txt | 2 rows (EUR/CHN) | N/A (audit evidence) |
+| Actual schema | `notes/results/W0/W0-2026-10-09-001/actual-schema.csv` | See W0-deliverables-checksums.txt | varies | N/A (audit evidence) |
+| Milestone coverage | `notes/results/W0/W0-2026-10-09-001/milestone-coverage.csv` | See W0-deliverables-checksums.txt | varies | N/A (audit evidence) |
+| Phase label provenance | `notes/results/W0/W0-2026-10-09-001/phase-label-provenance.csv` | See W0-deliverables-checksums.txt | varies | N/A (audit evidence) |
+| Aircraft common support | `notes/results/W0/W0-2026-10-09-001/aircraft-common-support.csv` | See W0-deliverables-checksums.txt | 75 types | N/A (audit evidence) |
+| Route coverage | `notes/results/W0/W0-2026-10-09-001/route-coverage.csv` | See W0-deliverables-checksums.txt | varies | N/A (audit evidence) |
 
 **Canonical copy:** All outputs in GitHub; no R2 upload required for W0.
 
@@ -209,8 +211,9 @@ W0 is a documentation and governance package. No new analytical datasets were cr
 2. Missing ALDT root cause unknown (affects 18.5% of flights)
 3. Distance calculation method unverified
 4. Fuel flow integration conventions unverified
-5. QAR producer/version undocumented
-6. TOC/TOD detector settings undocumented
+5. Batch processing provenance: `scripts/process-chn-summer2025-update.R` consolidates incoming batch outputs; batch producer/version unknown
+6. Helper bundle provided to Lingling contains `R/canonical-fuel-milestones.R`; whether batch-level outputs used this or another helper version is unverified
+7. TOC/TOD detector settings undocumented
 
 **General uncertainties:**
 1. Clock semantics (instants vs. wall times) for both regions
@@ -366,7 +369,7 @@ Audit runtime: ~30 seconds on local machine.
 
 **Lower priority but required for documentation:**
 7. AEM configuration undocumented
-8. QAR producer/detector settings undocumented
+8. Batch processing provenance: upstream batch producer/version unknown
 9. Clock semantics unverified for both regions
 
 ### Recommended immediate actions
