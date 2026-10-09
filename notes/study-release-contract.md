@@ -50,7 +50,7 @@ The authoritative manifest snapshot is preserved at:
 
 ## Aggregate Audit Evidence
 
-The readiness audit (`scripts/12-audit-study-readiness.R`) was executed on 2026-10-09 and generated seven aggregate diagnostic files in `outputs/study-design/`:
+The readiness audit (`scripts/12-audit-study-readiness.R`) was executed on 2026-10-09 and generated seven aggregate diagnostic files in `notes/results/W0/W0-2026-10-09-001/`:
 
 ### Key Findings Summary
 
@@ -160,7 +160,7 @@ Types with substantial two-region support for initial study:
 
 2. **Processing Pipeline**
    - Producer script: `scripts/process-chn-summer2025-update.R`
-   - Integration helper: `R/chn-helper-functions.R` (forward-increment cumulative construction)
+   - Integration helper: `R/chn-data-prep.R` (forward-increment cumulative construction)
    - Boundary definitions: TOC/TOD detection applied
 
 3. **Data Characteristics**
@@ -328,7 +328,7 @@ Required for Gate A:
 
 ### W1 — EUR Interval Reconstruction and Export Validation
 
-**Status:** ASSIGNED  
+**Status:** PROPOSED (awaiting owner confirmation)  
 **Owner:** To be determined by PRU data-processing lead  
 **Dependencies:** W0 (complete); local raw segment access  
 **Priority:** CRITICAL  
@@ -372,7 +372,7 @@ Required for Gate A:
 
 ### W2 — CHN Distance, Boundaries, and Fuel Validation
 
-**Status:** ASSIGNED  
+**Status:** PROPOSED (awaiting owner confirmation)  
 **Owner:** To be determined by CAUC QAR worker with operator/source access  
 **Dependencies:** W0 (complete)  
 **Priority:** CRITICAL (can run parallel to W1)  
@@ -531,7 +531,7 @@ Required for Gate A:
 - [x] This release contract: `notes/study-release-contract.md`
 - [x] Frozen manifest snapshot: `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv`
 - [x] Owner/dependency tracker: Embedded in this document
-- [x] Aggregate audit evidence: `outputs/study-design/*.csv` (7 files)
+- [x] Aggregate audit evidence: `notes/results/W0/W0-2026-10-09-001/*.csv` (7 files)
 
 ### R2 Artifacts
 
@@ -558,7 +558,7 @@ Required for Gate A:
 - [x] W1/W2 assigned with clear scope and acceptance criteria
 - [x] Investigation plan established
 
-**W0 Status:** ✅ **ACCEPTED** — Release identity and investigation plan established
+**W0 Status:** Ready for steward review — Release identity and investigation plan established
 
 **Note:** This accepts release identity and investigation plan, NOT analytical readiness. Analysis release remains BLOCKED on W1/W2 validation.
 

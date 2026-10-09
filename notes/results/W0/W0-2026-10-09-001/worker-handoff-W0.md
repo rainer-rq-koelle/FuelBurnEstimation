@@ -12,7 +12,7 @@
 - **Analysis status:** ✅ Analysed and checked (read-only audit complete)
 - **Data delivery status:** Not required (W0 is documentation package)
 - **Review status:** Awaiting review by release steward and PRU/CAUC leads
-- **Remaining work:** W1 EUR interval reconstruction (assigned, awaiting owner), W2 CHN distance/boundary validation (assigned, awaiting owner)
+- **Remaining work:** W1 EUR interval reconstruction (proposed, awaiting owner confirmation), W2 CHN distance/boundary validation (proposed, awaiting owner confirmation)
 - **Blocker:** None for W0 completion. W1/W2 source access is prerequisite for their work packages.
 - **Responsible person:** Release steward (rkoelle) for W0 acceptance; PRU/CAUC leads for W1/W2 assignments
 
@@ -71,15 +71,15 @@ W0 is a documentation and governance package. No new analytical datasets were cr
 
 | Output role | Durable destination and exact key/path | SHA-256 | Rows/flights | Stored hash verified? |
 |---|---|---|---|---|
-| Release contract | `notes/study-release-contract.md` | (to be computed at commit) | N/A | N/A (GitHub tracked) |
-| Frozen manifest snapshot | `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` | (to be computed at commit) | 7 artifacts | N/A (GitHub tracked) |
-| Worker handoff | `notes/results/W0/W0-2026-10-09-001/worker-handoff-W0.md` | (to be computed at commit) | N/A | N/A (GitHub tracked) |
+| Release contract | `notes/study-release-contract.md` | db1437ee0663027c48c04f21729e03a2b9d70ffd6c366f2639c7c1e81ec3c4a4 | N/A | N/A (GitHub tracked) |
+| Frozen manifest snapshot | `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv` | 25e4e1145511997efefbb8f9fe214c6209922e56edbb9c6446b0fbc7c861114e | 7 artifacts | N/A (GitHub tracked) |
+| Worker handoff | `notes/results/W0/W0-2026-10-09-001/worker-handoff-W0.md` | d12b136b114728325cbcd7607f94e564d3f167d8aaf9778298d2f78dd0bd225e | N/A | N/A (GitHub tracked) |
 | Release integrity check | `notes/results/W0/W0-2026-10-09-001/release-integrity.csv` | (audit output) | 7 rows | N/A (audit evidence) |
 | Study readiness summary | `notes/results/W0/W0-2026-10-09-001/study-readiness.csv` | (audit output) | 2 rows (EUR/CHN) | N/A (audit evidence) |
 | Actual schema | `notes/results/W0/W0-2026-10-09-001/actual-schema.csv` | (audit output) | varies | N/A (audit evidence) |
 | Milestone coverage | `notes/results/W0/W0-2026-10-09-001/milestone-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
 | Phase label provenance | `notes/results/W0/W0-2026-10-09-001/phase-label-provenance.csv` | (audit output) | varies | N/A (audit evidence) |
-| Aircraft common support | `notes/results/W0/W0-2026-10-09-001/aircraft-common-support.csv` | (audit output) | 77 types | N/A (audit evidence) |
+| Aircraft common support | `notes/results/W0/W0-2026-10-09-001/aircraft-common-support.csv` | (audit output) | 75 types | N/A (audit evidence) |
 | Route coverage | `notes/results/W0/W0-2026-10-09-001/route-coverage.csv` | (audit output) | varies | N/A (audit evidence) |
 
 **Canonical copy:** All outputs in GitHub; no R2 upload required for W0.
