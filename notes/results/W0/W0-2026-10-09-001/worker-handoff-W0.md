@@ -61,7 +61,7 @@
 | EUR level segments | `processed/eur/EUR-level-segments-summer2025.parquet` | FIXED-summer2025 | a2c1b923a0826e4173ea8402619dc3aa780661631482e1ad4e8147fd8111a86d |
 | EUR raw metadata | `raw/eur/g2g-flight-metadata-2025-summer-FIXED.parquet` | FIXED | e9d61aa942e0b986ebb82073b489cba550991d7ca8860cc8d4b106893c7e3e35 |
 | EUR raw segments | `raw/eur/g2g-segment-details-2025-summer-FIXED.parquet` | FIXED | f341b8894335ebfb62dd97f27dd90517da088f31b4e50fd46e1f420b755744fc |
-| Authoritative manifest | `data-store/manifest/current-artifacts.csv` | 2026-10-09 | (snapshot SHA-256: computed from frozen copy) |
+| Authoritative manifest (frozen snapshot) | `data-store/manifest/current-artifacts.csv` (snapshot: `notes/results/W0/W0-2026-10-09-001/input-manifest-snapshot.csv`) | 2026-10-09 | See `W0-deliverables-checksums.txt` for snapshot file SHA-256 |
 
 **Note:** All seven R2 artifacts were verified present in local data store with matching hashes. The audit script loaded these files read-only and generated aggregate diagnostics without modification.
 

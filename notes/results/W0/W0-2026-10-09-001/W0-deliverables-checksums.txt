@@ -1,6 +1,6 @@
 f52d34dc4f47c4559f940d8668aca1b3a42ef0ad875568cffa31a3fb9b273f2d *README.md
-ca8a59e6c220ba7713ab8965f8668f79b8438f09260f2e090f2e0f810bfae9b9 *worker-handoff-W0.md
-5035ee2a27c6d91b41225b75686d33ce6a9c6599d42d5e722fc2df13f116d610 *CORRECTIONS-CHECKLIST.md
+d2908de40ffe445182d332599275399ed171a5b8279c5a106178a913fe3a9cfc *worker-handoff-W0.md
+6259d46ab2e41dea9fced15852c0e88f62beb9e4632884ac523341d7f20e9fbb *CORRECTIONS-CHECKLIST.md
 f431e9b0f659192d5d1333f65183a880f61cc31c4e35e8d2a8f8a0ffc8b13b77 *actual-schema.csv
 a84f822642570c84590ab45dc81bb026896a3bbead9f6c49f37c606cb9c7b1ee *aircraft-common-support.csv
 25e4e1145511997efefbb8f9fe214c6209922e56edbb9c6446b0fbc7c861114e *input-manifest-snapshot.csv
@@ -9,4 +9,4 @@ afde03b37ed3d13971d0ef702ea0713f0d20b19a63578b51c4efaa3ab9a24696 *phase-label-pr
 2635adfa71ce8af2afc1b0fc37cb5c950fa6abfe7da12fb18973cc4d31f29b6a *release-integrity.csv
 a73babf30739d32cb960092a8b877cfb355bb5d55a08d8361ba400108e26b07d *route-coverage.csv
 c331f78658a47abdfdf0e9bc00fb90f895dbc455dd39c66479515ffb54513a8b *study-readiness.csv
-36dd7d5ae3127757db2ad7368dcfc4ba68b7250dee3c79104ec8bd469a299009 *../../../study-release-contract.md
+56ae922875d4f1a9fb465f812006864eb33123b83a7ccc4838aab8d0856b9541 *../../../study-release-contract.md

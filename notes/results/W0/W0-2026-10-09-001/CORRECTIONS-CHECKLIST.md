@@ -136,24 +136,7 @@ All counts verified against `notes/results/W0/W0-2026-10-09-001/study-readiness.
 
 ## File Checksums (Post-Correction)
 
-From `W0-deliverables-checksums.txt`:
-
-```
-README.md                        f52d34dc4f47c4559f940d8668aca1b3a42ef0ad875568cffa31a3fb9b273f2d
-worker-handoff-W0.md             ca8a59e6c220ba7713ab8965f8668f79b8438f09260f2e090f2e0f810bfae9b9
-actual-schema.csv                f431e9b0f659192d5d1333f65183a880f61cc31c4e35e8d2a8f8a0ffc8b13b77
-aircraft-common-support.csv      a84f822642570c84590ab45dc81bb026896a3bbead9f6c49f37c606cb9c7b1ee
-input-manifest-snapshot.csv      25e4e1145511997efefbb8f9fe214c6209922e56edbb9c6446b0fbc7c861114e
-milestone-coverage.csv           9924396e9c669e61d60e5c7b73c827a4ee9f275e75d472a6d76d58b7a2cd40da
-phase-label-provenance.csv       afde03b37ed3d13971d0ef702ea0713f0d20b19a63578b51c4efaa3ab9a24696
-release-integrity.csv            2635adfa71ce8af2afc1b0fc37cb5c950fa6abfe7da12fb18973cc4d31f29b6a
-route-coverage.csv               a73babf30739d32cb960092a8b877cfb355bb5d55a08d8361ba400108e26b07d
-study-readiness.csv              c331f78658a47abdfdf0e9bc00fb90f895dbc455dd39c66479515ffb54513a8b
-study-release-contract.md        36dd7d5ae3127757db2ad7368dcfc4ba68b7250dee3c79104ec8bd469a299009
-```
-
-**Note:** `README.md`, `worker-handoff-W0.md`, and `CORRECTIONS-CHECKLIST.md` hashes changed due to final corrections.  
-**Note:** `study-release-contract.md` hash unchanged (no edits in final pass).
+`W0-deliverables-checksums.txt` is the single checksum index for the W0 package. It covers all deliverables except itself. The index is regenerated after final edits and verified against the exact files on the PR branch.
 
 ## Verification
 
@@ -169,8 +152,7 @@ study-release-contract.md        36dd7d5ae3127757db2ad7368dcfc4ba68b7250dee3c791
 ## Summary
 
 **Corrections applied:** 14 substantive changes  
-**Files modified:** 3 (README.md, worker-handoff-W0.md, CORRECTIONS-CHECKLIST.md)  
-**Files added/updated:** 1 (W0-deliverables-checksums.txt)  
+**Final reconciliation pass:** Updated the release contract, worker handoff, and correction checklist; regenerated the checksum index.
 **Files removed:** 1 (notes/study-release-contract.md.bak)  
 **Production data:** Preserved (no changes)
 
@@ -187,4 +169,4 @@ study-release-contract.md        36dd7d5ae3127757db2ad7368dcfc4ba68b7250dee3c791
 
 ---
 
-*W0 corrections complete. All placeholders replaced with actual values, invented statistics removed, provenance claims verified against audit evidence, links corrected, status claims reconciled, and reproducibility established.*
+*W0 corrections complete. Unsupported distance claims removed; provenance separates the known local consolidation step and supplied helper from the unverified batch producer; links, statuses, and checksums reconciled.*

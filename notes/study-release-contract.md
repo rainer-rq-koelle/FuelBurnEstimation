@@ -159,9 +159,10 @@ Types with substantial two-region support for initial study:
    - Timezone attribute: UTC
 
 2. **Processing Pipeline**
-   - Producer script: `scripts/process-chn-summer2025-update.R`
-   - Integration helper: `R/chn-data-prep.R` (forward-increment cumulative construction)
-   - Boundary definitions: TOC/TOD detection applied
+   - Local consolidation script: `scripts/process-chn-summer2025-update.R` (combines incoming batch outputs; it does not generate them)
+   - Helper bundle provided to Lingling: `R/canonical-fuel-milestones.R`; whether those batches used this helper or another version is unverified
+   - This repository also contains `R/chn-data-prep.R`, but no evidence establishes it as the producer of these batches
+   - TOC/TOD boundaries appear in the delivered outputs; the batch-specific detector and settings are unverified
 
 3. **Data Characteristics**
    - Coordinates available ✅
@@ -555,12 +556,12 @@ Required for Gate A:
 - [x] Every required input has a verified hash
 - [x] Every required input has owner and semantic definition
 - [x] Known limitations documented
-- [x] W1/W2 assigned with clear scope and acceptance criteria
+- [x] W1/W2 work packages proposed with clear scope and acceptance criteria; owner confirmation pending
 - [x] Investigation plan established
 
 **W0 Status:** Ready for steward review — Release identity and investigation plan established
 
-**Note:** This accepts release identity and investigation plan, NOT analytical readiness. Analysis release remains BLOCKED on W1/W2 validation.
+**Note:** If approved, W0 acceptance covers release identity and the investigation plan only; analytical readiness remains BLOCKED pending W1/W2 validation.
 
 ### Immediate Next Actions
 
