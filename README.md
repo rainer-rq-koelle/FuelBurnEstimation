@@ -18,6 +18,8 @@ plus a technical note that documents the data preparation pipeline step by step.
   trials, percentile interpretation, validation, and the cruise side study.
 - `notes/study-worker-plan.md` defines work packages, dependencies, acceptance
   criteria, and the proposed schedule to 30 October 2026.
+- `notes/worker-dispatch.md` provides the initial W0 dispatch pinned to an exact
+  instruction commit; `notes/worker-handoff-template.md` defines the return package.
 - `R/` contains reusable helper functions.
 - `scripts/` contains reproducible data-preparation scripts.
 - `data-raw/` and `data-derived/` are intentionally ignored by Git except for
