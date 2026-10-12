@@ -16,10 +16,10 @@ cat("(Source validation blocked - see handoff)\n")
 cat("============================================\n\n")
 
 # Use W0 audit results as primary evidence
-w0_audit <- here("notes", "results", "W0", "W0-2026-10-09-001", "study-readiness.csv")
+w0_audit <- here("notes", "results", "W1", "W1-2026-10-12-001", "W0-audit-excerpt.csv")
 
 if (!file.exists(w0_audit)) {
-  stop("W0 audit file not found. Run W0 audit first.")
+  stop("W0 audit excerpt not found in W1 package.")
 }
 
 audit <- readr::read_csv(w0_audit, show_col_types = FALSE) |>

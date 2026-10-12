@@ -1,0 +1,5 @@
+artifact_role,file_path,format,sha256,size_bytes
+Diagnostic README,notes/results/W1/W1-2026-10-12-001/README.md,markdown,2e6d0c115df8c4d8c407ad161d2ab16b415b2657d5047149a36b2a95bd9d5bc5,9434
+Worker handoff,notes/results/W1/W1-2026-10-12-001/worker-handoff-W1.md,markdown,d734fa1baf2a9c19bc02291ae32d790345df02723db03b5eb005f937789fb5e5,9783
+W0 audit excerpt,notes/results/W1/W1-2026-10-12-001/W0-audit-excerpt.csv,csv,c331f78658a47abdfdf0e9bc00fb90f895dbc455dd39c66479515ffb54513a8b,1041
+Validation script,scripts/W1-validation-checks.R,R script,2a269379d1bdbd46ca848784ac60741be6887eb6c5344eda96fe54be7a90d5a2,5332

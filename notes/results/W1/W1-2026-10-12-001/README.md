@@ -210,8 +210,8 @@ lvl_events <- df |>
 
 See `notes/results/W1/W1-2026-10-12-001/`:
 - `W0-audit-excerpt.csv` - Relevant metrics from W0 audit
-- `code-review-notes.md` - Detailed code analysis
-- `validation-script.R` - Tests for processed data (where possible)
+- `artifact-manifest.csv` - SHA-256 and byte sizes for all deliverables
+- Validation script: `scripts/W1-validation-checks.R` (executed successfully, see handoff for output)
 
 ## Next Steps
 
