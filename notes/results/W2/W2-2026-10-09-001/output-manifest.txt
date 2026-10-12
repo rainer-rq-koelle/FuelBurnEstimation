@@ -1,0 +1,40 @@
+W2 CHN Validation - Output Manifest
+Run ID: W2-2026-10-09-001
+Generated: 2026-10-12
+Branch: w2-chn-validation-clean
+Base: main
+
+AGGREGATE SUMMARIES (in GitHub):
+=================================
+9e550c5c9939c2e02e9302bc45cddda93e37f7b7515b494453e1f75bf1acaa22 *flight-eligibility-summary-corrected.csv
+6fba060886d618250cc6c20ae7cad734216d05dd25d8779698469565ff10cf0b *fuel-by-aircraft-type.csv
+a10a1f015514192e1b9d3af3a2162c3a0df7f3bdadc611965a908176f2c4ecb0 *level-segment-speed-summary.csv
+4ffcb3c09d9293e3e595d41efb0c5e4fbac00bbcce5ff38f0934f59b8ebca3af *missing-aldt-by-batch.csv
+9c00f2cb429627d837b8471b0f1cd3efa9d0f1ab084e5cbdf79381140b07bdc7 *missing-aldt-by-route.csv
+43c51d7b40cc9f9422e29d12d0f83dc1d3bce5e6f89e79516879c86a84697c13 *missing-aldt-by-type.csv
+90ef775c8797ea3b2a468e8f03792a77c7d1a7a5046eba3436ac69c7bd4522b4 *phase-eligibility-summary-corrected.csv
+780e09a4423dbc38ce8da577ea0a6c0343a92651622f6212ab93f02c037a59af *speed-by-batch-phase.csv
+299bfce55da7f449e12cd439edc6244d4dc34dd1db0f15c92e7fe0e555ffd27b *speed-calculation-check.csv
+597fb7ac693b845c1161ad7abc1aeb4fce5374640e1479e12d4a10da6c5a3905 *speed-summary-by-phase.csv
+
+DOCUMENTATION (in GitHub):
+==========================
+5b5477f53fc6859c71ef0a7a12bf440adf30677eaa0f3520b60b1306887f6f1e *W2-FINDINGS-SUMMARY-CORRECTED.md
+714abd3983a60a18061e3d3dd1e7678b5613807a1bc03bc7024918498c9a0798 *WORKER-HANDOFF-W2-FINAL.md
+
+SCRIPTS (in GitHub):
+===================
+42aa83c13724d628a7d48a37c47b4f77eed891841c3be54369fa7d25320613ab *scripts/W2-validate-chn-data.R
+e61a83b82e0fee4b33a246e626a3c5b08fd7a13b16d6794f075ff189916bff62 *scripts/W2-create-eligibility-flags-corrected.R
+
+FLIGHT-LEVEL FLAGS (local-package, pending R2 upload):
+======================================================
+88bf459382786123e45a20941821a1ca135641a697476bef82e0868afc826331 *local-package/flight-eligibility-flags.csv
+e6a7a59517c2626807e4408bca41784e22984f85feeead1906334e22d5966624 *local-package/phase-eligibility-flags.csv
+
+NOTES:
+======
+- Flight-level example CSVs (extreme-speed-examples, extreme-level-segment-examples,
+  missing-aldt-examples, fuel-outliers) are NOT included in GitHub per aggregate-only policy
+- Flight-level eligibility flags in local-package/ pending R2 upload
+- All hashes are SHA256
