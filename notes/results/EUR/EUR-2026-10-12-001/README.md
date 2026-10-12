@@ -56,4 +56,4 @@ The exact aggregate build audit is in [`EUR-parallel-build-audit.csv`](EUR-paral
 - `EUR-flights-parallel.parquet`
 - `EUR-flight-eligibility-parallel.parquet`
 - `EUR-parallel-build-audit.csv`
-- `EUR-parallel-artifact-manifest.csv`
+- `EUR-parallel-release-manifest.csv` (pins producing code commit `e4edd68c7e9fc6eeddb6c6b08701d3b93e9e4872`)
