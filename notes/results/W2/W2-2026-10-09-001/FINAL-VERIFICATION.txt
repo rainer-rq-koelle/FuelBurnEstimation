@@ -1,0 +1,104 @@
+W2 FINAL VERIFICATION — BOUNDED CORRECTION PASS COMPLETE
+=========================================================
+
+Branch: w2-chn-validation-clean
+Base: a6dbfb9 (w0-release-contract)
+Final commit: 4e58d26
+Verification date: 2026-10-12T16:30:00Z
+
+CORRECTIONS VERIFIED:
+
+✅ 1. Airborne Eligibility Calculation
+   - Fixed: Requires ALL THREE phases (CLIMB+CRUISE+DESCENT) present AND eligible
+   - Correct count: 5,226 flights (81.4%)
+   - Previous incorrect count: 5,248
+   - Limiting factor: DESCENT phase presence (only 5,226 have TOD)
+   - Script confirmed working: W2-create-eligibility-flags-corrected.R
+
+✅ 2. Distance Anomaly Statement
+   - Observed: 9,573 of 52,171 non-zero-duration records (18.3%) >700kt
+   - Helper code: Confirmed correct (END_DIST - START_DIST at lines 669,724,991)
+   - Cause: Stated as UNKNOWN (requires source QAR inspection)
+   - NOT claiming root cause from processed data
+
+✅ 3. Speed Calculation Clarity
+   - Numerator: 9,573 (phase records >700kt)
+   - Denominator: 52,171 (non-zero duration with distance)
+   - Zero-duration records excluded from denominator
+   - Percentage: 18.3%
+
+✅ 4. Fuel Results Description
+   - Changed to: "Plausibility checks against aircraft-type references"
+   - NOT claiming: Independent fuel integration validation
+
+✅ 5. Flight-Level Data Separation
+   - Removed from GitHub: 4 flight-level CSV files
+   - Location: notes/results/W2/W2-2026-10-09-001/local-package/
+   - Files: phase-eligibility-flags.csv (54,131 records)
+           flight-eligibility-flags.csv (6,421 records)
+   - GitHub contains: Only aggregate summaries
+
+✅ 6. R2 Upload Status
+   - Status: PENDING (credentials unavailable)
+   - Local package: Ready at local-package/ directory
+   - Proposed location: derived/chn/study-runs/W2-2026-10-09-001/
+   - Data delivery: Marked INCOMPLETE until upload verified
+
+✅ 7. Output Manifest
+   - Created: output-manifest.txt
+   - Contains: SHA256 hashes for all outputs
+   - Includes: Both GitHub files and local-package files
+
+✅ 8. Batch Producer Version
+   - Status: UNKNOWN
+   - Reason: Processing summaries lack version metadata
+   - Likely: commit 68b9f8b (2026-10-08) or later
+   - NOT claiming confirmed version
+
+✅ 9. Findings Documents Reconciled
+   - W2-FINDINGS-SUMMARY-CORRECTED.md: Matches all counts
+   - WORKER-HANDOFF-W2-FINAL.md: Complete with pending status
+
+✅ 10. No W3-Ready Claims
+   - Clearly states: NOT READY for W3
+   - Reason: R2 upload pending
+   - Required: Flags must be retrievable before W3 proceeds
+
+COMMIT HISTORY:
+  4e58d26 Remove flight-level CSVs from GitHub
+  ab8d8a4 W2 CORRECTED: Final bounded correction pass
+  3c4c184 Add W2 validation script and diagnostic CSVs
+  451aaa1 W2: CHN validation with phase-specific eligibility flags
+  a6dbfb9 Complete W0 final documentation corrections
+
+GITHUB CONTENTS (aggregate only):
+  - 2 validation scripts
+  - 14 aggregate diagnostic CSVs
+  - 3 corrected summary CSVs
+  - 1 speed calculation check
+  - 1 output manifest with hashes
+  - 2 findings documents
+  - 2 handoff documents
+
+LOCAL PACKAGE (not in GitHub):
+  - phase-eligibility-flags.csv (54,131 records)
+  - flight-eligibility-flags.csv (6,421 records)
+  - SHA256 hashes in output-manifest.txt
+
+SCRIPT VERIFICATION:
+  ✅ W2-validate-chn-data.R runs cleanly
+  ✅ W2-create-eligibility-flags-corrected.R runs cleanly
+  ✅ Counts reconcile across all outputs
+  ✅ No flight-level data in GitHub
+
+READY FOR:
+  - PR creation to w0-release-contract
+  - Steward review
+  - R2 upload when credentials available
+
+NOT READY FOR:
+  - W3 consumption (pending R2 upload)
+  - Distance-dependent analyses (coordinate issue)
+
+VERIFICATION COMPLETE: All corrections bounded and verified.
+Worker: Claude Sonnet 4.5
