@@ -125,7 +125,8 @@ missing_aldt_examples <- aldt_analysis %>%
   select(SOURCE_UID, source_batch, TYPE, ROUTE, has_ATOT, has_TOC, has_TOD) %>%
   head(50)
 
-write_csv(missing_aldt_examples, file.path(output_dir, "missing-aldt-examples.csv"))
+# Not written to GitHub (contains SOURCE_UID flight-level data)
+# write_csv(missing_aldt_examples, file.path(output_dir, "missing-aldt-examples.csv"))
 
 cat(sprintf("\n✓ Total flights missing ALDT: %d (%.1f%%)\n",
             sum(!aldt_analysis$has_ALDT),
@@ -178,7 +179,8 @@ extreme_speed_examples <- speed_analysis %>%
   arrange(desc(IMPLIED_SPEED_KT)) %>%
   head(100)
 
-write_csv(extreme_speed_examples, file.path(output_dir, "extreme-speed-examples.csv"))
+# Not written to GitHub (contains SOURCE_UID flight-level data)
+# write_csv(extreme_speed_examples, file.path(output_dir, "extreme-speed-examples.csv"))
 
 cat(sprintf("\n✓ Phase records with speed >700 kt: %d (%.1f%%)\n",
             sum(speed_analysis$speed_flag == "extreme_high", na.rm = TRUE),
@@ -251,7 +253,8 @@ extreme_level_examples <- level_speed_analysis %>%
   arrange(desc(IMPLIED_SPEED_KT)) %>%
   head(100)
 
-write_csv(extreme_level_examples, file.path(output_dir, "extreme-level-segment-examples.csv"))
+# Not written to GitHub (contains SOURCE_UID flight-level data)
+# write_csv(extreme_level_examples, file.path(output_dir, "extreme-level-segment-examples.csv"))
 
 # ============================================================================
 # Step 5: Fuel Integration Validation
@@ -334,7 +337,8 @@ fuel_outliers <- fuel_validation %>%
 
 cat(sprintf("\n✓ Flights with extreme burn rates (<500 or >15000 kg/h): %d\n", nrow(fuel_outliers)))
 
-write_csv(fuel_outliers, file.path(output_dir, "fuel-outliers.csv"))
+# Not written to GitHub (contains SOURCE_UID flight-level data)
+# write_csv(fuel_outliers, file.path(output_dir, "fuel-outliers.csv"))
 
 # ============================================================================
 # Step 6: Boundary Quality Assessment

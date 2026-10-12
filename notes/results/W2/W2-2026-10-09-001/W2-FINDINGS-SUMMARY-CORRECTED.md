@@ -66,7 +66,7 @@
 
 **Distance eligibility:** 0 flights (0%) — all invalid pending coordinate investigation.
 
-**Explanation of 5,226:** Airborne eligibility requires CLIMB, CRUISE, and DESCENT all present AND eligible. DESCENT phase is only present for 5,226 flights (those with TOD milestone), which becomes the limiting factor.
+**Explanation of 5,226:** Airborne eligibility requires CLIMB, CRUISE, and DESCENT all present AND eligible. DESCENT rows were emitted for only 5,226 flights despite 6,399 TOD milestones and 5,231 ALDT milestones existing in the data. The 1,173-flight gap between TOD milestones (6,399) and DESCENT rows (5,226) is unexplained and requires investigation. DESCENT row presence becomes the limiting factor for airborne eligibility.
 
 ## Batch Producer Version
 

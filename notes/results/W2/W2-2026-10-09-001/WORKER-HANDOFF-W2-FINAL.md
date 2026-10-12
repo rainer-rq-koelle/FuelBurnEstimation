@@ -6,7 +6,7 @@
 
 ## Result and Status
 
-**Main finding:** CHN data exhibits batch-wide distance anomaly (18.3% of non-zero-duration phase records show implied speed >700kt) and 18.5% missing ALDT. Helper code distance calculation appears correct by inspection; cause unknown until source QAR cases and batch-producer versions checked.
+**Main finding:** CHN data exhibits batch-wide distance anomaly (18.3% of non-zero-duration phase records show implied speed >700kt), 18.5% missing ALDT, and unexplained DESCENT row emission gap (6,399 TOD milestones but only 5,226 DESCENT rows emitted). Helper code distance calculation appears correct by inspection; causes unknown until source QAR cases and batch-producer versions checked.
 
 **Analysis status:** Diagnostic complete  
 **Data delivery status:** PENDING R2 upload (credentials unavailable, local package ready)  
@@ -69,7 +69,7 @@ All aircraft types show burn rates within plausible ranges (narrow-body 2,400-3,
 - Airborne eligible (CLIMB+CRUISE+DESCENT all present and eligible): 5,226 (81.4%)
 - Has ALDT: 5,231 (81.5%)
 
-**Explanation:** Airborne eligibility requires all three phases present AND eligible. DESCENT presence is limited to 5,226 flights (those with TOD), which becomes the limiting factor.
+**Explanation:** Airborne eligibility requires all three phases present AND eligible. DESCENT row emission is limited to 5,226 despite 6,399 TOD milestones and 5,231 ALDT milestones existing. The 1,173-flight gap between TOD milestones and DESCENT rows is unexplained. DESCENT row presence becomes the limiting factor for airborne eligibility.
 
 **Phase-Level:**
 
