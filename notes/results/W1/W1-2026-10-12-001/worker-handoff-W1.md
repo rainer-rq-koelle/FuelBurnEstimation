@@ -59,12 +59,27 @@ Rscript -e "library(arrow); schema <- read_parquet('...', as_data_frame=FALSE)\$
 
 | Output role | Durable destination and exact key/path | SHA-256 | Rows/flights | Stored hash verified? |
 |---|---|---|---|---|
-| Diagnostic README | `notes/results/W1/W1-2026-10-12-001/README.md` | (computed after commit) | N/A | N/A (GitHub) |
-| Worker handoff | `notes/results/W1/W1-2026-10-12-001/worker-handoff-W1.md` | (computed after commit) | N/A | N/A (GitHub) |
-| W0 audit excerpt | `notes/results/W1/W1-2026-10-12-001/W0-audit-excerpt.csv` | (same as W0 input) | 2 rows | N/A (GitHub) |
-| Validation script | `scripts/W1-validation-checks.R` | (computed after commit) | N/A | N/A (GitHub) |
+| Diagnostic README | `notes/results/W1/W1-2026-10-12-001/README.md` | See artifact-manifest.csv | N/A | N/A (GitHub) |
+| Worker handoff | `notes/results/W1/W1-2026-10-12-001/worker-handoff-W1.md` | See artifact-manifest.csv | N/A | N/A (GitHub) |
+| W0 audit excerpt | `notes/results/W1/W1-2026-10-12-001/W0-audit-excerpt.csv` | See artifact-manifest.csv | 2 rows | N/A (GitHub) |
+| Validation script | `scripts/W1-validation-checks.R` | See artifact-manifest.csv | N/A | N/A (GitHub) |
+| Artifact manifest | `notes/results/W1/W1-2026-10-12-001/artifact-manifest.csv` | (self-referential) | 5 rows | N/A (GitHub) |
+
+**Artifact manifest** (`notes/results/W1/W1-2026-10-12-001/artifact-manifest.csv`) contains SHA-256 hashes and byte sizes for all deliverables.
 
 ## Validation and sample flow
+### Validation Script Execution
+
+**Command:** `Rscript scripts/W1-validation-checks.R` (from repository root)
+
+**Output summary:**
+- **W0 AUDIT EVIDENCE:** 29,631 repeated keys (61.9%), 18,860 overlaps (87.7%), 57.3% exposure overstatement
+- **VALIDATION CHECK 1:** Data quality thresholds - ALL FAIL (repeated keys, overlaps, exposure all exceed limits)
+- **VALIDATION CHECK 2:** Code review - Alternating pairing found at R/eur-milestone-harmonization.R:142-173, SAM_ID not used, distance field not preserved
+- **VALIDATION CHECK 3:** W1 acceptance criteria - NOT MET (repeated keys present, overlaps present, no regression tests)
+- **CONCLUSION:** EUR processed segments UNSUITABLE for segment-based analyses, source validation BLOCKED
+
+**Script status:** Executes successfully, uses W0 audit excerpt from W1 package (no external dependencies)
 
 ### Observed Issues (from W0 audit)
 
