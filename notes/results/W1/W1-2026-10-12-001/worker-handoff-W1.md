@@ -19,10 +19,10 @@
 
 ## Producing code and reproduction
 
-**Base commit (main):** 0aa6daf Add worker dispatch pinned to published instruction revision  
-**Diagnostic branch:** w1-eur-interval-diagnostic  
-**Diagnostic commit:** (this commit)  
-**W0 audit used:** notes/results/W0/W0-2026-10-09-001/study-readiness.csv
+**Branch:** w1-eur-diagnostic-clean
+**Original diagnostic commit:** 47751dddfcd4f94e8bcbb5f2b869419089436ab7
+**Base at time of diagnostic:** 0aa6daf (main at 2026-10-09)
+**PR target:** current main (c01128b at 2026-10-12)
 
 **Relevant files reviewed:**
 - `R/eur-milestone-harmonization.R` lines 142-173 (alternating pairing logic)
