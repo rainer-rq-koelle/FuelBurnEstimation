@@ -1,0 +1,12 @@
+ICAO,AIRPORT_NAME,AIRPORT_TYPE,ARP_LAT,ARP_LON,COORDINATE_SOURCE
+EDDF,Frankfurt Airport,large_airport,50.030241,8.561096,OurAirports 2024-12-27
+EDDM,Munich Airport,large_airport,48.353802,11.7861,OurAirports 2024-12-27
+EGLL,London Heathrow Airport,large_airport,51.4706,-0.461941,OurAirports 2024-12-27
+EHAM,Amsterdam Airport Schiphol,large_airport,52.308601,4.76389,OurAirports 2024-12-27
+LEBL,Josep Tarradellas Barcelona-El Prat Airport,large_airport,41.2971,2.07846,OurAirports 2024-12-27
+LEMD,Adolfo Suárez Madrid–Barajas Airport,large_airport,40.471926,-3.56264,OurAirports 2024-12-27
+LFPG,Charles de Gaulle International Airport,large_airport,49.012798,2.55,OurAirports 2024-12-27
+LGAV,Athens Eleftherios Venizelos International Airport,large_airport,37.936401,23.9445,OurAirports 2024-12-27
+LIRF,Rome–Fiumicino Leonardo da Vinci International Airport,large_airport,41.804532,12.251998,OurAirports 2024-12-27
+LSZH,Zürich Airport,large_airport,47.458056,8.548056,OurAirports 2024-12-27
+LTFM,İstanbul Airport,large_airport,41.261297,28.741951,OurAirports 2024-12-27

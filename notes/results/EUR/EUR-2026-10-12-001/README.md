@@ -36,12 +36,16 @@ Add `--upload` to place the six flight-level parquet files and aggregate build a
 
 Build results:
 
+> This 12 October build is the baseline candidate. The M3-refined follow-up and its updated crossing/phase handling are documented in [EUR-2026-10-13-001](../EUR-2026-10-13-001/README.md).
+
 - 21,503 flights; 569,408 canonical milestone rows.
 - 49,836 accepted level intervals across 19,279 flights: 9,091 climb and 40,745 descent.
 - All accepted intervals matched a G2G flight and had G2G time coverage; no negative or missing integrated interval fuel/distance was found.
 - Adjusted and original fuel totals, and total distance, reconcile to flight metadata within `3e-11` kg and `2e-12` NM.
 - The milestone label set and all three shared table schemas match the current CHN parquet outputs exactly.
 - 21,320 flights pass the initial `FULL_PROFILE_SCREEN_PASS` rule: unique FLTID, ATOT/TOC/TOD/ALDT present, and positive, complete CLIMB/CRUISE/DESCENT intervals. This is a pilot-screening rule, not a final validity determination.
+- In this 12 October baseline, `D040`/`A040`-family and flight-level anchors select a single first G2G sample meeting each threshold. The M3-refined 13 October follow-up enumerates crossings and records their bracket resolution. Distance anchors use departure/arrival aerodrome reference coordinates, respectively.
+- The 13 October follow-up suppresses flight-level crossing milestones associated with accepted level segments while retaining those candidates in the detailed audit.
 - Across all nine phase summaries, 586 intervals have zero duration and 8 have missing duration (four `RUNWAY_EXIT` and four `TAXI_IN`); no negative phase durations were found. These remain visible as zero or missing values.
 - 3,658 PRU `Add_fuel_kg` values are negative. They are preserved without clipping and need methodological interpretation before use as an efficiency measure.
 
