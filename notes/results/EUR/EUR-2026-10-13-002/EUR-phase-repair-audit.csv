@@ -1,0 +1,6 @@
+PHASE,REPAIR_STATUS,flight_count
+CLIMB,repaired_from_m3,1
+CRUISE,repaired_from_m3,107
+CRUISE,unresolved_m3_profile_failed_phase_coherence_check,75
+RUNWAY_EXIT,unresolved_ground_phase_boundary_mapping_pending_APDF_G2G_review,302
+TAXI_IN,unresolved_ground_phase_boundary_mapping_pending_APDF_G2G_review,109

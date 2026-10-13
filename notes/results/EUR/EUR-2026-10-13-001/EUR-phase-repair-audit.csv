@@ -1,0 +1,7 @@
+PHASE,REPAIR_STATUS,flight_count
+CLIMB,repaired_from_m3,1
+CRUISE,repaired_from_m3,107
+CRUISE,unresolved_m3_profile_failed_phase_coherence_check,75
+RUNWAY_EXIT,unresolved_m3_profile_failed_phase_coherence_check,2
+RUNWAY_EXIT,unresolved_m3_track_ends_before_terminal_boundary,300
+TAXI_IN,unresolved_m3_track_ends_before_terminal_boundary,109
