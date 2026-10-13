@@ -1,0 +1,16 @@
+PHASE,PHASE_TIME_FUEL_SCREEN_PASS,TIME_FUEL_SCREEN_REASON,PHASE_DISTANCE_FUEL_SCREEN_PASS,DISTANCE_FUEL_SCREEN_REASON,PHASE_SCREEN_PASS,PHASE_SCREEN_REASON,flight_count
+CLIMB,TRUE,pass,FALSE,nonpositive_distance,FALSE,nonpositive_distance,1
+CLIMB,TRUE,pass,TRUE,pass,TRUE,pass,21502
+CRUISE,FALSE,nonpositive_duration,FALSE,nonpositive_distance,FALSE,nonpositive_duration,75
+CRUISE,TRUE,pass,TRUE,pass,TRUE,pass,21428
+DESCENT,TRUE,pass,TRUE,pass,TRUE,pass,21503
+LTO_APPROACH_LANDING,TRUE,pass,TRUE,pass,TRUE,pass,21503
+LTO_CLIMB_OUT,TRUE,pass,FALSE,nonpositive_distance,FALSE,nonpositive_distance,124
+LTO_CLIMB_OUT,TRUE,pass,TRUE,pass,TRUE,pass,21379
+RUNWAY_EXIT,FALSE,duration_missing,FALSE,distance_missing,FALSE,boundary_time_missing,4
+RUNWAY_EXIT,FALSE,nonpositive_duration,FALSE,nonpositive_distance,FALSE,nonpositive_duration,298
+RUNWAY_EXIT,TRUE,pass,TRUE,pass,TRUE,pass,21201
+TAKE_OFF_ROLL,TRUE,pass,FALSE,nonpositive_distance,FALSE,nonpositive_distance,21503
+TAXI_IN,FALSE,g2g_taxi_in_phase_absent,FALSE,g2g_taxi_in_phase_absent,FALSE,g2g_taxi_in_phase_absent,109
+TAXI_IN,TRUE,pass,TRUE,pass,TRUE,pass,21394
+TAXI_OUT,TRUE,pass,FALSE,nonpositive_distance,FALSE,nonpositive_distance,21503
