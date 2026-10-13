@@ -436,8 +436,26 @@ phase_eligibility <- phase_intervals |>
   left_join(ground_source_coverage, by = "SOURCE_UID") |>
   mutate(G2G_TAXI_IN_SOURCE_PRESENT = replace_na(G2G_TAXI_IN_SOURCE_PRESENT, FALSE),
          G2G_LANDING_SOURCE_PRESENT = replace_na(G2G_LANDING_SOURCE_PRESENT, FALSE),
-         PHASE_SCREEN_PASS = is.finite(DURATION_MIN) & DURATION_MIN > 0 &
-           is.finite(FUEL_KG) & FUEL_KG >= 0 & is.finite(DISTANCE_NM) & DISTANCE_NM >= 0,
+         SOURCE_PHASE_PRESENT = PHASE != "TAXI_IN" | G2G_TAXI_IN_SOURCE_PRESENT,
+         PHASE_TIME_FUEL_SCREEN_PASS = SOURCE_PHASE_PRESENT & is.finite(DURATION_MIN) & DURATION_MIN > 0 &
+           is.finite(FUEL_KG) & FUEL_KG >= 0,
+         PHASE_DISTANCE_FUEL_SCREEN_PASS = SOURCE_PHASE_PRESENT & is.finite(DISTANCE_NM) & DISTANCE_NM > 0 &
+           is.finite(FUEL_KG) & FUEL_KG >= 0,
+         PHASE_SCREEN_PASS = PHASE_TIME_FUEL_SCREEN_PASS & PHASE_DISTANCE_FUEL_SCREEN_PASS,
+         TIME_FUEL_SCREEN_REASON = case_when(
+           PHASE == "TAXI_IN" & !G2G_TAXI_IN_SOURCE_PRESENT ~ "g2g_taxi_in_phase_absent",
+           is.na(DURATION_MIN) ~ "duration_missing",
+           DURATION_MIN <= 0 ~ "nonpositive_duration",
+           is.na(FUEL_KG) ~ "fuel_missing",
+           FUEL_KG < 0 ~ "negative_fuel",
+           TRUE ~ "pass"),
+         DISTANCE_FUEL_SCREEN_REASON = case_when(
+           PHASE == "TAXI_IN" & !G2G_TAXI_IN_SOURCE_PRESENT ~ "g2g_taxi_in_phase_absent",
+           is.na(DISTANCE_NM) ~ "distance_missing",
+           DISTANCE_NM <= 0 ~ "nonpositive_distance",
+           is.na(FUEL_KG) ~ "fuel_missing",
+           FUEL_KG < 0 ~ "negative_fuel",
+           TRUE ~ "pass"),
          PHASE_SCREEN_REASON = case_when(
            PHASE == "TAXI_IN" & !G2G_TAXI_IN_SOURCE_PRESENT ~ "g2g_taxi_in_phase_absent",
            is.na(DURATION_MIN) ~ "boundary_time_missing",
@@ -445,11 +463,13 @@ phase_eligibility <- phase_intervals |>
            is.na(FUEL_KG) ~ "fuel_missing",
            FUEL_KG < 0 ~ "negative_fuel",
            is.na(DISTANCE_NM) ~ "distance_missing",
-           DISTANCE_NM < 0 ~ "negative_distance",
+           DISTANCE_NM <= 0 ~ "nonpositive_distance",
            TRUE ~ "pass")) |>
   select(SOURCE_UID, FLTID, ADEP, ADES, TYPE, PHASE, FROM_MST, TO_MST,
          START_TIME, END_TIME, DURATION_MIN, FUEL_KG, FUEL_KG_ORIGINAL, DISTANCE_NM,
          G2G_TAXI_IN_SOURCE_PRESENT, G2G_LANDING_SOURCE_PRESENT,
+         PHASE_TIME_FUEL_SCREEN_PASS, TIME_FUEL_SCREEN_REASON,
+         PHASE_DISTANCE_FUEL_SCREEN_PASS, DISTANCE_FUEL_SCREEN_REASON,
          PHASE_SCREEN_PASS, PHASE_SCREEN_REASON, source_batch)
 
 # Keep the exact shared CHN schemas. Multiple analytical threshold crossings
@@ -489,6 +509,12 @@ terminal_phase_screen <- phase_eligibility |>
         G2G_TAXI_IN_SOURCE_PRESENT, G2G_LANDING_SOURCE_PRESENT, name = "flight_count")
 write_csv(terminal_phase_screen, file.path(evidence_dir, "EUR-terminal-phase-screen.csv"))
 write_csv(terminal_phase_screen, file.path(output_dir, "EUR-terminal-phase-screen.csv"))
+phase_eligibility_summary <- phase_eligibility |>
+  count(PHASE, PHASE_TIME_FUEL_SCREEN_PASS, TIME_FUEL_SCREEN_REASON,
+        PHASE_DISTANCE_FUEL_SCREEN_PASS, DISTANCE_FUEL_SCREEN_REASON,
+        PHASE_SCREEN_PASS, PHASE_SCREEN_REASON, name = "flight_count")
+write_csv(phase_eligibility_summary, file.path(evidence_dir, "EUR-phase-eligibility-summary.csv"))
+write_csv(phase_eligibility_summary, file.path(output_dir, "EUR-phase-eligibility-summary.csv"))
 
 audit <- bind_rows(
   tibble(metric = c("base_run_id", "study_flights", "m3_rows", "m3_flights", "airport_reference_airports",
@@ -539,7 +565,8 @@ input_names <- c(
 )
 output_names <- c(required_base, "EUR-milestone-crossing-candidates.parquet",
                   "EUR-phase-boundary-repair-detail.parquet", "EUR-phase-eligibility-parallel.parquet",
-                  "EUR-terminal-phase-screen.csv", "EUR-parallel-build-audit.csv")
+                  "EUR-terminal-phase-screen.csv", "EUR-phase-eligibility-summary.csv",
+                  "EUR-parallel-build-audit.csv")
 manifest <- bind_rows(
   tibble(role = "input_or_code", artifact = input_names, sha256 = map_chr(input_paths, sha256_file),
          size_bytes = as.numeric(file.info(input_paths)$size), producing_code_commit = code_commit),
@@ -558,7 +585,8 @@ if (do_upload) {
   prefix <- paste0("derived/eur/parallel-preprocessing/", run_id, "/")
   upload_files <- c(required_base, "EUR-milestone-crossing-candidates.parquet",
                     "EUR-phase-boundary-repair-detail.parquet", "EUR-phase-eligibility-parallel.parquet",
-                    "EUR-terminal-phase-screen.csv", "EUR-parallel-build-audit.csv",
+                    "EUR-terminal-phase-screen.csv", "EUR-phase-eligibility-summary.csv",
+                    "EUR-parallel-build-audit.csv",
                     "EUR-parallel-release-manifest.csv", "EUR-parallel-release-manifest.sha256")
   for (name in upload_files) r2_upload(file.path(output_dir, name), paste0(prefix, name))
 }
