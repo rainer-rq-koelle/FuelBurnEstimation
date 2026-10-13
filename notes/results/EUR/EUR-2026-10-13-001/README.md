@@ -1,5 +1,7 @@
 # EUR parallel canonical build with M3 crossings
 
+> **Superseded:** Terminal-phase eligibility and the corrected boundary diagnosis are published in [EUR-2026-10-13-002](../EUR-2026-10-13-002/README.md). This earlier release remains the provenance record for its original candidate.
+
 **Status:** Candidate analytical data, for study development and review. This is a parallel preparation; it does not replace the endorsed PRU production pipeline.
 
 ## What this build does

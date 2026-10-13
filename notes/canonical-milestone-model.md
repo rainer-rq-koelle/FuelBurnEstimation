@@ -38,6 +38,8 @@ Level-segment boundaries:
 
 These are derived events and should carry a segment identifier and the detection settings used to produce them.
 
+Ground interval labels used in the current EUR candidate are derived phase-table labels, not source events: `RUNWAY_EXIT` is the interval from `ALDT` to `XRWY`, and `TAXI_IN` is the interval from `XRWY` to `AIBT`. Their mapping must preserve the APDF/G2G ICAO take-off/landing-roll conventions and the row-level fuel-increment allocation. In the EUR parallel candidate, eligibility is stored per phase so an unresolved ground interval does not remove otherwise usable airborne data. Do not infer a missing ground boundary from M3 or move a G2G row increment between phases without source evidence.
+
 ## Candidate generation and event selection
 
 - Generate and retain all observed or interpolated crossings of each distance and pressure-altitude threshold. The production choice of `first`, `last`, or another representative crossing is a separate methodological decision and must be explicit and consistent across sources.

@@ -1,0 +1,19 @@
+metric,value
+base_run_id,EUR-2026-10-12-001
+study_flights,21503
+m3_rows,2833869
+m3_flights,21503
+airport_reference_airports,11
+airport_coordinate_source,OurAirports 2024-12-27; airport coordinate proxy pending NM ARP confirmation
+level_segments_altitude_unit_converted_from_FL_to_ft,49836
+level_segments_with_zero_altitude_band_after_conversion,0
+m3_crossing_candidate_rows,269685
+m3_crossing_candidates_suppressed_by_level,1565
+m3_crossings_bracketed_within_30sec,131449
+m3_toc_tod_repairs,107
+m3_dlto_repairs,108
+m3_repairs_reverted_for_phase_incoherence,75
+core_phase_screen_pass_flights,21428
+phase_zero_duration_rows_after_repair,478
+phase_missing_duration_rows_after_repair,8
+runway_exit_or_taxi_in_unresolved_rows,411

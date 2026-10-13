@@ -73,6 +73,10 @@ haversine_nm <- function(lat1, lon1, lat2, lon2) {
 message("Reading G2G increments and M3 profiles...")
 g2g <- read_parquet(file.path(input_dir, "g2g-segment-details-2025-summer.parquet")) |>
   mutate(SAM_ID = as.character(SAM_ID))
+ground_source_coverage <- g2g |>
+  group_by(SOURCE_UID = SAM_ID) |>
+  summarise(G2G_TAXI_IN_SOURCE_PRESENT = any(FLIGHT_PHASE == "Taxi-In", na.rm = TRUE),
+            G2G_LANDING_SOURCE_PRESENT = any(FLIGHT_PHASE == "Landing", na.rm = TRUE), .groups = "drop")
 profile <- g2g |>
   arrange(SAM_ID, TIME_OVER, MILESTONE, FLIGHT_PHASE) |>
   group_by(SAM_ID) |>
@@ -425,6 +429,29 @@ eligibility <- flights |> select(SOURCE_UID, FLTID, ADEP, ADES, TYPE) |>
          FULL_PROFILE_SCREEN_PASS = !is.na(FLTID) & ATOT_PRESENT & TOC_PRESENT & TOD_PRESENT & ALDT_PRESENT & CORE_PHASE_SCREEN_PASS,
          SCREEN_DEFINITION = "EUR_parallel_core_phase_v2_m3")
 
+# Phase-level screens preserve the flight and the other phase rows when one
+# interval is unusable. Ground intervals are not repaired from M3: their event
+# timing belongs to the APDF/G2G and ICAO-roll convention.
+phase_eligibility <- phase_intervals |>
+  left_join(ground_source_coverage, by = "SOURCE_UID") |>
+  mutate(G2G_TAXI_IN_SOURCE_PRESENT = replace_na(G2G_TAXI_IN_SOURCE_PRESENT, FALSE),
+         G2G_LANDING_SOURCE_PRESENT = replace_na(G2G_LANDING_SOURCE_PRESENT, FALSE),
+         PHASE_SCREEN_PASS = is.finite(DURATION_MIN) & DURATION_MIN > 0 &
+           is.finite(FUEL_KG) & FUEL_KG >= 0 & is.finite(DISTANCE_NM) & DISTANCE_NM >= 0,
+         PHASE_SCREEN_REASON = case_when(
+           PHASE == "TAXI_IN" & !G2G_TAXI_IN_SOURCE_PRESENT ~ "g2g_taxi_in_phase_absent",
+           is.na(DURATION_MIN) ~ "boundary_time_missing",
+           DURATION_MIN <= 0 ~ "nonpositive_duration",
+           is.na(FUEL_KG) ~ "fuel_missing",
+           FUEL_KG < 0 ~ "negative_fuel",
+           is.na(DISTANCE_NM) ~ "distance_missing",
+           DISTANCE_NM < 0 ~ "negative_distance",
+           TRUE ~ "pass")) |>
+  select(SOURCE_UID, FLTID, ADEP, ADES, TYPE, PHASE, FROM_MST, TO_MST,
+         START_TIME, END_TIME, DURATION_MIN, FUEL_KG, FUEL_KG_ORIGINAL, DISTANCE_NM,
+         G2G_TAXI_IN_SOURCE_PRESENT, G2G_LANDING_SOURCE_PRESENT,
+         PHASE_SCREEN_PASS, PHASE_SCREEN_REASON, source_batch)
+
 # Keep the exact shared CHN schemas. Multiple analytical threshold crossings
 # remain distinct milestone rows; their candidate IDs and direction live in the
 # restricted crossing-candidate table.
@@ -448,13 +475,20 @@ phase_repair_audit <- base_phases |> filter(is.na(DURATION_MIN) | DURATION_MIN <
   left_join(applied_repairs |> distinct(SOURCE_UID, REPAIR_PHASE) |> mutate(HAS_REPAIR = TRUE), by = c("SOURCE_UID", "PHASE" = "REPAIR_PHASE")) |>
   mutate(HAS_REPAIR = replace_na(HAS_REPAIR, FALSE),
          REPAIR_STATUS = case_when(HAS_REPAIR & !is.na(REPAIRED_DURATION_MIN) & REPAIRED_DURATION_MIN > 0 ~ "repaired_from_m3",
+                                   PHASE %in% c("RUNWAY_EXIT", "TAXI_IN") ~ "unresolved_ground_phase_boundary_mapping_pending_APDF_G2G_review",
                                    SOURCE_UID %in% failed_repair_ids ~ "unresolved_m3_profile_failed_phase_coherence_check",
-                                   PHASE %in% c("RUNWAY_EXIT", "TAXI_IN") ~ "unresolved_m3_track_ends_before_terminal_boundary",
                                    TRUE ~ "unresolved_no_ordered_m3_boundary_pair")) |>
   select(SOURCE_UID, PHASE, FROM_MST, TO_MST, ORIGINAL_DURATION_MIN = DURATION_MIN, REPAIRED_DURATION_MIN, REPAIR_STATUS)
 write_parquet(phase_repair_audit, file.path(output_dir, "EUR-phase-boundary-repair-detail.parquet"), compression = "zstd")
 write_csv(phase_repair_audit |> count(PHASE, REPAIR_STATUS, name = "flight_count"),
           file.path(evidence_dir, "EUR-phase-repair-audit.csv"))
+write_parquet(phase_eligibility, file.path(output_dir, "EUR-phase-eligibility-parallel.parquet"), compression = "zstd")
+terminal_phase_screen <- phase_eligibility |>
+  filter(PHASE %in% c("RUNWAY_EXIT", "TAXI_IN")) |>
+  count(PHASE, PHASE_SCREEN_PASS, PHASE_SCREEN_REASON,
+        G2G_TAXI_IN_SOURCE_PRESENT, G2G_LANDING_SOURCE_PRESENT, name = "flight_count")
+write_csv(terminal_phase_screen, file.path(evidence_dir, "EUR-terminal-phase-screen.csv"))
+write_csv(terminal_phase_screen, file.path(output_dir, "EUR-terminal-phase-screen.csv"))
 
 audit <- bind_rows(
   tibble(metric = c("base_run_id", "study_flights", "m3_rows", "m3_flights", "airport_reference_airports",
@@ -504,7 +538,8 @@ input_names <- c(
   "scripts/build-eur-parallel-canonical-m3.R"
 )
 output_names <- c(required_base, "EUR-milestone-crossing-candidates.parquet",
-                  "EUR-phase-boundary-repair-detail.parquet", "EUR-parallel-build-audit.csv")
+                  "EUR-phase-boundary-repair-detail.parquet", "EUR-phase-eligibility-parallel.parquet",
+                  "EUR-terminal-phase-screen.csv", "EUR-parallel-build-audit.csv")
 manifest <- bind_rows(
   tibble(role = "input_or_code", artifact = input_names, sha256 = map_chr(input_paths, sha256_file),
          size_bytes = as.numeric(file.info(input_paths)$size), producing_code_commit = code_commit),
@@ -522,7 +557,8 @@ if (do_upload) {
   source(file.path(repo_root, "R/r2-storage.R"))
   prefix <- paste0("derived/eur/parallel-preprocessing/", run_id, "/")
   upload_files <- c(required_base, "EUR-milestone-crossing-candidates.parquet",
-                    "EUR-phase-boundary-repair-detail.parquet", "EUR-parallel-build-audit.csv",
+                    "EUR-phase-boundary-repair-detail.parquet", "EUR-phase-eligibility-parallel.parquet",
+                    "EUR-terminal-phase-screen.csv", "EUR-parallel-build-audit.csv",
                     "EUR-parallel-release-manifest.csv", "EUR-parallel-release-manifest.sha256")
   for (name in upload_files) r2_upload(file.path(output_dir, name), paste0(prefix, name))
 }
