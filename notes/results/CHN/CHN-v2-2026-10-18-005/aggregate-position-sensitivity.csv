@@ -1,0 +1,10 @@
+ROLE,MAX_POSITION_BRACKET_SEC,files,included,held
+modern_control,5,3,1,2
+modern_control,8,3,2,1
+modern_control,15,3,3,0
+verification,5,10,5,5
+verification,8,10,6,4
+verification,15,10,7,3
+earlier_reference_bracket_review_subset,5,8,0,8
+earlier_reference_bracket_review_subset,8,8,8,0
+earlier_reference_bracket_review_subset,15,8,8,0

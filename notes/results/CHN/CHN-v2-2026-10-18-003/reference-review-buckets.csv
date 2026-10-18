@@ -1,0 +1,7 @@
+REVIEW_CLASS,files,flight_identifiers
+airborne_motion_or_altitude_review,8,5
+clock_or_sampling_review,6,5
+ground_only_position_coverage,22,22
+included,134,63
+repair_share_policy_review,22,9
+source_required_fuel_channels_absent,28,28

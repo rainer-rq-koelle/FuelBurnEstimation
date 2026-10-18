@@ -1,0 +1,9 @@
+ROLE,REVIEW_CATEGORY,files,flight_identifiers
+historical_reference,included,186,88
+historical_reference,source_clock_or_sampling,5,4
+historical_reference,source_fuel_channels_absent,28,28
+historical_reference,source_position_or_profile,1,1
+modern_control,included,3,3
+verification,included,7,7
+verification,source_altitude_or_profile,1,1
+verification,source_position_or_profile,2,2

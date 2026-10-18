@@ -1,0 +1,11 @@
+ROLE,MST,SELECTION,EVENTS,EVENTS_INSIDE_RELEVANT200
+historical_reference,TOC,enroute_context,180,172
+historical_reference,TOC,profile_fallback,12,11
+historical_reference,TOD,enroute_context,180,171
+historical_reference,TOD,profile_fallback,11,7
+modern_control,TOC,enroute_context,3,3
+modern_control,TOD,enroute_context,3,2
+verification,TOC,enroute_context,7,7
+verification,TOC,profile_fallback,2,0
+verification,TOD,enroute_context,7,3
+verification,TOD,profile_fallback,2,0

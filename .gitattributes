@@ -32,3 +32,6 @@
 *.pdf binary
 *.zip binary
 *.gz binary
+
+# Preserve the bundled lookup bytes for reproducible helper ZIP checksums.
+helpers/chn-qar-v2/data/airports.csv -text whitespace=cr-at-eol

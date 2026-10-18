@@ -1,0 +1,3 @@
+FULL_CLOCK_VALID,AIRBORNE_CLOCK_VALID,INTERPRETATION,INPUTS
+FALSE,FALSE,"Airborne clock/sampling is unresolved; freeze remains a secondary lead, not independent source attribution",5
+FALSE,TRUE,Locally clock-supported position freeze with independent airborne groundspeed; full-record clock defects remain separate,1

@@ -28,6 +28,27 @@ plus a technical note that documents the data preparation pipeline step by step.
   convention for along-track distance anchors, pressure-altitude flight-level
   crossings, level segments, intervals, and lookup-table inputs.
 
+The separate [CHN QAR helper v2 candidate](helpers/chn-qar-v2/README.md) adds
+bounded repair, explicit quality/domain flags, matching problem/exclusion lists,
+and corrected timestamp and landing logic. It writes only to new candidate
+directories; it does not replace the distributed helper, the EUR pipeline, or
+existing canonical releases. Build its source-only ZIP with
+`python3 scripts/build-chn-qar-helper-v2.py`; run synthetic regressions with
+`Rscript tests/chn-qar-v2-regression.R`.
+The [older-reference rejection investigation](notes/results/CHN/CHN-v2-2026-10-18-003/README.md)
+documents the candidate.2 clock/shutdown fixes and distinguishes source gaps from
+repair-limit and analysis-window holds, using aggregate evidence only.
+The [candidate.3 window/position validation](notes/results/CHN/CHN-v2-2026-10-18-005/README.md)
+adds airborne eligibility, a bounded 15-second position ceiling, and individual
+repair-share reviews while retaining ground timing and existing releases.
+The [candidate.5 validation](notes/results/CHN/CHN-v2-2026-10-18-009/README.md)
+records the current handoff: bundled airport coordinates, great-circle ARP
+milestones, altitude-profile TOC/TOD selection, and partial fuel/time coverage.
+The source-only package passed 97 synthetic checks and validation against 233
+reference/control/verification inputs. Candidate.5 has been emailed to CAUC;
+follow-up QAR runs are pending. Flight shortlists, correspondence, and individual
+evidence remain local and excluded from Git.
+
 ## EUR Data Pipeline Status
 
 **Analytical readiness update (9 October 2026):** the FIXED release is available

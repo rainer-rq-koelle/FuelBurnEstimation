@@ -1,0 +1,10 @@
+input_group,max_bracket_sec,study_exclude,files
+modern_control,0,TRUE,3
+modern_control,2,TRUE,3
+modern_control,5,FALSE,1
+modern_control,5,TRUE,2
+verification,0,TRUE,10
+verification,2,FALSE,2
+verification,2,TRUE,8
+verification,5,FALSE,2
+verification,5,TRUE,8

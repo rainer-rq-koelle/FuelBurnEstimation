@@ -1,0 +1,19 @@
+{
+  "protected_files_unchanged": 85,
+  "earlier_verification_files_unchanged": 441,
+  "input_files_sha256_verified": 233,
+  "synthetic_regression_checks_passed": 33,
+  "unhandled_file_failures": 0,
+  "verification_landings_retained": 10,
+  "verification_files_included": 2,
+  "verification_files_investigation_excluded": 8,
+  "problem_exclusion_lists_identical": true,
+  "old_helper_and_bundle_unchanged": true,
+  "all_sensitive_artifacts_git_ignored": true,
+  "source_only_bundle_verified": true,
+  "standalone_package_test_passed": true,
+  "duplicate_and_read_error_retention_passed": true,
+  "overwrite_guard_passed": true,
+  "EUR_or_existing_CHN_release_regenerated": false,
+  "R2_modified": false
+}

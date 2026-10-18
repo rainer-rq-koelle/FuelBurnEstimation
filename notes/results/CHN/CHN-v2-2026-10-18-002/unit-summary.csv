@@ -1,0 +1,5 @@
+input_group,unit,confidence,files
+historical_reference,kg/h,high,192
+historical_reference,kg/h,unknown,28
+modern_control,kg/h,high,3
+verification,kg/h,high,10

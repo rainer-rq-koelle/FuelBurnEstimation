@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/davidmegginson/ourairports-data",
+  "commit": "65beeb51c64fa411eb113c5d6680715309cd808a",
+  "commit_date": "2025-08-31T01:53:12Z",
+  "source_url": "https://raw.githubusercontent.com/davidmegginson/ourairports-data/65beeb51c64fa411eb113c5d6680715309cd808a/airports.csv",
+  "snapshot_selection": "Last airports.csv revision on or before 2025-08-31 UTC, end of the summer-2025 study period",
+  "downloaded_client_date": "2026-10-18",
+  "source_sha256": "6e01a0cef37ec3f8e4ea9487cef8bbd2cf1d36f038c54d9e8e028e4ba8da4cf8",
+  "license_url": "https://ourairports.com/data/",
+  "coordinate_status": "OurAirports airport-coordinate proxy for ARP, not certified AIP ARP"
+}

@@ -1,0 +1,10 @@
+{
+  "input_files": 233,
+  "unhandled_errors": 0,
+  "verification_landing_events": 10,
+  "verification_included": 2,
+  "verification_excluded": 8,
+  "fuel_closure_max_error_kg": 0.0,
+  "phase_fuel_max_error_kg": 2.7966962079517543e-10,
+  "synthetic_checks": 33
+}

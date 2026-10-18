@@ -1,0 +1,9 @@
+ROLE,OLD_EXCLUDE,STUDY_EXCLUDE,files
+historical_reference,FALSE,FALSE,134
+historical_reference,TRUE,FALSE,52
+historical_reference,TRUE,TRUE,34
+modern_control,FALSE,FALSE,1
+modern_control,TRUE,FALSE,2
+verification,FALSE,FALSE,2
+verification,TRUE,FALSE,5
+verification,TRUE,TRUE,3

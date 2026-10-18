@@ -1,0 +1,4 @@
+ROLE,files,max_abs_fuel_change_kg,max_abs_distance_change_nm
+historical_reference,134,1.1550582712516189e-10,0.08928085814386577
+modern_control,1,6.366462912410498e-12,0
+verification,2,1.546140993013978e-11,9.094947017729282e-13

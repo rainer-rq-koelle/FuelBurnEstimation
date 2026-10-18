@@ -17,12 +17,23 @@ Operational or source-derived events:
 
 - `AOBT`, `ERWY`, `ATOT`, `TOC`, `TOD`, `ALDT`, `XRWY`, `AIBT`, and related source milestones.
 
-Along-track distance anchors:
+TOC/TOD selection uses complete sustained level segments in altitude versus time.
+The initial departure/final arrival 200 NM windows supply altitude context for
+selecting the initial/final cruise level when enroute step changes exist. Use the
+first/last complete qualifying level boundary, never the circle-crossing timestamp
+or a clipped level segment. A relevant level can precede, follow or span the
+circle crossing. Short flights or unsupported geometry use the documented
+near-ceiling profile fallback; record the selection context and retain partial
+supported events independently.
+
+Airport-reference distance anchors:
 
 - departure side: `D040`, `D100`, `D200`;
 - arrival side: `A200`, `A100`, `A040`.
 
-These are based on flown distance relative to the aerodrome reference point (ARP), not geometric ASMA/TMA rings. Departure-side distances are measured from the departure ARP; arrival-side distances are measured to the arrival ARP. The trajectory can cross a distance threshold more than once, so candidate generation must retain every crossing before a later, explicit selection rule chooses the representative event. Do not silently assume a single crossing.
+Clarified on 18 October 2026: these are great-circle distances from/to the aerodrome reference point (ARP), defining airport-centred radii. They are not cumulative distance flown. Use sourced airport coordinates (with an explicit proxy designation when using OurAirports), calculate distance at each usable trajectory point, and retain every outward departure / inward arrival crossing before an explicit representative-selection rule. No per-flight ARP-to-take-off or landing-to-ARP track-length offset is needed.
+
+Distance flown is a separate cumulative sum of successive short great-circle legs along the cleaned/repaired coordinates. Its full-record or ATOT-zero airborne reference must be explicit. Earlier wording describing the ARP anchors as along-track distance is superseded by this clarification; existing releases are not modified by this model note.
 
 Flight-level anchors:
 
@@ -43,7 +54,7 @@ Ground interval labels used in the current EUR candidate are derived phase-table
 ## Candidate generation and event selection
 
 - Generate and retain all observed or interpolated crossings of each distance and pressure-altitude threshold. The production choice of `first`, `last`, or another representative crossing is a separate methodological decision and must be explicit and consistent across sources.
-- `Dnnn` candidates use distance from the departure ARP; `Annn` candidates use distance to the arrival ARP. Do not confuse these with distance from take-off or remaining distance on an arbitrary path-length coordinate unless that is the documented source definition.
+- `Dnnn` candidates use great-circle distance from the departure ARP; `Annn` candidates use great-circle distance to the arrival ARP. Keep cumulative distance from take-off or remaining flown distance to landing under separate labels.
 - `D_FLxxx` candidates are upward crossings and `A_FLxxx` candidates are downward crossings, identified from the trajectory sequence rather than from a single first sample that happens to be beyond the threshold.
 - If repeated altitude-threshold crossings are associated with an accepted level segment, do not emit those crossings as additional climb/descent sub-phase events. The accepted level interval already provides its entry (`LVL_START`) and exit (`LVL_END`) boundaries. Preserve the level interval and its provenance; apply this suppression only where the association is clear.
 - For sampled trajectories, record the crossing method, bracketing samples, time gap, and threshold residual. A tolerance screen may determine whether a crossing is sufficiently resolved; otherwise retain it as unresolved rather than silently assigning a distant sample.

@@ -1,0 +1,4 @@
+ROLE,ROWS,INPUTS,FUEL_TIME_ELIGIBLE,DISTANCE_ELIGIBLE
+historical_reference,440,220,362,361
+modern_control,6,3,6,3
+verification,20,10,20,12
