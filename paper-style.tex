@@ -1,0 +1,16 @@
+% IEEE-like working layout; the conference's official template takes precedence.
+\usepackage{titlesec}
+\usepackage{caption}
+\setlength{\columnsep}{0.25in}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\titleformat{\section}{\normalfont\normalsize\centering}{\Roman{section}.}{0.6em}{}
+\titleformat{\subsection}{\normalfont\normalsize\itshape}{\Alph{subsection}.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.5ex plus .5ex}{.8ex}
+\titlespacing*{\subsection}{0pt}{1.2ex plus .4ex}{.5ex}
+\captionsetup{font=footnotesize,labelfont=normalfont,labelsep=period}
+\captionsetup[table]{position=top}
+\renewcommand{\thetable}{\Roman{table}}
+\AtBeginDocument{\renewcommand{\figurename}{Fig.}}
+\pagestyle{plain}
+\AtBeginEnvironment{CSLReferences}{\footnotesize}

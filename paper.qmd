@@ -1,51 +1,245 @@
 ---
-title: "Fuel Burn Estimation and Summarisation"
-subtitle: "Flight-phase based comparison framework"
+title: "Regional flight profiles as context for phase fuel-burn references"
 author:
   - name: Lingling Ma
   - name: Wei Dai
   - name: Rainer Koelle
-date: today
+date: "18 October 2026"
+date-format: "D MMMM YYYY"
+bibliography: paper-references.bib
+csl: paper-numeric.csl
+number-sections: true
 format:
+  pdf:
+    documentclass: article
+    classoption: [twocolumn]
+    fontsize: 10pt
+    mainfont: Times New Roman
+    sansfont: Times New Roman
+    pdf-engine: xelatex
+    geometry: [letterpaper, top=0.75in, bottom=1in, left=0.625in, right=0.625in]
+    include-in-header: paper-style.tex
+    keep-tex: true
+    toc: false
   html:
-    toc: true
-  docx: default
-  pdf: default
+    toc: false
+    theme: cosmo
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
 ---
 
 ```{r}
 #| label: setup
-source(here::here("R", "setup.R"))
+#| include: false
+source("R/paper-profile-characterisation.R")
+analysis <- build_paper_profiles()
+plots <- plot_paper_profiles(analysis)
+fmt <- function(x, digits=0) formatC(x, format="f", digits=digits, big.mark=",")
+inv <- function(region, field) analysis$inventory[[field]][analysis$inventory$REGION==region]
+med <- function(region, metric) analysis$summary$P50[analysis$summary$REGION==region & analysis$summary$METRIC==metric]
+cell <- function(region, metric, scale=1, digits=1) {
+  z <- subset(analysis$summary, REGION==region & METRIC==metric)
+  paste0(fmt(z$P50*scale,digits), " [",fmt(z$P20*scale,digits), "; ",fmt(z$P80*scale,digits),"]")
+}
+# Wrapping paragraph columns avoid longtable in two-column PDF output.
+paper_table <- function(data, caption, widths=NULL) {
+  if (knitr::is_latex_output()) {
+    if (is.null(widths)) widths <- rep(.94/ncol(data), ncol(data))
+    tab <- knitr::kable(data, format="latex", booktabs=TRUE, row.names=FALSE, escape=TRUE)
+    spec <- paste0("@{}",paste0("p{",widths,"\\linewidth}",collapse=""),"@{}")
+    lines <- strsplit(tab,"\n",fixed=TRUE)[[1]]
+    lines[grepl("\\begin{tabular}",lines,fixed=TRUE)] <- paste0("\\begin{tabular}{",spec,"}")
+    cat("\\begin{table}[htbp]\n\\centering\n\\caption{",caption,"}\n\\footnotesize\n\\setlength{\\tabcolsep}{2pt}\n\\renewcommand{\\arraystretch}{1.08}\n",paste(lines,collapse="\n"),"\n\\end{table}\n",sep="")
+  } else print(knitr::kable(data, caption=caption, row.names=FALSE))
+}
 ```
+
+*First working skeleton. Results describe screened source samples; introduction, background and conclusions remain aides-memoires. The final conference paper has an eight-page target including references; this sparse draft is deliberately shorter.*
 
 # Introduction
 
-Air transport performance work increasingly needs comparable fuel-burn summaries across operational contexts, data providers, and regions. This paper develops a flight-phase based approach for estimating and comparing fuel burn using Chinese QAR/FDR-derived data and European gate-to-gate fuel-burn data.
+- Motivation: interpretable phase fuel-burn references for international operational benchmarking.
+- Extend the milestone approach in @ma2025fuel with an expanded summer-2025 Chinese sample and regional profile context.
+- Keep two questions distinct: **regional operations** (do comparable aircraft encounter different profiles?) and **conditional consumption** (for comparable aircraft and profiles, are consumption distributions similar?). Only the first is examined in this draft.
+
+<!-- Final allocation: approximately 1 page. -->
 
 # Background
 
-The 2025 ICNS draft established the first CHN-EUR comparison workflow. It treated each flight as a trajectory with characteristic milestones, then summarised fuel burn by phase and aircraft type.
+- Prior study: milestone discretisation and distance-defined phases; its whole-flight regressions are not phase lookup coefficients or validation targets [@ma2025fuel].
+- Comparative design: aircraft type, distance, phase and profile dimensions. Describe regional profile distributions before matching on profile.
+- Keep CCO/CDO concepts separate from empirical interruption descriptors and demonstrated fuel effects [@eurocontrol2020ccocdo].
 
-# Data and Methods
+<!-- Final allocation: no more than 2 pages; likely 1-1.5 to accommodate references. -->
 
-The data-preparation workflow is documented separately in `technical-note-data-preparation.qmd`. The core architecture is:
+# Model, concept, and methods
 
-1. Inventory source data and metadata.
-2. Standardise raw trajectory and fuel-flow fields.
-3. Derive or validate milestones.
-4. Summarise fuel burn by flight phase.
-5. Build comparable CHN and EUR analysis tables.
+## Trajectory profile and milestones
 
-# Results
+The analytical backbone is a trajectory carrying time, pressure altitude, cumulative consumed fuel and cumulative flown distance. For this first characterisation, use a whole-airborne partition: **climb = ATOT--TOC; enroute = TOC--TOD; descent = TOD--ALDT**. Thus climb and descent include their airborne LTO portions. These intervals are recalculated from milestone times; the supplied phase rows labelled CLIMB and DESCENT instead start at DLTO and end at ALTO. Adding those rows alone would omit climb-out and approach.
 
-To be developed once the refreshed data extracts and processing choices are agreed.
+```{r}
+#| label: fig-concept
+#| fig-cap: "Schematic milestone profile (not study data). Pressure-altitude and airport-distance anchors are additional descriptors, not alternative TOC/TOD definitions."
+#| fig-width: 3.45
+#| fig-height: 1.85
+z <- data.frame(t=c(0,4,10,15,21,45,52,59,70,76),h=c(0,0,10,17,34,34,31,31,8,0))
+ggplot(z,aes(t,h)) + geom_line(linewidth=.7,color="#245C89") +
+  geom_vline(xintercept=c(4,21,52,76),linetype=3,color="grey60") +
+  annotate("text",x=c(4,21,52,76),y=c(3,37,34,3),label=c("ATOT","TOC","TOD","ALDT"),size=2.4) +
+  annotate("text",x=c(12,36,64),y=41,label=c("Climb","Enroute","Descent"),size=2.7) +
+  labs(x="Elapsed time (schematic)",y="Altitude (schematic)") +
+  coord_cartesian(ylim=c(0,44)) + theme_classic(base_size=8) + theme(axis.text=element_blank(),axis.ticks=element_blank())
+```
 
-# Discussion
+```{r}
+#| results: asis
+paper_table(data.frame(
+  Family=c("Operational", "LTO / runway", "Airport-distance", "Pressure altitude", "Level intervals"),
+  Milestones=c("AOBT, ATOT, TOC, TOD, ALDT, AIBT", "ERWY, DLTO, ALTO, XRWY", "D040/D100/D200; A200/A100/A040", "D_FL075/100/180; A_FL180/100/075", "LVL_START, LVL_END; segment ID")),
+  "Milestone families retained in the study model.",c(.25,.69))
+```
 
-To be developed.
+Airport-distance anchors refer to great-circle radii around airport coordinates, not cumulative track length. **Aerodrome GCD** is the endpoint-to-endpoint distance used for stage-length stratification. Pressure-altitude crossings retain direction; pressure altitude is not height above local terrain. Airport coordinates are sourced proxies for ARP. The Chinese legacy returned anchors have not been relabelled as if regenerated under the clarified convention.
 
-# Conclusions
+TOC/TOD delimit the source-selected enroute interval, which can contain step climbs or descents. The intended harmonised rule selects the entry of the initial sustained cruise level and exit of the final sustained cruise level; it must not substitute an airport-circle crossing. The returned Chinese batches predate the 18 October helper revision, and Europe mostly retains G2G boundaries with selected M3 repairs. Current TOC/TOD comparisons remain **sensitive to detector definition**. They do not yet demonstrate a difference in time-weighted cruising altitude.
 
-To be developed.
+## Study data and analysis cohorts
 
-# References
+China uses fourteen returned QAR-derived batches. Europe uses the pinned EUR parallel candidate of 13 October, with G2G fuel estimates and M3-supported milestones. The European fuel source is model-based [@eurocontrolAEM]; the Chinese source integrates recorded fuel flow. This profile analysis does not depend on fuel magnitudes. It does not substitute the recently tested Chinese helper outputs for the returned study batches.
+
+```{r}
+#| results: asis
+d <- data.frame(
+  Item=c("Source flights", "Profile-screened flights", "Distance-screened subset", "Common-support flights", "Airports / directed pairs", "Aircraft types (source)", "GCD range (NM, source)", "GCD median (NM, source)"),
+  China=c(fmt(inv("CHN","INPUT")),fmt(inv("CHN","RETAINED")),fmt(inv("CHN","DISTANCE_SCREEN")),fmt(inv("CHN","COMMON_SUPPORT")),paste(inv("CHN","AIRPORTS"),inv("CHN","ROUTES"),sep=" / "),inv("CHN","TYPES"),paste(fmt(inv("CHN","GCD_MIN")),fmt(inv("CHN","GCD_MAX")),sep="--"),fmt(inv("CHN","GCD_P50"))),
+  Europe=c(fmt(inv("EUR","INPUT")),fmt(inv("EUR","RETAINED")),fmt(inv("EUR","DISTANCE_SCREEN")),fmt(inv("EUR","COMMON_SUPPORT")),paste(inv("EUR","AIRPORTS"),inv("EUR","ROUTES"),sep=" / "),inv("EUR","TYPES"),paste(fmt(inv("EUR","GCD_MIN")),fmt(inv("EUR","GCD_MAX")),sep="--"),fmt(inv("EUR","GCD_P50"))))
+paper_table(d,"Study sample and metric-specific support.",c(.46,.24,.24))
+```
+
+Nominal coverage is June--August 2025. Stored Chinese take-off dates extend from `r inv("CHN","FIRST_DATE")` to `r inv("CHN","LAST_DATE")`; Europe extends from `r inv("EUR","FIRST_DATE")` to `r inv("EUR","LAST_DATE")`. Two September boundary records require a source-clock/date check before final seasonal reporting. China covers ZSSS connections with ZBAA, ZLXY and ZPPP in both directions. The European source sample covers 11 airports and 22 directed pairs.
+
+```{r}
+#| results: asis
+t <- analysis$types |> filter(INPUT_CHN>0)
+paper_table(data.frame(Type=t$TYPE, `CHN input / kept`=paste(t$INPUT_CHN,t$RETAINED_CHN,sep=" / "),
+ `EUR input / kept`=paste(t$INPUT_EUR,t$RETAINED_EUR,sep=" / "),check.names=FALSE),
+ "Aircraft types occurring in China, with European support. Additional EUR-only types enter the overview.",c(.22,.34,.38))
+```
+
+Exact aircraft variants are kept separate; engine variants are unavailable in this analysis and remain a future grouping requirement. B737-MAX is unresolved. C919 has no European comparator.
+
+**Working selection rule.** Require unique, complete, strictly ordered ATOT/TOC/TOD/ALDT boundaries; airborne duration 10--480 min; GCD/airborne time at most 650 kt; and finite TOC/TOD pressure altitudes between 2,000 and 50,000 ft. For China, additionally require take-off and landing coordinates within 10 NM of the respective airport and screen emitted airborne events for invalid/zero positions, geometric speed above 750 kt, or vertical rate above 12,000 ft/min. These are broad problem screens, not efficiency thresholds. European enriched anchors combine M3 and G2G interpolation and are not treated as independent recorder samples for event-to-event checks; European trajectory validity relies on the parallel source preparation. Screening depth is source-specific.
+
+The screen retains `r fmt(inv("CHN","RETAINED"))` Chinese flights, fewer than the illustrative 4,000-flight ambition. Before the Chinese event checks, `r fmt(sum(analysis$flights$REGION=="CHN" & analysis$flights$COMPLETE & analysis$flights$ORDERED & analysis$flights$TIME_PLAUSIBLE & analysis$flights$ALT_PLAUSIBLE & analysis$flights$ENDPOINT_OK))` pass the boundary/airport screen. The difference signals selection sensitivity; maximizing counts is optional. Event-only checks cannot certify unobserved portions of the raw trajectory or correct legacy boundary selection.
+
+```{r}
+#| results: asis
+e <- analysis$exclusions |> pivot_wider(names_from=REGION,values_from=n,values_fill=0)
+paper_table(e[,c("EXCLUSION","CHN","EUR")],"Sequential exclusions (first failed rule; retained counts complete the accounting).",c(.56,.19,.19))
+```
+
+Flown-distance validity is assessed separately using positive milestone differences, phase mean speeds at most 750 kt and airborne track length at least 95% of GCD. This is a plausibility screen, not certification for kg/NM. Fuel-unit, cumulative-fuel and phase-accounting review will additionally be required before fuel comparisons.
+
+## Descriptors and comparison design
+
+Report flight-weighted P20/P50/P80 of GCD, airborne duration, phase durations, enroute share, and TOC/TOD altitude. These are percentiles of flights, not trajectory points. Regional overviews describe sample composition. For comparison, use exact aircraft type × shared 100 NM GCD bands, initially requiring at least 30 independent flights **in each region**. This is an exploratory support rule, not a power calculation; report cell counts and avoid pooling cells under different regional weights.
+
+The enroute question needs three distinct measurements: initial/final cruise-boundary altitude; time-weighted altitude exposure during TOC--TOD; and the interval's duration and share of airborne time. Only the first and third are currently populated. The next extension will calculate residence time in common pressure-altitude bands, maximum attained level, step changes and level-segment exposure. Missing altitude coverage remains separate from low-altitude operation.
+
+<!-- Final methods allocation: approximately 2 pages; move detailed screens into the technical note as the narrative matures. -->
+
+# Results and discussion
+
+## Stage length and profile composition
+
+```{r}
+#| label: fig-stage
+#| fig-cap: "GCD distributions in the screened samples. The different route mixtures motivate distance stratification."
+#| fig-width: 3.45
+#| fig-height: 1.85
+plots$stage
+```
+
+Screened sample median GCD is `r fmt(med("CHN","GCD_NM"))` NM in China and `r fmt(med("EUR","GCD_NM"))` NM in Europe. Chinese source routes occupy only three endpoint distances; Europe includes much shorter stages. The longest Chinese stages have no European distance counterpart in this extraction. Overall regional phase differences therefore combine route, aircraft and profile composition.
+
+```{r}
+#| results: asis
+labels <- c(GCD_NM="GCD (NM)", AIRBORNE_MIN="Airborne (min)", CLIMB_MIN="Climb (min)", ENROUTE_MIN="Enroute (min)", DESCENT_MIN="Descent (min)", ENROUTE_SHARE="Enroute share (%)", ALT_FT_TOC="TOC altitude (100 ft)", ALT_FT_TOD="TOD altitude (100 ft)")
+metrics <- names(labels)
+sc <- c(1,1,1,1,1,100,.01,.01)
+paper_table(data.frame(Metric=unname(labels), China=mapply(function(m,s)cell("CHN",m,s),metrics,sc), Europe=mapply(function(m,s)cell("EUR",m,s),metrics,sc)),
+ "Screened sample descriptors: P50 [P20; P80]. Unadjusted regional summaries.",c(.34,.30,.30))
+```
+
+```{r}
+#| label: fig-timing
+#| fig-cap: "Phase duration distributions for ATOT--TOC--TOD--ALDT. Panels have different horizontal scales."
+#| fig-width: 3.45
+#| fig-height: 1.9
+plots$timing
+```
+
+Median TOC--TOD duration is `r fmt(med("CHN","ENROUTE_MIN"),1)` min in China and `r fmt(med("EUR","ENROUTE_MIN"),1)` min in Europe, with median airborne shares of `r fmt(100*med("CHN","ENROUTE_SHARE"),1)`% and `r fmt(100*med("EUR","ENROUTE_SHARE"),1)`%. Missing or coincident boundaries are excluded rather than interpreted as unusually short enroute operation; genuinely zero-cruise profiles require separate identification.
+
+## Comparable aircraft and distance support
+
+```{r}
+#| results: asis
+s <- analysis$support |> filter(COMMON)
+paper_table(data.frame(Type=s$TYPE,`GCD band (NM)`=paste(s$BAND100,s$BAND100+99,sep="--"),China=s$CHN,Europe=s$EUR,check.names=FALSE),
+ "Common-support cells; independent screened flight counts.",c(.18,.34,.20,.22))
+```
+
+Six cells support comparisons: five exact aircraft types over 600--699 NM, plus A21N over 500--599 NM. These contain `r fmt(inv("CHN","COMMON_SUPPORT"))` Chinese and `r fmt(inv("EUR","COMMON_SUPPORT"))` European flights. Widebodies lack the required joint support despite substantial Chinese source counts. Equal type and distance band do not equalise engines, operators, payload, winds, direction or airport procedures.
+
+```{r}
+#| results: asis
+dd <- analysis$differences |> filter(METRIC %in% c("CLIMB_MIN","ENROUTE_MIN","DESCENT_MIN")) |>
+  select(TYPE,BAND100,METRIC,CHN_MINUS_EUR) |> pivot_wider(names_from=METRIC,values_from=CHN_MINUS_EUR)
+paper_table(data.frame(Cell=paste(dd$TYPE,dd$BAND100),Climb=fmt(dd$CLIMB_MIN,1),Enroute=fmt(dd$ENROUTE_MIN,1),Descent=fmt(dd$DESCENT_MIN,1)),
+ "Median-duration differences (China minus Europe, min); cell label gives type and band lower bound.",c(.31,.21,.21,.21))
+```
+
+Chinese median climb duration exceeds the European median by approximately 2.6--8.6 min across these cells. Enroute median differences are much smaller, approximately -5.2 to +1.9 min. Descent differences vary in sign. The aggregate impression of a longer Chinese enroute phase should therefore not carry directly into fuel-burn interpretation. No equivalence or significance claim is made; date/route clustering and uncertainty estimation remain to be added.
+
+## Enroute altitude: what the current evidence establishes
+
+```{r}
+#| label: fig-altitude
+#| fig-cap: "Source-selected TOC/TOD pressure altitude in common-support cells: P50 and P20--P80. Boundary altitudes do not measure time-weighted enroute levels."
+#| fig-width: 3.45
+#| fig-height: 2.55
+plots$altitude
+```
+
+In these cells, median Chinese TOC altitude is approximately 1,900--6,900 ft below the European value; TOD altitude is approximately 5,900--9,400 ft lower. This is a candidate pattern for investigation, rather than confirmation that flights cruise lower throughout China. The Chinese TOC/TOD selector may attach to intermediate levels differently from the European G2G convention. The asymmetry between TOC and TOD motivates direct analysis of step descents and the level selected as final cruise.
+
+The next result should show **time-weighted altitude-band exposure within TOC--TOD**, alongside initial/final cruise levels and maximum altitude, for these support cells. Rebuilding the Chinese study batches under the revised helper and checking both regions against selected altitude-time profiles will distinguish an operating pattern from a boundary-definition effect. Milestones alone cannot recover exact exposure between widely spaced events without an interpolation assumption.
+
+## Level segments and connection to consumption
+
+- Next profile characterisation: identify paired segments, clip to physical phase boundaries and measure the union of observed level time; retain segment altitude and enroute step structure. Accepted European CCO/CDO intervals, rather than odd/even pairing of G2G LVL tags, supply European interval evidence.
+- Leave interruption classes unassigned in this draft. Later, describe total level time/share, count, longest interruption and altitude separately for climb and descent. Freeze common definitions across regions; preserve unknown coverage separately from genuinely uninterrupted flight.
+- Retain the **regional profile distribution** when adding conditional consumption. Matching on profile alone could conceal a difference in how often interrupted profiles occur.
+- Future lookup: **aircraft/engine group × GCD band × phase × common profile class**, retaining source/region, with fuel kg, duration, kg/min, kg/NM, P20/P50/P80 and independent-flight support. Total fuel remains alongside rates; lower kg/min need not imply lower phase fuel.
+- Percentiles are descriptive references. P20 is not an attainable optimum; P50--P20 is not an ATM-recoverable saving. Fuel comparisons must also distinguish recorded and modelled fuel and retain the European original/adjusted fuel convention.
+
+<!-- Final results allocation: approximately 2 pages; consolidate overview tables/plots when the main result is selected. -->
+
+# Conclusion
+
+- Check whether profile differences persist within aircraft/distance support and under aligned TOC/TOD definitions.
+- State the reach of the selected routes/operators; distinguish regional profile composition from conditional consumption.
+- No fuel-savings or regional-efficiency conclusion at this stage.
+
+<!-- Final allocation: approximately 0.5-1 page, sharing the page budget with references. -->
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

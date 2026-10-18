@@ -12,6 +12,7 @@ desktop.ini
 *_files/
 /.quarto/
 /_output/
+/paper.tex
 /outputs/*
 !outputs/.gitkeep
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="en-US">
+  <info><title>Fuelburn compact numeric working style</title><id>http://www.zotero.org/styles/fuelburn-working-numeric</id><updated>2026-10-18T00:00:00+00:00</updated></info>
+  <citation collapse="citation-number"><sort><key variable="citation-number"/></sort><layout prefix="[" suffix="]" delimiter=", "><text variable="citation-number"/></layout></citation>
+  <bibliography entry-spacing="0" second-field-align="flush">
+    <layout suffix=".">
+      <text variable="citation-number" prefix="[" suffix="]"/>
+      <group delimiter=", ">
+        <names variable="author"><name initialize-with=". " and="text"/></names>
+        <text variable="title" quotes="true"/>
+        <text variable="container-title" font-style="italic"/>
+        <text variable="publisher"/>
+        <date variable="issued"><date-part name="year"/></date>
+        <text variable="URL"/>
+      </group>
+    </layout>
+  </bibliography>
+</style>

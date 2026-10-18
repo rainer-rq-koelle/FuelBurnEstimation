@@ -9,7 +9,17 @@ plus a technical note that documents the data preparation pipeline step by step.
 
 ## Current Setup
 
-- `paper.qmd` is the lightweight paper draft.
+- `paper.qmd` is the first conference-paper skeleton, with reproducible regional
+  profile tables/figures, an IEEE-like two-column PDF in 10 pt Times New Roman,
+  and brief aides-memoires for introduction/background/conclusion.
+- `paper-references.bib` seeds the bibliography. `paper-style.tex` and
+  `paper-numeric.csl` provide the working layout and numeric citations.
+- `R/paper-profile-characterisation.R` reads the pinned EUR parallel candidate
+  and all fourteen returned CHN batches without changing them.
+  `Rscript scripts/13-characterise-paper-profiles.R` saves the screen ledger,
+  aggregate tables, input hashes and R session in the ignored
+  `outputs/paper-profile-characterisation/` directory.
+  See `notes/paper-development.md` for scope, interpretation and reproduction.
 - `paper-exploratory-2026.qmd` develops the AICAP 2027 argument, delivered-release
   diagnostics, profile-aware lookup design, and validation gates.
 - `technical-note-data-preparation.qmd` is the process note for source data,
