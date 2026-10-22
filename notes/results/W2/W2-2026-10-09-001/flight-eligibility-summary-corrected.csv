@@ -1,0 +1,2 @@
+total_flights,has_climb,has_cruise,has_descent,climb_eligible,cruise_eligible,descent_eligible,airborne_eligible,has_ALDT
+6421,6398,6399,5226,6398,5226,5226,5226,5231

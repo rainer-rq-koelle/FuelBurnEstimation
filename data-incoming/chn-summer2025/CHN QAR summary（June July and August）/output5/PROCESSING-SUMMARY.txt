@@ -1,0 +1,46 @@
+FUEL BURN QAR PROCESSING SUMMARY
+================================
+
+Processing date: 2026-10-08 22:01:40.949818
+Input path: G:\6月\ZLXY3
+Output directory: G:\6月\output5
+
+RESULTS:
+  Flights processed: 344
+  Milestone records: 14375
+  Phase records: 2883
+  Level segments: 3581
+
+FUEL-FLOW UNIT CHECK:
+  Unit mode: auto
+  Flights requiring unit review: 0
+# A tibble: 1 × 4
+  inferred_unit unit_confidence unit_flag            n
+  <chr>         <chr>           <chr>            <int>
+1 kg/h          high            ok_auto_inferred   344
+
+ROUTE PAIRS:
+# A tibble: 2 × 3
+  ROUTE_PAIR flights types
+  <chr>        <int> <int>
+1 ZSSS-ZLXY      173     7
+2 ZLXY-ZSSS      171     7
+
+OUTPUT FILES:
+  • CHN-canonical-milestones.parquet/.csv
+  • CHN-phase-summaries.parquet/.csv
+  • CHN-level-segments.parquet/.csv
+  • CHN-phase-level-descriptors.csv
+  • CHN-flight-phase-code-diagnostics.csv
+  • CHN-fuel-flow-unit-qc.csv
+  • CHN-qar-fuel-flow-qc.csv
+  • profile-plots/*.png
+
+NEXT STEPS:
+  1. Review the profile-plots/*.png files to verify milestone detection
+  2. Check CHN-fuel-flow-unit-qc.csv for kg/h vs lb/h unit inference
+  3. Check CHN-qar-fuel-flow-qc.csv for fuel flow spike corrections
+  4. Check CHN-level-segments.csv for derived level-off intervals
+  5. Send the entire output folder to the report team for integration
+
+For questions, contact the China-Europe report coordination team.
