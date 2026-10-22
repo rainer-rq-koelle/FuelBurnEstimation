@@ -1,15 +1,28 @@
-# First conference-paper skeleton, 18 October 2026
+# Conference-paper development record
+
+Updated 22 October 2026. The enroute residence and TOC/TOD-definition extension,
+its measurement assumptions, and ranked paper add-ons are documented in
+`notes/enroute-level-analysis.md`. The original 18 October aggregate snapshot
+and source releases remain preserved.
+
+The lookup pilot and its source-fuel eligibility are documented in
+`notes/paper-lookup-table.md`. The draft introduction now contains paraphrased
+breadcrumbs from the opening abstract/introduction logic of the 2025 paper,
+with a citation rather than a new block of developed prose.
 
 ## Scope
 
 `paper.qmd` now provides the requested classical structure. The active methods
 and results concern stage length, climb/enroute/descent duration, enroute share,
-and pressure altitude at source-selected TOC and TOD. Introduction, background
-and conclusion contain reminders only. Smoothness classes and conditional fuel
-distributions are reserved for later work. The working layout emulates IEEE:
+pressure altitude at source-selected TOC and TOD, reconstructed altitude-band
+residence, and a paired sustained-level boundary sensitivity. Introduction, background
+and conclusion contain reminders only. Smoothness classes remain reserved for
+later work; the partial lookup now includes altitude-conditioned enroute fuel
+references. The working PDF layout emulates IEEE:
 two columns, US letter, 10 pt Times New Roman and numeric references. It is not
-the official conference template. The sparse skeleton currently renders to four
-pages; the developed paper must fit eight pages including references.
+the official conference template. The developed paper must fit eight pages
+including references. Processing-status commentary belongs in these notes,
+while the draft states the methods and their scientific assumptions directly.
 
 The study builds on the 2025 ICNS paper. The design preserves two estimands:
 regional profile composition and
@@ -22,8 +35,11 @@ From the project root, with the restricted local data cache populated:
 
 ```sh
 Rscript scripts/13-characterise-paper-profiles.R
+Rscript tests/enroute-level-exposure.R
+Rscript scripts/14-characterise-enroute-levels.R
 quarto render paper.qmd --to pdf
 quarto render paper.qmd --to html
+quarto render paper.qmd --to docx
 ```
 
 The QMD recomputes its tables directly from the pinned inputs on each render;
@@ -38,8 +54,26 @@ A portable input-hash manifest and identifier-free result snapshot are checked i
 under `notes/results/paper-profile-characterisation-2026-10-18/`. Paths beginning
 `data-store/` resolve against `FUELBURN_DATA_STORE`; other paths resolve against
 the project root. Compare regenerated aggregates with this snapshot to reproduce
-the current draft. Flight-level data and generated PDF/HTML files remain ignored;
+the original descriptive baseline. Flight-level data and generated PDF/HTML/Word files remain ignored;
 the committed QMD, analysis code, styles and bibliography reproduce the outputs.
+
+### Word review copy, 22 October 2026
+
+`quarto render paper.qmd --to docx` writes `_output/paper.docx` using the same
+analysis, citations and manuscript as the other formats. Word uses a single
+column for commenting; the conference layout remains specific to PDF. Tables
+are native Word tables and figures are embedded. Agreed comments should be
+integrated into `paper.qmd`, which remains the manuscript source of truth.
+The review export was visually checked across all ten pages. Structural checks
+confirmed twelve data tables, four figures, thirteen native equations and no
+document protection. The enroute and lookup unit checks also passed.
+
+The latest analysis snapshots are `notes/results/enroute-levels-2026-10-22/`
+and `notes/results/lookup-pilot-2026-10-22/`. Their companion notes document
+the inputs, definitions and support rules. Adding the Word output format does
+not change the analysis. The lookup snapshot's manuscript hash is refreshed
+for this output-configuration change; the older enroute snapshot retains its
+historical source identity.
 
 ### Pinned sources
 
@@ -53,7 +87,7 @@ the committed QMD, analysis code, styles and bibliography reproduce the outputs.
   These are airport-coordinate proxies for ARP. GCD is calculated independently
   by a spherical haversine (radius 3,440.065 NM).
 
-## Current descriptive evidence
+## Preserved 18 October descriptive baseline
 
 | Quantity | CHN | EUR |
 |---|---:|---:|
@@ -114,14 +148,12 @@ will require stronger distance and fuel validation than the present screen.
 - LVL_START/LVL_END: linked interval boundaries. Missing partners/coverage remain
   unknown; sparse G2G LVL tags cannot simply be paired in odd/even order.
 
-The strongest next result is time-weighted pressure-altitude-band exposure
-within TOC--TOD, together with initial/final cruise level, maximum attained
-altitude and step changes. Sparse milestone endpoints are insufficient for
-exact residence time. Reprocessing the fourteen CHN batches with the revised
-helper and reviewing representative source altitude-time profiles should
-precede a claim about lower enroute levels. Level-segment altitude and union
-time clipped to physical phases can then enrich profile characterisation,
-before any interruption classes or conditional fuel estimates are introduced.
+The 22 October extension estimates altitude-band residence within TOC--TOD by
+explicit interpolation of altitude-time knots and checks the contrast under a
+common level-envelope definition. This supplies a model-based residence estimate,
+not exact continuously observed occupancy. Maximum altitude and step structure
+remain optional additions. The new note records the source-resolution sensitivity
+and the full-batch input-adoption plan separately from the draft.
 
 ## Bibliography and page budget
 

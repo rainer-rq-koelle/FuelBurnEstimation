@@ -20,6 +20,15 @@ plus a technical note that documents the data preparation pipeline step by step.
   aggregate tables, input hashes and R session in the ignored
   `outputs/paper-profile-characterisation/` directory.
   See `notes/paper-development.md` for scope, interpretation and reproduction.
+- `R/enroute-level-exposure.R` adds altitude-band residence and a paired
+  TOC/TOD-definition sensitivity on common aircraft/distance cells.
+  `Rscript scripts/14-characterise-enroute-levels.R` exports its restricted
+  analysis and aggregate evidence to `outputs/paper-enroute-levels/`.
+  See `notes/enroute-level-analysis.md` for assumptions and paper add-ons.
+- `R/paper-lookup-table.R` builds pooled and altitude-conditioned phase fuel
+  references with explicit engine/class slots and metric-specific support.
+  `Rscript scripts/15-populate-paper-lookup.R` exports the long/wide lookup grid
+  to `outputs/paper-lookup/`. See `notes/paper-lookup-table.md` for interpretation.
 - `paper-exploratory-2026.qmd` develops the AICAP 2027 argument, delivered-release
   diagnostics, profile-aware lookup design, and validation gates.
 - `technical-note-data-preparation.qmd` is the process note for source data,
@@ -302,6 +311,8 @@ Rscript scripts/00-check-data-store.R
 
 # Render documents
 quarto render paper.qmd --to html
+quarto render paper.qmd --to pdf
+quarto render paper.qmd --to docx
 quarto render technical-note-data-preparation.qmd --to html
 
 # EUR pipeline (if reprocessing)
@@ -312,6 +323,12 @@ Rscript scripts/05-derive-eur-level-segments.R
 Rscript scripts/07-enrich-eur-level-segments.R
 Rscript scripts/08-create-harmonized-analytical-datasets.R
 ```
+
+The paper's Word review copy is `_output/paper.docx`, rendered from the same
+`paper.qmd`, bibliography and analysis as the PDF. It uses a single-column layout
+for comments; the PDF retains the two-column conference layout. Generated
+documents remain outside version control. Integrate agreed review changes into
+`paper.qmd` before rendering the next review copy.
 
 ## Data Quality Assurance
 

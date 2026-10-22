@@ -5,7 +5,7 @@ build_paper_profiles <- function(store = Sys.getenv("FUELBURN_DATA_STORE", ".fue
     library(dplyr); library(tidyr); library(arrow); library(ggplot2)
   })
   eur_dir <- file.path(store, "derived/eur/parallel-preprocessing/EUR-2026-10-13-002")
-  chn_dir <- file.path(store, "derived/chn/verification/CHN-2026-10-18-001/returned-batches")
+  chn_dir <- Sys.getenv("FUELBURN_PAPER_CHN_DIR",unset=file.path(store, "derived/chn/verification/CHN-2026-10-18-001/returned-batches"))
   chn_files <- sort(list.files(chn_dir, "^CHN-canonical-milestones.parquet$", recursive = TRUE, full.names = TRUE))
   stopifnot(length(chn_files) == 14L)
   eur_file <- file.path(eur_dir, "EUR-canonical-milestones-parallel.parquet")

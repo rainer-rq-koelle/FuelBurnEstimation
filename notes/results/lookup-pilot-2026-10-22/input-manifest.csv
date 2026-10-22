@@ -1,0 +1,63 @@
+PATH,SHA256
+data-store/derived/eur/parallel-preprocessing/EUR-2026-10-13-002/EUR-canonical-milestones-parallel.parquet,8131f9c4454b0ffffe1b90b4bd1f39ab02ba6439d2e3e3cdf9b838c2f113113b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output1/CHN-canonical-milestones.parquet,b65147e4809b8284d80bc9ced01a45beca7687a37544bdcbb5cce848d061901d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output10/CHN-canonical-milestones.parquet,b3f5961bf1f20f234b36c9ba91828f0d649c497df58e5ec33e32d2cec3f8a523
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output11/CHN-canonical-milestones.parquet,6217c0f462054432e537975e1cb9137c2920c6faf00f5e970729484aab879eee
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output12/CHN-canonical-milestones.parquet,4fbde8a3839d6f65839fe107a7596a2e2ba927998ade836da0b97c67c620ec00
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output13/CHN-canonical-milestones.parquet,eabef8c9340a5566d91e37fabfdfc28968535c5bdd4ad6321d9c8ec872f676d5
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output14/CHN-canonical-milestones.parquet,c3eef07edbbf46aa22de22606f72757c9d9ba58c7a2a91ccd8cce8e5c986bda5
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output2/CHN-canonical-milestones.parquet,f4d0bf04da6c07c912784339295dfd22c73ac2cad91d19b61c393b19bf41ab3d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output3/CHN-canonical-milestones.parquet,0b619fab74eb7ced8fb8545896620bd7e0c3fb837281041467d7add0d6742b81
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output4/CHN-canonical-milestones.parquet,903f8676d594574c1e6afdeda88728ae41b897f1d213a519086828176e10e29e
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output5/CHN-canonical-milestones.parquet,c0699daee0523dce80ee73a63a4c4d840b9b634cbf7c06f4dca03d88a25ec388
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output6/CHN-canonical-milestones.parquet,fbcd74439efb8acce08e3c818e16238c1491a61de94f5c5efd4f5898c0f468ec
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output7/CHN-canonical-milestones.parquet,862413a551d845ae484d3634afac5d30c1c413ecf985a6e748712aac53a1e998
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output8/CHN-canonical-milestones.parquet,c0e3c0651a2ce9d703904b897873ad333932dcaab2f3637d700b3616feb07e4f
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output9/CHN-canonical-milestones.parquet,d3d2cd6bcb059b776e08124dfc313d8ea46a835acd1fd9b976926dcab5daac51
+helpers/chn-qar-v2/data/airports.csv,80ee08138175bb7988b66baf2a578f9d72c7c25c81b4c3a648dd11b0144b0f87
+notes/reference-data/EUR-airport-coordinates-2024-12-27.csv,c9cc2c2a986556ee12127dc48c3870d5f9c869ebf8b52dd0500864bc11fbe11e
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output1/CHN-level-segments.parquet,d695851192fdbd9430dd1c9caecfad743527df3319b5ce86d156ac02c295685d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output10/CHN-level-segments.parquet,ea025d6ca4f5868f8d21b8a44b1597a72dce03902abea1766739ce6326e34136
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output11/CHN-level-segments.parquet,9fafe23044829370a372f7815f79a7b4152dae7d215da4544c919baf6c9526d8
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output12/CHN-level-segments.parquet,acc1547f487790277519c1742935e00475c9fa090b6116ce415f180eaa527699
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output13/CHN-level-segments.parquet,88be3b83f71ff3fa53e58f301aa4f0dc8ec4532e8abde4548f85c51268739e12
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output14/CHN-level-segments.parquet,b78e5e410281971f7b437e8f85519eb9e572364400068faf475e4a56d6acff2b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output2/CHN-level-segments.parquet,8dedec63b8c577f759a8882e761ab491bad4eaa98ee1b502c2fd904703223ede
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output3/CHN-level-segments.parquet,37c5e137e176e0104cf69e6b116b700c2ee56c32efb6ddd40c29e50bda2aa958
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output4/CHN-level-segments.parquet,56e457eb4dec50b0f43910f4e3e3a1eda7f1a949a491861b7520d6fe061e4e9b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output5/CHN-level-segments.parquet,17dee9b30ce2cad7d6fc5cc625ccd02ef48c67b292663cc954e45a51aa1f8615
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output6/CHN-level-segments.parquet,82a829a2e406e2baca1a986411fe2ff25687df167b58b86cd2ae7c1b89484927
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output7/CHN-level-segments.parquet,723b9002c49c64c151775ed13a4b6d5f0647e30638ebc4e5820c423ff0776122
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output8/CHN-level-segments.parquet,bcf23fa3e993d4b3981690b4d4e8eb482948080ef46bec19f09c8d48f4f947dc
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output9/CHN-level-segments.parquet,fb8a01394855f5805fbe1e8b057e5110855e2cef0ec0c5b2887243efb4532757
+data-store/raw/eur/source-sample/m3-ctfm-2025-06.parquet,6adcf0f3a3c3c9eab621e106ca7606778befce8821927ffac25b2bf99543eb26
+data-store/raw/eur/source-sample/m3-ctfm-2025-07.parquet,89f4a6882f04fed018998e2ebf2889b5ce2eab05484643090e960fc8f8d57702
+data-store/raw/eur/source-sample/m3-ctfm-2025-08.parquet,c1390c574816e39e7f2b9bce0232133005daecaa6a2ec6cc4666401af9c543cf
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output1/CHN-fuel-flow-unit-qc.csv,c5a9f6a0dc06fb8e985c36f15ea268c4f5e5981feafadaa17334eed0a3d88aec
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output10/CHN-fuel-flow-unit-qc.csv,1b029a31737baeb37a5efae32ab99b6adb26f9fea5fec3c44e71d51495188995
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output11/CHN-fuel-flow-unit-qc.csv,eb336e07ed5db07b8f8f3d8aa6372d771d087bf7d2f04295fe646724fe86ac51
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output12/CHN-fuel-flow-unit-qc.csv,ec6f1e432bdf03ff7dbb3d405e816a5575030f4466edb7bd019de43e71b9f76e
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output13/CHN-fuel-flow-unit-qc.csv,1aeac5643a45a4c80d4eda1da9cb6663991ba17605a8fa5fac761f7b31f40a57
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output14/CHN-fuel-flow-unit-qc.csv,235c598831f9adbc79c115d66e308664ea40faf4b6002da289bdfc470792d6a0
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output2/CHN-fuel-flow-unit-qc.csv,7fd3ff3a5aaba9aed4208adefa1af3283b31da53025c70abf14ba60653458314
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output3/CHN-fuel-flow-unit-qc.csv,72699557e8038bbcdb2f77e73311de89aa40270015c5b3510765042a861d8dbd
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output4/CHN-fuel-flow-unit-qc.csv,1230e6efeedce3eb5bc4f7714dc45f1190908f6b475f1a69141a67c904357af7
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output5/CHN-fuel-flow-unit-qc.csv,4349c3d5c8cdeeaf32c42e5eded09f7633452c97e7cfe75e6d9c2b2af6c20865
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output6/CHN-fuel-flow-unit-qc.csv,04ac96f26fde1ad4b72f7c793a3b0ae87b4b2523cd56534d8c02156b502086a9
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output7/CHN-fuel-flow-unit-qc.csv,399c597782e194981573e89d81327f01e273db7b8201e48242420f897885697f
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output8/CHN-fuel-flow-unit-qc.csv,26bd0143d2b4403df6d10c203e5758b164e780ae626ba41fbcd07ae24a1cc83d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output9/CHN-fuel-flow-unit-qc.csv,f5789ed6495f451764a3d9716e72f8dbe98fcf496b08bea5515c06cd429fd37b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output1/CHN-qar-fuel-flow-qc.csv,8966df817439bc8a88ccf8b043a4cb09626b9cba21e668605f74f05293b4bb3a
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output10/CHN-qar-fuel-flow-qc.csv,f29d884bc80991edb7d721480feb6fc4080ee0eefa53084fc1c5528fd8a4ee2f
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output11/CHN-qar-fuel-flow-qc.csv,35d480f9eb10d55b4693080887356ef4b80fce02fa364091ddb122bd5a2d8cba
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output12/CHN-qar-fuel-flow-qc.csv,6745f7b5a4b9186ced0578652bfec65ef0e1a0d90797aa65634dd437596d0e89
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output13/CHN-qar-fuel-flow-qc.csv,acbd9ae922a1a594c49169ea731bd943e8d5aa34021146537f36e504aaa5643b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output14/CHN-qar-fuel-flow-qc.csv,a785dbc5813c48dc32a864a9bc5499a1e40e5523928a16bd1d5163c9638f883d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output2/CHN-qar-fuel-flow-qc.csv,40ca6c3597b6eae759698ddaed9262cd09442feaaa4299aa361200973951daac
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output3/CHN-qar-fuel-flow-qc.csv,be531c409728dc61aefe5dc123c24a429c5eda1daab23cbd954b9ed5e5709d91
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output4/CHN-qar-fuel-flow-qc.csv,943273b946e0a3b967a784941d93ad2a9410346a90ee03378e811c10b0bbfeea
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output5/CHN-qar-fuel-flow-qc.csv,9499f088d0aef0b3f05c0095d252cab075acc9179b7aa705167d8642d41e85cd
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output6/CHN-qar-fuel-flow-qc.csv,12f1d9c9fe173119a132540a9924451a45bf7112bea9effcc0dad7acdb231459
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output7/CHN-qar-fuel-flow-qc.csv,dcaf1af8ed0d4353f70b84582a7684c5748c4dc56e27a55dc361b75115dd3589
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output8/CHN-qar-fuel-flow-qc.csv,46854725adadfcbb9347eebcddbfe90154425116af1247562fd5a3993996ee4c
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output9/CHN-qar-fuel-flow-qc.csv,0a02a40fe7d56af54b41c70cfcb91c06c69b2ffd9138066eced98c60d2ad5e8f

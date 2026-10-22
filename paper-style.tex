@@ -4,6 +4,13 @@
 \setlength{\columnsep}{0.25in}
 \setlength{\parindent}{1em}
 \setlength{\parskip}{0pt}
+\raggedbottom
+% Keep float-only columns aligned at the top as the skeleton grows.
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{12pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
 \titleformat{\section}{\normalfont\normalsize\centering}{\Roman{section}.}{0.6em}{}
 \titleformat{\subsection}{\normalfont\normalsize\itshape}{\Alph{subsection}.}{0.5em}{}
 \titlespacing*{\section}{0pt}{1.5ex plus .5ex}{.8ex}
