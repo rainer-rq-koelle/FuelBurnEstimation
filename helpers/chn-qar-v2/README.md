@@ -1,4 +1,10 @@
-# CHN QAR helper 2.0.0-candidate.5
+# CHN QAR helper 2.0.0-candidate.6
+
+Candidate.6 fixes the missing bracket-column warnings when an input has no
+milestone crossings, such as a ground-only recording. Empty crossing tables now
+declare both bracket-row columns. Repair rules, thresholds, milestone selection
+and study eligibility are unchanged from candidate.5. Existing results are not
+overwritten; private repair reviews remain bound to an exact input and version.
 
 This isolated candidate evaluates the physical airborne study window and retains
 separate full-record and ground diagnostics. It does not replace the distributed

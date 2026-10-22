@@ -1,5 +1,5 @@
 # CHN-only candidate. Load legacy-core.R into the same isolated environment first.
-chn_version <- "2.0.0-candidate.5"
+chn_version <- "2.0.0-candidate.6"
 chn_config <- function(overrides = list()) {
   defaults <- list(max_gap_sec = 5, max_position_gap_sec = 15, max_repair_share = 0.01, max_speed_kt = 750,
     max_ground_speed_kt = 120, max_bridge_turn_deg = 45, repair_review_path = NULL, airport_reference_path = NULL,
@@ -818,7 +818,7 @@ chn_enrich_result <- function(result,tr,path,cfg,airport_meta) {
       REFERENCE_METHOD=if(sp$KIND=="departure_arp")arp$departure$method else if(sp$KIND=="arrival_arp")arp$arrival$method else sp$REFERENCE)
   }
   ca<-dplyr::bind_rows(candidates)
-  if(!nrow(ca))ca<-tibble::tibble(SOURCE_UID=character(),MST=character(),CANDIDATE_ID=character(),SUPPORTED=logical(),SUPPRESS_LEVEL_ASSOCIATED=logical(),SELECTED=logical())
+  if(!nrow(ca))ca<-tibble::tibble(SOURCE_UID=character(),MST=character(),CANDIDATE_ID=character(),SUPPORTED=logical(),SUPPRESS_LEVEL_ASSOCIATED=logical(),SELECTED=logical(),BRACKET_FROM_ROW=integer(),BRACKET_TO_ROW=integer())
   av<-dplyr::bind_rows(availability)
   keep<-!grepl("^[DA][0-9]{3}$|^[DA]_FL[0-9]{3}$",ms$MST)
   enriched<-dplyr::bind_rows(ms[keep,,drop=FALSE],ca[ca$SELECTED,,drop=FALSE])

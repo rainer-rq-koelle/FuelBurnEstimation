@@ -52,12 +52,19 @@ The [candidate.3 window/position validation](notes/results/CHN/CHN-v2-2026-10-18
 adds airborne eligibility, a bounded 15-second position ceiling, and individual
 repair-share reviews while retaining ground timing and existing releases.
 The [candidate.5 validation](notes/results/CHN/CHN-v2-2026-10-18-009/README.md)
-records the current handoff: bundled airport coordinates, great-circle ARP
+records the candidate.5 handoff: bundled airport coordinates, great-circle ARP
 milestones, altitude-profile TOC/TOD selection, and partial fuel/time coverage.
 The source-only package passed 97 synthetic checks and validation against 233
 reference/control/verification inputs. Candidate.5 has been emailed to CAUC;
-follow-up QAR runs are pending. Flight shortlists, correspondence, and individual
-evidence remain local and excluded from Git.
+follow-up verification results are documented below. Flight shortlists,
+correspondence, and individual evidence remain local and excluded from Git.
+The [candidate.6 warning-fix validation](notes/results/CHN/CHN-v2-2026-10-22-003/README.md)
+documents the isolated empty-table schema correction prepared for full-batch
+processing after the returned candidate.5 verification run. Repair thresholds,
+milestone selection and analysis policy are unchanged; private reviews remain
+separate from the source-only package. Candidate.6 has been emailed to CAUC for
+processing all fourteen batches. Results are pending; eligibility and candidate
+selection/review will resume once those outputs arrive.
 
 ## EUR Data Pipeline Status
 

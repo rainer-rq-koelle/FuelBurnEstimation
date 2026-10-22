@@ -222,5 +222,15 @@ n<-length(alt);t<-tibble::tibble(SOURCE_UID="synthetic-step-down",TIME=as.POSIXc
 attr(t,"config")<-e$chn_config();v<-e$fuel_vfe_toc_tod(t,1L,n)
 check("initial cruise before D200 survives a later lower enroute level",v$TOC<331)
 check("last cruise level extends into arrival context without clipping",v$TOD>900)
+# A supported ground-only record has no crossings and must retain an explicit
+# empty bracket schema without warnings or an invented airborne window.
+ground<-base();ground$FLIGHT_PHASE<-rep(2,nrow(ground));ground$ALT_STD<-rep(1800,nrow(ground))
+ground$LATP<-rep(34.4,nrow(ground));ground$LONP<-rep(108.7,nrow(ground));ground$GS<-rep(0,nrow(ground))
+ground$FF1C<-ground$FF2C<-rep(100,nrow(ground));ground_warnings<-character()
+g<-withCallingHandlers(process(ground),warning=function(w){ground_warnings<<-c(ground_warnings,conditionMessage(w));invokeRestart("muffleWarning")})
+check("no-crossing ground-only processing emits no warnings",length(ground_warnings)==0L)
+check("no-crossing candidate table is empty",nrow(g$milestone_candidates)==0L)
+check("empty crossing table declares typed bracket rows",all(c("BRACKET_FROM_ROW","BRACKET_TO_ROW")%in%names(g$milestone_candidates))&&is.integer(g$milestone_candidates$BRACKET_FROM_ROW)&&is.integer(g$milestone_candidates$BRACKET_TO_ROW))
+check("ground-only fuel retained without invented airborne eligibility",g$qc$STUDY_EXCLUDE&&!g$qc$WHOLE_AIRBORNE_FUEL_TIME_ELIGIBLE&&isTRUE(g$flight_summaries$ELIGIBLE_FUEL_TIME[g$flight_summaries$WINDOW=="FULL_RECORD"]))
 cat(length(tests),"synthetic regression checks passed\n")
 unlink(work,recursive=TRUE)
