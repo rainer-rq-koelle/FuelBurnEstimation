@@ -1,0 +1,6 @@
+SPEC,MIN_LEVEL_SEC,MAX_GAP_SEC
+Short 20s / gap 10s,20,10
+Minute 60s / gap 30s,60,30
+Sustained 120s / gap 60s,120,60
+Sustained 120s / gap 30s,120,30
+Sustained 120s / gap 120s,120,120

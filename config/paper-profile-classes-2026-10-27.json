@@ -1,0 +1,25 @@
+{
+  "analysis_id": "PAPER-PROFILE-CLASSES-2026-10-27-001",
+  "base_config": "config/paper-analysis-2026-10-27.json",
+  "output_directory": "derived/paper/profile-classes/PAPER-PROFILE-CLASSES-2026-10-27-001",
+  "snapshot_directory": "notes/results/paper-profile-classes-2026-10-27",
+  "primary_spec": "Sustained 120s / gap 60s",
+  "vertical_rate_limit_fpm": 300,
+  "minimum_native_intervals_per_episode": 2,
+  "maximum_reverse_progress_ft": 300,
+  "light_maximum_interruptions": 2,
+  "light_maximum_level_share": 0.20,
+  "light_maximum_longest_sec": 180,
+  "minimum_reference_n": 30,
+  "feature_specs": [
+    {"SPEC": "Short 20s / gap 10s", "MIN_LEVEL_SEC": 20, "MAX_GAP_SEC": 10},
+    {"SPEC": "Minute 60s / gap 30s", "MIN_LEVEL_SEC": 60, "MAX_GAP_SEC": 30},
+    {"SPEC": "Sustained 120s / gap 60s", "MIN_LEVEL_SEC": 120, "MAX_GAP_SEC": 60},
+    {"SPEC": "Sustained 120s / gap 30s", "MIN_LEVEL_SEC": 120, "MAX_GAP_SEC": 30},
+    {"SPEC": "Sustained 120s / gap 120s", "MIN_LEVEL_SEC": 120, "MAX_GAP_SEC": 120}
+  ],
+  "threshold_status": "Working research definitions fixed before class/fuel summaries; not regulatory CCO/CDO thresholds",
+  "coverage_rule": "Complete native altitude-time bracketing; every original overlapping interval within the specified gap; no event inserted as a new native observation; window at least feature duration",
+  "source_level_rule": "Positive source-segment evidence only; never used to close native-point gaps or establish zero interruption",
+  "scope": "Four pressure windows, both departure/arrival terminal alternatives and source macro climb/descent; no canonical or decoder changes"
+}

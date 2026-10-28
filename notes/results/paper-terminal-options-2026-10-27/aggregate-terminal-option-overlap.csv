@@ -1,0 +1,9 @@
+REGION,SIDE,SCOPE,SOURCE_3000_N,FL075_N,BOTH_N,SOURCE_ONLY_N,FL075_ONLY_N
+CHN,Arrival,All eligible source flights,6376,6391,6374,2,17
+CHN,Arrival,Paired aircraft-GCD cells,1639,1648,1639,0,9
+CHN,Departure,All eligible source flights,6392,6391,6391,1,0
+CHN,Departure,Paired aircraft-GCD cells,1647,1647,1647,0,0
+EUR,Arrival,All eligible source flights,21502,21168,21168,334,0
+EUR,Arrival,Paired aircraft-GCD cells,6224,6086,6086,138,0
+EUR,Departure,All eligible source flights,21502,21501,21501,1,0
+EUR,Departure,Paired aircraft-GCD cells,6224,6224,6224,0,0

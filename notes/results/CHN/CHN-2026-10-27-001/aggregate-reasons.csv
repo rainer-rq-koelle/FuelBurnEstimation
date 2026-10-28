@@ -1,0 +1,13 @@
+REASON,FILES
+airborne_position_repair_budget,2638
+position_repair_budget,2635
+position_unresolved,913
+position_frozen_while_moving,283
+profile_boundaries_unresolved,38
+altitude_unresolved,33
+sampling_gap,27
+fuel_unit_review,4
+airborne_altitude_repair_budget,3
+altitude_repair_budget,1
+airborne_window_unresolved,1
+fuel_unresolved,1

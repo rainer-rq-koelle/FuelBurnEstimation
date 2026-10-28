@@ -1,0 +1,8 @@
+SCENARIO,MAX_N,MAX_SHARE,MAX_LONGEST
+Primary,2,0.2,180
+Light share 10%,2,0.1,180
+Light share 30%,2,0.3,180
+Light max 1 interruption,1,0.2,180
+Light max 3 interruptions,3,0.2,180
+Light longest 120s,2,0.2,120
+Light longest 240s,2,0.2,240

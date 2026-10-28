@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-28",
+  "scope": "Local exports retained for the Technical Note and conference draft at repository wrap-up. Generated files stay outside Git under repository policy.",
+  "sources": {
+    "paper.qmd": "dfc164d7c10d8df18fb456d90655bf2aede9a14a98d7f4c40ecbb13977dd479b",
+    "conference-paper.qmd": "efef3a3b78b9807f5ee8cfa47390f8b200bb49e4f7dd70ef7f9157a08c74b148",
+    "paper-references.bib": "77450914fdfa44f4ff7c2fdcea50c2fbf3fe34afa3c6331111e4713fa32329dc",
+    "paper-numeric.csl": "bd42486f2d16150ec51b67d9a62b5889de4fa3a9b7f77fd63fb010de7079d2c9"
+  },
+  "technical_note_note": "Technical Note exports were preserved during the conference editorial pass; the shared bibliography and citation style subsequently received publication metadata updates.",
+  "exports": [
+    {
+      "path": "_output/paper.pdf",
+      "bytes": 1007355,
+      "sha256": "cf77c1b778f1a58cd458c8d6f7e74eccc8881ca1b7aedd026babfb097a694f8b",
+      "pages": 21
+    },
+    {
+      "path": "_output/paper.docx",
+      "bytes": 3234043,
+      "sha256": "8cda1f91dcee0e22afdfaf608a43f0f20911aa895a70653fc20d5fddfe75dc01"
+    },
+    {
+      "path": "_output/conference-paper.pdf",
+      "bytes": 171707,
+      "sha256": "9ef0e75c35635baefc922e88793926f31c65a0fb0b83bb704775bf4759a5b64a",
+      "pages": 10
+    },
+    {
+      "path": "_output/conference-paper.docx",
+      "bytes": 474160,
+      "sha256": "940ab70f07c63291335c92033bed4b9882e9185098758895aa234d36e7f8bd81"
+    }
+  ]
+}

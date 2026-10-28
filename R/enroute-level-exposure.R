@@ -108,10 +108,10 @@ enroute_choose_boundaries <- function(points, levels, flight) {
     DEP_CONTEXT=departure$method,ARR_CONTEXT=arrival$method)
 }
 
-build_enroute_exposure <- function(profiles, store=Sys.getenv("FUELBURN_DATA_STORE",".fuelburn-data-store")) {
+build_enroute_exposure <- function(profiles, store=Sys.getenv("FUELBURN_DATA_STORE",".fuelburn-data-store"),chn_dir=NULL) {
   suppressPackageStartupMessages({library(dplyr);library(tidyr);library(arrow)})
   flights <- profiles$profiles |> filter(COMMON)
-  chn_dir <- Sys.getenv("FUELBURN_PAPER_CHN_DIR",unset=file.path(store,"derived/chn/verification/CHN-2026-10-18-001/returned-batches"))
+  if(is.null(chn_dir))chn_dir <- Sys.getenv("FUELBURN_PAPER_CHN_DIR",unset=file.path(store,"derived/chn/verification/CHN-2026-10-18-001/returned-batches"))
   level_files <- sort(list.files(chn_dir,"^CHN-level-segments.parquet$",recursive=TRUE,full.names=TRUE))
   milestone_files <- sort(list.files(chn_dir,"^CHN-canonical-milestones.parquet$",recursive=TRUE,full.names=TRUE))
   stopifnot(length(level_files)==14,length(milestone_files)==14)
@@ -126,6 +126,12 @@ build_enroute_exposure <- function(profiles, store=Sys.getenv("FUELBURN_DATA_STO
       is.finite(LEVEL_ALT_FT),LEVEL_ALT_FT>=3000,LEVEL_ALT_FT<=50000)
   chn_points <- bind_rows(lapply(milestone_files,function(p) read_parquet(p,col_select=c("SOURCE_UID","TIME","ALT_FT","LAT","LON")))) |>
     mutate(REGION="CHN",TIME=as.numeric(TIME)) |> semi_join(flights,by=keys)
+  # Position-review holds do not remove altitude support, but may not silently
+  # supply airport-circle context for a new boundary scheme.
+  if('DISTANCE_CONTEXT_OK'%in%names(flights))chn_points <- chn_points |>
+    left_join(select(flights,all_of(keys),DISTANCE_CONTEXT_OK),by=keys) |>
+    mutate(LAT=if_else(DISTANCE_CONTEXT_OK,LAT,NA_real_),LON=if_else(DISTANCE_CONTEXT_OK,LON,NA_real_)) |>
+    select(-DISTANCE_CONTEXT_OK)
   eur_points <- bind_rows(lapply(m3_files,function(p) read_parquet(p,col_select=c("FLIGHT_ID","TIME_OVER","FLIGHT_LEVEL","LATITUDE","LONGITUDE")))) |>
     transmute(REGION="EUR",SOURCE_UID=as.character(FLIGHT_ID),TIME=as.numeric(TIME_OVER),ALT_FT=as.numeric(FLIGHT_LEVEL)*100,LAT=LATITUDE,LON=LONGITUDE) |>
     semi_join(flights,by=keys)
@@ -221,7 +227,9 @@ plot_enroute_exposure <- function(x) {
     dplyr::mutate(CELL=paste(TYPE,paste0(BAND100,"-",BAND100+99),REGION))
   ggplot2::ggplot(data,ggplot2::aes(100*MEAN_SHARE,CELL,fill=BAND)) +
     ggplot2::geom_col(width=.75) + ggplot2::scale_fill_manual(values=c("#C7DCEB","#85B8D7","#468CB9","#245C89","#17324D","#D6D6D6"),drop=FALSE) +
-    ggplot2::scale_x_continuous(limits=c(0,100),expand=ggplot2::expansion(mult=c(0,.01))) +
+    # Keep round-off above 100% from censoring a complete stacked segment.
+    ggplot2::scale_x_continuous(expand=ggplot2::expansion(mult=c(0,.01))) +
+    ggplot2::coord_cartesian(xlim=c(0,100)) +
     ggplot2::labs(x="Mean flight share of TOC-TOD time (%)",y=NULL,fill=NULL) +
     ggplot2::theme_bw(base_size=8) + ggplot2::theme(legend.position="bottom",legend.text=ggplot2::element_text(size=6),panel.grid.minor=ggplot2::element_blank()) +
     ggplot2::guides(fill=ggplot2::guide_legend(nrow=2,byrow=TRUE))

@@ -11,6 +11,7 @@
         <text variable="container-title" font-style="italic"/>
         <text variable="publisher"/>
         <date variable="issued"><date-part name="year"/></date>
+        <text variable="page" prefix="pp. "/>
         <text variable="URL"/>
       </group>
     </layout>

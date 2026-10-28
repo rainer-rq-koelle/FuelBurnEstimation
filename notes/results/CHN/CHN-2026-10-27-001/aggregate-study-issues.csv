@@ -1,0 +1,13 @@
+CODE,STATUS,FILES
+airborne_position_repair_budget,unresolved,2638
+position_repair_budget,unresolved,2635
+position_unresolved,unresolved,913
+position_frozen_while_moving,unresolved,283
+profile_boundaries_unresolved,unresolved,38
+altitude_unresolved,unresolved,33
+sampling_gap,unresolved,27
+fuel_unit_review,unresolved,4
+airborne_altitude_repair_budget,unresolved,3
+altitude_repair_budget,unresolved,1
+airborne_window_unresolved,unresolved,1
+fuel_unresolved,unresolved,1

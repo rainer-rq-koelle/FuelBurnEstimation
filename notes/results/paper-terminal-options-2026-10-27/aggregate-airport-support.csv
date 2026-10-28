@@ -1,0 +1,91 @@
+REGION,WINDOW,SIDE,AIRPORT,INPUT,TIME_N,FUEL_N,PAIRED_FUEL_N
+CHN,Approach-landing source LTO,Arrival,ZBAA,1514,1513,1513,151
+CHN,Approach-landing source LTO,Arrival,ZLXY,1015,1009,1009,659
+CHN,Approach-landing source LTO,Arrival,ZPPP,595,589,586,0
+CHN,Approach-landing source LTO,Arrival,ZSSS,3297,3269,3268,829
+CHN,Climb source LTO-FL075,Departure,ZBAA,1504,1503,1503,155
+CHN,Climb source LTO-FL075,Departure,ZLXY,1032,1031,1031,678
+CHN,Climb source LTO-FL075,Departure,ZPPP,761,0,0,0
+CHN,Climb source LTO-FL075,Departure,ZSSS,3124,3116,3113,814
+CHN,Climb-out source LTO,Departure,ZBAA,1504,1503,1503,155
+CHN,Climb-out source LTO,Departure,ZLXY,1032,1032,1032,678
+CHN,Climb-out source LTO,Departure,ZPPP,761,745,744,0
+CHN,Climb-out source LTO,Departure,ZSSS,3124,3116,3113,814
+CHN,Descent FL075-source LTO,Arrival,ZBAA,1514,1512,1512,151
+CHN,Descent FL075-source LTO,Arrival,ZLXY,1015,1009,1009,659
+CHN,Descent FL075-source LTO,Arrival,ZPPP,595,0,0,0
+CHN,Descent FL075-source LTO,Arrival,ZSSS,3297,3269,3268,829
+CHN,FL075-landing,Arrival,ZBAA,1514,1513,1513,151
+CHN,FL075-landing,Arrival,ZLXY,1015,1014,1014,664
+CHN,FL075-landing,Arrival,ZPPP,595,589,586,0
+CHN,FL075-landing,Arrival,ZSSS,3297,3279,3278,833
+CHN,Takeoff-FL075,Departure,ZBAA,1504,1503,1503,155
+CHN,Takeoff-FL075,Departure,ZLXY,1032,1031,1031,678
+CHN,Takeoff-FL075,Departure,ZPPP,761,745,744,0
+CHN,Takeoff-FL075,Departure,ZSSS,3124,3116,3113,814
+EUR,Approach-landing source LTO,Arrival,EDDF,6052,6052,6051,686
+EUR,Approach-landing source LTO,Arrival,EDDM,3143,3143,3143,37
+EUR,Approach-landing source LTO,Arrival,EGLL,3387,3387,3387,895
+EUR,Approach-landing source LTO,Arrival,EHAM,1404,1404,1404,1229
+EUR,Approach-landing source LTO,Arrival,LEBL,2964,2964,2964,2565
+EUR,Approach-landing source LTO,Arrival,LEMD,815,815,815,304
+EUR,Approach-landing source LTO,Arrival,LFPG,787,787,787,304
+EUR,Approach-landing source LTO,Arrival,LGAV,586,586,586,0
+EUR,Approach-landing source LTO,Arrival,LIRF,878,878,878,204
+EUR,Approach-landing source LTO,Arrival,LSZH,1012,1012,1012,0
+EUR,Approach-landing source LTO,Arrival,LTFM,475,475,475,0
+EUR,Climb source LTO-FL075,Departure,EDDF,6026,6016,6016,683
+EUR,Climb source LTO-FL075,Departure,EDDM,3143,3127,3127,37
+EUR,Climb source LTO-FL075,Departure,EGLL,3384,3383,3382,894
+EUR,Climb source LTO-FL075,Departure,EHAM,1397,1397,1397,1227
+EUR,Climb source LTO-FL075,Departure,LEBL,2972,2971,2971,2568
+EUR,Climb source LTO-FL075,Departure,LEMD,787,787,787,304
+EUR,Climb source LTO-FL075,Departure,LFPG,815,815,815,304
+EUR,Climb source LTO-FL075,Departure,LGAV,620,588,588,0
+EUR,Climb source LTO-FL075,Departure,LIRF,877,876,876,204
+EUR,Climb source LTO-FL075,Departure,LSZH,1007,1006,1006,0
+EUR,Climb source LTO-FL075,Departure,LTFM,475,378,378,0
+EUR,Climb-out source LTO,Departure,EDDF,6026,6026,6026,684
+EUR,Climb-out source LTO,Departure,EDDM,3143,3143,3143,37
+EUR,Climb-out source LTO,Departure,EGLL,3384,3384,3383,895
+EUR,Climb-out source LTO,Departure,EHAM,1397,1397,1397,1227
+EUR,Climb-out source LTO,Departure,LEBL,2972,2972,2972,2569
+EUR,Climb-out source LTO,Departure,LEMD,787,787,787,304
+EUR,Climb-out source LTO,Departure,LFPG,815,815,815,304
+EUR,Climb-out source LTO,Departure,LGAV,620,620,620,0
+EUR,Climb-out source LTO,Departure,LIRF,877,877,877,204
+EUR,Climb-out source LTO,Departure,LSZH,1007,1007,1007,0
+EUR,Climb-out source LTO,Departure,LTFM,475,475,475,0
+EUR,Descent FL075-source LTO,Arrival,EDDF,6052,5983,5983,674
+EUR,Descent FL075-source LTO,Arrival,EDDM,3143,3121,3121,37
+EUR,Descent FL075-source LTO,Arrival,EGLL,3387,3212,3212,798
+EUR,Descent FL075-source LTO,Arrival,EHAM,1404,1378,1378,1212
+EUR,Descent FL075-source LTO,Arrival,LEBL,2964,2953,2953,2558
+EUR,Descent FL075-source LTO,Arrival,LEMD,815,811,811,304
+EUR,Descent FL075-source LTO,Arrival,LFPG,787,772,772,298
+EUR,Descent FL075-source LTO,Arrival,LGAV,586,580,580,0
+EUR,Descent FL075-source LTO,Arrival,LIRF,878,877,877,204
+EUR,Descent FL075-source LTO,Arrival,LSZH,1012,989,989,0
+EUR,Descent FL075-source LTO,Arrival,LTFM,475,381,381,0
+EUR,FL075-landing,Arrival,EDDF,6052,5991,5990,675
+EUR,FL075-landing,Arrival,EDDM,3143,3127,3127,37
+EUR,FL075-landing,Arrival,EGLL,3387,3213,3213,798
+EUR,FL075-landing,Arrival,EHAM,1404,1378,1378,1212
+EUR,FL075-landing,Arrival,LEBL,2964,2954,2954,2558
+EUR,FL075-landing,Arrival,LEMD,815,811,811,304
+EUR,FL075-landing,Arrival,LFPG,787,773,773,298
+EUR,FL075-landing,Arrival,LGAV,586,580,580,0
+EUR,FL075-landing,Arrival,LIRF,878,878,878,204
+EUR,FL075-landing,Arrival,LSZH,1012,989,989,0
+EUR,FL075-landing,Arrival,LTFM,475,475,475,0
+EUR,Takeoff-FL075,Departure,EDDF,6026,6026,6026,684
+EUR,Takeoff-FL075,Departure,EDDM,3143,3142,3142,37
+EUR,Takeoff-FL075,Departure,EGLL,3384,3384,3383,895
+EUR,Takeoff-FL075,Departure,EHAM,1397,1397,1397,1227
+EUR,Takeoff-FL075,Departure,LEBL,2972,2972,2972,2569
+EUR,Takeoff-FL075,Departure,LEMD,787,787,787,304
+EUR,Takeoff-FL075,Departure,LFPG,815,815,815,304
+EUR,Takeoff-FL075,Departure,LGAV,620,620,620,0
+EUR,Takeoff-FL075,Departure,LIRF,877,877,877,204
+EUR,Takeoff-FL075,Departure,LSZH,1007,1007,1007,0
+EUR,Takeoff-FL075,Departure,LTFM,475,475,475,0

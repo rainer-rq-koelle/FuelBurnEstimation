@@ -1,4 +1,69 @@
-# Conference-paper development record
+# Study technical note and conference-paper development record
+
+Technical-note integration, 28 October 2026: `paper.qmd` now includes the reviewed
+descent and enroute findings, proposed reference categories, the complete A321neo
+lookup example, the fleet-generation comparison, and the ten-minute light-class
+constraint. The PDF and single-column Word versions retain all earlier study
+aspects. The update adds three figures and seven tables (29 and 33 in total).
+The categories are working proposals justified by the observed patterns, rather
+than claims of universal breakpoints or final validation. Rendering reads checked
+aggregate snapshots through `R/paper-descent-enroute-lookup.R`; it does not rerun
+the source analyses or change canonical inputs.
+
+Export verification: the 28 October PDF has 21 pages and the single-column Word
+review copy has 49. Both retain 29 figures and 33 data/result tables. Word keeps
+the tables editable and nine equations native. Every final page was visually
+checked; unchanged page-image hashes were used to retain checks across the last
+layout adjustment. The Word formatter separates adjacent data/figure table
+elements and releases every final-row cell to prevent repeated data headers
+above figures. Text is preserved by the formatter.
+
+Latest review, 28 October 2026: the
+[descent/enroute lookup review](results/descent-enroute-lookup-2026-10-28/README.md)
+adds populated lookup grids, five paired altitude-qualified enroute kg/NM cells,
+source-specific descent level-time references, and three figures. Upper descent
+fuel rises with tagged level exposure in both sources, while the closer lower
+descent comparison has overlapping central fuel ranges. The original two-minute
+episode / 20% light-class rule requires a window of at least ten minutes, so it
+cannot provide a useful light category for most finer windows. Common class
+labels remain provisional; traversal time and source-tag exposure are explicit
+qualifiers. Source/region and exact aircraft type remain in the lookup key.
+The review preserves canonical inputs; its findings are now integrated as above.
+
+The preceding [climb-pattern study](results/paper-climb-patterns-2026-10-27/README.md)
+now leads the results with substantive fuel/profile findings. Similar-time,
+closer-GCD fuel distributions overlap for A320neo and A321neo. Within CHN,
+long traversals coincide with native tagged level time and a repeated departure/
+direction pattern at identical sector distances. Stage length remains relevant
+but does not identify aircraft weight. The note keeps these patterns separate
+from common interruption classification and causal ATM-saving claims.
+
+Latest scope, 27 October 2026: `paper.qmd` is now the expanding study technical
+note with no page limit. Keep all study aspects, figures and support/sensitivity
+results; select the conference story later. The
+[common interruption-class extension](paper-profile-classes.md) introduces working
+physical thresholds and counts support from supplied native altitude points.
+Source level tags provide separate positive evidence and do not turn unresolved
+profiles into continuous flights. Canonical inputs and decoder code stay unchanged.
+
+The following adoption paragraph records the earlier, superseded exploratory
+page-budget guidance.
+
+Updated 27 October 2026: the active paper now adopts the explicitly pinned
+candidate.6 CHN cohort views through `config/paper-analysis-2026-10-27.json` and
+`R/paper-window-references.R`. The four directional FL075/100/180 windows and both
+terminal options have populated marginal references. Canonical inputs remain
+unchanged. See `notes/paper-window-references.md` for reproduction and scientific
+scope. The user allows approximately 12–14 exploratory pages with additional
+figures/tables before selecting the eventual eight-page conference version.
+
+The [27 October integration plan](paper-integration-plan-2026-10-27.md) records the
+paper-analysis design and later profile/proxy extensions. The adapter, cohort
+reconciliation and marginal pressure/terminal references are implemented. Common
+interruption classes and numerical ground-distance proxies remain separate design
+tasks; no class thresholds or distance coefficients were invented.
+
+## Preserved 22 October development record
 
 Updated 22 October 2026. The enroute residence and TOC/TOD-definition extension,
 its measurement assumptions, and ranked paper add-ons are documented in

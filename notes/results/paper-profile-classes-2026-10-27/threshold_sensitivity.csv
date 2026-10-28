@@ -1,0 +1,561 @@
+SCENARIO,REGION,WINDOW,PROFILE_CLASS,N,FUEL_N
+Light longest 120s,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light longest 120s,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light longest 120s,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light longest 120s,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light longest 120s,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light longest 120s,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light longest 120s,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light longest 120s,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light longest 120s,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light longest 120s,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light longest 120s,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light longest 120s,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light longest 120s,CHN,Climb source window,Continuous at stated scale,0,0
+Light longest 120s,CHN,Climb source window,Heavily interrupted,0,0
+Light longest 120s,CHN,Climb source window,Lightly interrupted,0,0
+Light longest 120s,CHN,Climb source window,Unknown,6421,6381
+Light longest 120s,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light longest 120s,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light longest 120s,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light longest 120s,CHN,Climb-out source LTO,Unknown,6421,6392
+Light longest 120s,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light longest 120s,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light longest 120s,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light longest 120s,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light longest 120s,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light longest 120s,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light longest 120s,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light longest 120s,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light longest 120s,CHN,Descent source window,Continuous at stated scale,0,0
+Light longest 120s,CHN,Descent source window,Heavily interrupted,0,0
+Light longest 120s,CHN,Descent source window,Lightly interrupted,0,0
+Light longest 120s,CHN,Descent source window,Unknown,6421,6366
+Light longest 120s,CHN,FL075-landing,Continuous at stated scale,0,0
+Light longest 120s,CHN,FL075-landing,Heavily interrupted,0,0
+Light longest 120s,CHN,FL075-landing,Lightly interrupted,0,0
+Light longest 120s,CHN,FL075-landing,Unknown,6421,6391
+Light longest 120s,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light longest 120s,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light longest 120s,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light longest 120s,CHN,Takeoff-FL075,Unknown,6421,6391
+Light longest 120s,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light longest 120s,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light longest 120s,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light longest 120s,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light longest 120s,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light longest 120s,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light longest 120s,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light longest 120s,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light longest 120s,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light longest 120s,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light longest 120s,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light longest 120s,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light longest 120s,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light longest 120s,EUR,Climb source window,Heavily interrupted,9,9
+Light longest 120s,EUR,Climb source window,Lightly interrupted,0,0
+Light longest 120s,EUR,Climb source window,Unknown,19535,19534
+Light longest 120s,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light longest 120s,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light longest 120s,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light longest 120s,EUR,Climb-out source LTO,Unknown,16704,16704
+Light longest 120s,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light longest 120s,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light longest 120s,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light longest 120s,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light longest 120s,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light longest 120s,EUR,Descent FL180-FL100,Heavily interrupted,302,302
+Light longest 120s,EUR,Descent FL180-FL100,Lightly interrupted,0,0
+Light longest 120s,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light longest 120s,EUR,Descent source window,Continuous at stated scale,68,68
+Light longest 120s,EUR,Descent source window,Heavily interrupted,3,3
+Light longest 120s,EUR,Descent source window,Lightly interrupted,0,0
+Light longest 120s,EUR,Descent source window,Unknown,21432,21431
+Light longest 120s,EUR,FL075-landing,Continuous at stated scale,887,887
+Light longest 120s,EUR,FL075-landing,Heavily interrupted,10,10
+Light longest 120s,EUR,FL075-landing,Lightly interrupted,0,0
+Light longest 120s,EUR,FL075-landing,Unknown,20606,20271
+Light longest 120s,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light longest 120s,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Light longest 120s,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Light longest 120s,EUR,Takeoff-FL075,Unknown,4149,4147
+Light longest 240s,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light longest 240s,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light longest 240s,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light longest 240s,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light longest 240s,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light longest 240s,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light longest 240s,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light longest 240s,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light longest 240s,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light longest 240s,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light longest 240s,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light longest 240s,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light longest 240s,CHN,Climb source window,Continuous at stated scale,0,0
+Light longest 240s,CHN,Climb source window,Heavily interrupted,0,0
+Light longest 240s,CHN,Climb source window,Lightly interrupted,0,0
+Light longest 240s,CHN,Climb source window,Unknown,6421,6381
+Light longest 240s,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light longest 240s,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light longest 240s,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light longest 240s,CHN,Climb-out source LTO,Unknown,6421,6392
+Light longest 240s,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light longest 240s,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light longest 240s,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light longest 240s,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light longest 240s,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light longest 240s,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light longest 240s,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light longest 240s,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light longest 240s,CHN,Descent source window,Continuous at stated scale,0,0
+Light longest 240s,CHN,Descent source window,Heavily interrupted,0,0
+Light longest 240s,CHN,Descent source window,Lightly interrupted,0,0
+Light longest 240s,CHN,Descent source window,Unknown,6421,6366
+Light longest 240s,CHN,FL075-landing,Continuous at stated scale,0,0
+Light longest 240s,CHN,FL075-landing,Heavily interrupted,0,0
+Light longest 240s,CHN,FL075-landing,Lightly interrupted,0,0
+Light longest 240s,CHN,FL075-landing,Unknown,6421,6391
+Light longest 240s,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light longest 240s,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light longest 240s,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light longest 240s,CHN,Takeoff-FL075,Unknown,6421,6391
+Light longest 240s,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light longest 240s,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light longest 240s,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light longest 240s,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light longest 240s,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light longest 240s,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light longest 240s,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light longest 240s,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light longest 240s,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light longest 240s,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light longest 240s,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light longest 240s,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light longest 240s,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light longest 240s,EUR,Climb source window,Heavily interrupted,0,0
+Light longest 240s,EUR,Climb source window,Lightly interrupted,9,9
+Light longest 240s,EUR,Climb source window,Unknown,19535,19534
+Light longest 240s,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light longest 240s,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light longest 240s,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light longest 240s,EUR,Climb-out source LTO,Unknown,16704,16704
+Light longest 240s,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light longest 240s,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light longest 240s,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light longest 240s,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light longest 240s,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light longest 240s,EUR,Descent FL180-FL100,Heavily interrupted,300,300
+Light longest 240s,EUR,Descent FL180-FL100,Lightly interrupted,2,2
+Light longest 240s,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light longest 240s,EUR,Descent source window,Continuous at stated scale,68,68
+Light longest 240s,EUR,Descent source window,Heavily interrupted,0,0
+Light longest 240s,EUR,Descent source window,Lightly interrupted,3,3
+Light longest 240s,EUR,Descent source window,Unknown,21432,21431
+Light longest 240s,EUR,FL075-landing,Continuous at stated scale,887,887
+Light longest 240s,EUR,FL075-landing,Heavily interrupted,8,8
+Light longest 240s,EUR,FL075-landing,Lightly interrupted,2,2
+Light longest 240s,EUR,FL075-landing,Unknown,20606,20271
+Light longest 240s,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light longest 240s,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Light longest 240s,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Light longest 240s,EUR,Takeoff-FL075,Unknown,4149,4147
+Light max 1 interruption,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light max 1 interruption,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light max 1 interruption,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light max 1 interruption,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light max 1 interruption,CHN,Climb source window,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Climb source window,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Climb source window,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Climb source window,Unknown,6421,6381
+Light max 1 interruption,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Climb-out source LTO,Unknown,6421,6392
+Light max 1 interruption,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light max 1 interruption,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light max 1 interruption,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light max 1 interruption,CHN,Descent source window,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Descent source window,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Descent source window,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Descent source window,Unknown,6421,6366
+Light max 1 interruption,CHN,FL075-landing,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,FL075-landing,Heavily interrupted,0,0
+Light max 1 interruption,CHN,FL075-landing,Lightly interrupted,0,0
+Light max 1 interruption,CHN,FL075-landing,Unknown,6421,6391
+Light max 1 interruption,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light max 1 interruption,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light max 1 interruption,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light max 1 interruption,CHN,Takeoff-FL075,Unknown,6421,6391
+Light max 1 interruption,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light max 1 interruption,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light max 1 interruption,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light max 1 interruption,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light max 1 interruption,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light max 1 interruption,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light max 1 interruption,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light max 1 interruption,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light max 1 interruption,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light max 1 interruption,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light max 1 interruption,EUR,Climb source window,Heavily interrupted,0,0
+Light max 1 interruption,EUR,Climb source window,Lightly interrupted,9,9
+Light max 1 interruption,EUR,Climb source window,Unknown,19535,19534
+Light max 1 interruption,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light max 1 interruption,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light max 1 interruption,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Climb-out source LTO,Unknown,16704,16704
+Light max 1 interruption,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light max 1 interruption,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light max 1 interruption,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light max 1 interruption,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light max 1 interruption,EUR,Descent FL180-FL100,Heavily interrupted,300,300
+Light max 1 interruption,EUR,Descent FL180-FL100,Lightly interrupted,2,2
+Light max 1 interruption,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light max 1 interruption,EUR,Descent source window,Continuous at stated scale,68,68
+Light max 1 interruption,EUR,Descent source window,Heavily interrupted,0,0
+Light max 1 interruption,EUR,Descent source window,Lightly interrupted,3,3
+Light max 1 interruption,EUR,Descent source window,Unknown,21432,21431
+Light max 1 interruption,EUR,FL075-landing,Continuous at stated scale,887,887
+Light max 1 interruption,EUR,FL075-landing,Heavily interrupted,8,8
+Light max 1 interruption,EUR,FL075-landing,Lightly interrupted,2,2
+Light max 1 interruption,EUR,FL075-landing,Unknown,20606,20271
+Light max 1 interruption,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light max 1 interruption,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Light max 1 interruption,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Light max 1 interruption,EUR,Takeoff-FL075,Unknown,4149,4147
+Light max 3 interruptions,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light max 3 interruptions,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light max 3 interruptions,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light max 3 interruptions,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light max 3 interruptions,CHN,Climb source window,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Climb source window,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Climb source window,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Climb source window,Unknown,6421,6381
+Light max 3 interruptions,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Climb-out source LTO,Unknown,6421,6392
+Light max 3 interruptions,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light max 3 interruptions,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light max 3 interruptions,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light max 3 interruptions,CHN,Descent source window,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Descent source window,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Descent source window,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Descent source window,Unknown,6421,6366
+Light max 3 interruptions,CHN,FL075-landing,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,FL075-landing,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,FL075-landing,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,FL075-landing,Unknown,6421,6391
+Light max 3 interruptions,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light max 3 interruptions,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light max 3 interruptions,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light max 3 interruptions,CHN,Takeoff-FL075,Unknown,6421,6391
+Light max 3 interruptions,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light max 3 interruptions,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light max 3 interruptions,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light max 3 interruptions,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light max 3 interruptions,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light max 3 interruptions,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light max 3 interruptions,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light max 3 interruptions,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light max 3 interruptions,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light max 3 interruptions,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light max 3 interruptions,EUR,Climb source window,Heavily interrupted,0,0
+Light max 3 interruptions,EUR,Climb source window,Lightly interrupted,9,9
+Light max 3 interruptions,EUR,Climb source window,Unknown,19535,19534
+Light max 3 interruptions,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light max 3 interruptions,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light max 3 interruptions,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Climb-out source LTO,Unknown,16704,16704
+Light max 3 interruptions,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light max 3 interruptions,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light max 3 interruptions,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light max 3 interruptions,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light max 3 interruptions,EUR,Descent FL180-FL100,Heavily interrupted,300,300
+Light max 3 interruptions,EUR,Descent FL180-FL100,Lightly interrupted,2,2
+Light max 3 interruptions,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light max 3 interruptions,EUR,Descent source window,Continuous at stated scale,68,68
+Light max 3 interruptions,EUR,Descent source window,Heavily interrupted,0,0
+Light max 3 interruptions,EUR,Descent source window,Lightly interrupted,3,3
+Light max 3 interruptions,EUR,Descent source window,Unknown,21432,21431
+Light max 3 interruptions,EUR,FL075-landing,Continuous at stated scale,887,887
+Light max 3 interruptions,EUR,FL075-landing,Heavily interrupted,8,8
+Light max 3 interruptions,EUR,FL075-landing,Lightly interrupted,2,2
+Light max 3 interruptions,EUR,FL075-landing,Unknown,20606,20271
+Light max 3 interruptions,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light max 3 interruptions,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Light max 3 interruptions,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Light max 3 interruptions,EUR,Takeoff-FL075,Unknown,4149,4147
+Light share 10%,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light share 10%,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light share 10%,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light share 10%,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light share 10%,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light share 10%,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light share 10%,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light share 10%,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light share 10%,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light share 10%,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light share 10%,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light share 10%,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light share 10%,CHN,Climb source window,Continuous at stated scale,0,0
+Light share 10%,CHN,Climb source window,Heavily interrupted,0,0
+Light share 10%,CHN,Climb source window,Lightly interrupted,0,0
+Light share 10%,CHN,Climb source window,Unknown,6421,6381
+Light share 10%,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light share 10%,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light share 10%,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light share 10%,CHN,Climb-out source LTO,Unknown,6421,6392
+Light share 10%,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light share 10%,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light share 10%,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light share 10%,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light share 10%,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light share 10%,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light share 10%,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light share 10%,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light share 10%,CHN,Descent source window,Continuous at stated scale,0,0
+Light share 10%,CHN,Descent source window,Heavily interrupted,0,0
+Light share 10%,CHN,Descent source window,Lightly interrupted,0,0
+Light share 10%,CHN,Descent source window,Unknown,6421,6366
+Light share 10%,CHN,FL075-landing,Continuous at stated scale,0,0
+Light share 10%,CHN,FL075-landing,Heavily interrupted,0,0
+Light share 10%,CHN,FL075-landing,Lightly interrupted,0,0
+Light share 10%,CHN,FL075-landing,Unknown,6421,6391
+Light share 10%,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light share 10%,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light share 10%,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light share 10%,CHN,Takeoff-FL075,Unknown,6421,6391
+Light share 10%,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light share 10%,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light share 10%,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light share 10%,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light share 10%,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light share 10%,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light share 10%,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light share 10%,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light share 10%,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light share 10%,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light share 10%,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light share 10%,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light share 10%,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light share 10%,EUR,Climb source window,Heavily interrupted,6,6
+Light share 10%,EUR,Climb source window,Lightly interrupted,3,3
+Light share 10%,EUR,Climb source window,Unknown,19535,19534
+Light share 10%,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light share 10%,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light share 10%,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light share 10%,EUR,Climb-out source LTO,Unknown,16704,16704
+Light share 10%,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light share 10%,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light share 10%,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light share 10%,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light share 10%,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light share 10%,EUR,Descent FL180-FL100,Heavily interrupted,302,302
+Light share 10%,EUR,Descent FL180-FL100,Lightly interrupted,0,0
+Light share 10%,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light share 10%,EUR,Descent source window,Continuous at stated scale,68,68
+Light share 10%,EUR,Descent source window,Heavily interrupted,2,2
+Light share 10%,EUR,Descent source window,Lightly interrupted,1,1
+Light share 10%,EUR,Descent source window,Unknown,21432,21431
+Light share 10%,EUR,FL075-landing,Continuous at stated scale,887,887
+Light share 10%,EUR,FL075-landing,Heavily interrupted,10,10
+Light share 10%,EUR,FL075-landing,Lightly interrupted,0,0
+Light share 10%,EUR,FL075-landing,Unknown,20606,20271
+Light share 10%,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light share 10%,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Light share 10%,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Light share 10%,EUR,Takeoff-FL075,Unknown,4149,4147
+Light share 30%,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Light share 30%,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Light share 30%,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Light share 30%,CHN,Approach-landing source LTO,Unknown,6421,6376
+Light share 30%,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Light share 30%,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Light share 30%,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Light share 30%,CHN,Climb FL075-FL100,Unknown,6380,6337
+Light share 30%,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Light share 30%,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Light share 30%,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Light share 30%,CHN,Climb FL100-FL180,Unknown,6421,6378
+Light share 30%,CHN,Climb source window,Continuous at stated scale,0,0
+Light share 30%,CHN,Climb source window,Heavily interrupted,0,0
+Light share 30%,CHN,Climb source window,Lightly interrupted,0,0
+Light share 30%,CHN,Climb source window,Unknown,6421,6381
+Light share 30%,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Light share 30%,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Light share 30%,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Light share 30%,CHN,Climb-out source LTO,Unknown,6421,6392
+Light share 30%,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Light share 30%,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Light share 30%,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Light share 30%,CHN,Descent FL100-FL075,Unknown,6317,6265
+Light share 30%,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Light share 30%,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Light share 30%,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Light share 30%,CHN,Descent FL180-FL100,Unknown,6421,6369
+Light share 30%,CHN,Descent source window,Continuous at stated scale,0,0
+Light share 30%,CHN,Descent source window,Heavily interrupted,0,0
+Light share 30%,CHN,Descent source window,Lightly interrupted,0,0
+Light share 30%,CHN,Descent source window,Unknown,6421,6366
+Light share 30%,CHN,FL075-landing,Continuous at stated scale,0,0
+Light share 30%,CHN,FL075-landing,Heavily interrupted,0,0
+Light share 30%,CHN,FL075-landing,Lightly interrupted,0,0
+Light share 30%,CHN,FL075-landing,Unknown,6421,6391
+Light share 30%,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Light share 30%,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Light share 30%,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Light share 30%,CHN,Takeoff-FL075,Unknown,6421,6391
+Light share 30%,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Light share 30%,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Light share 30%,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Light share 30%,EUR,Approach-landing source LTO,Unknown,18256,18255
+Light share 30%,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Light share 30%,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Light share 30%,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Light share 30%,EUR,Climb FL075-FL100,Unknown,21367,21363
+Light share 30%,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Light share 30%,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Light share 30%,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Light share 30%,EUR,Climb FL100-FL180,Unknown,3534,3508
+Light share 30%,EUR,Climb source window,Continuous at stated scale,1959,1959
+Light share 30%,EUR,Climb source window,Heavily interrupted,0,0
+Light share 30%,EUR,Climb source window,Lightly interrupted,9,9
+Light share 30%,EUR,Climb source window,Unknown,19535,19534
+Light share 30%,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Light share 30%,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Light share 30%,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Light share 30%,EUR,Climb-out source LTO,Unknown,16704,16704
+Light share 30%,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Light share 30%,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Light share 30%,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Light share 30%,EUR,Descent FL100-FL075,Unknown,16323,15830
+Light share 30%,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Light share 30%,EUR,Descent FL180-FL100,Heavily interrupted,223,223
+Light share 30%,EUR,Descent FL180-FL100,Lightly interrupted,79,79
+Light share 30%,EUR,Descent FL180-FL100,Unknown,11653,11456
+Light share 30%,EUR,Descent source window,Continuous at stated scale,68,68
+Light share 30%,EUR,Descent source window,Heavily interrupted,0,0
+Light share 30%,EUR,Descent source window,Lightly interrupted,3,3
+Light share 30%,EUR,Descent source window,Unknown,21432,21431
+Light share 30%,EUR,FL075-landing,Continuous at stated scale,887,887
+Light share 30%,EUR,FL075-landing,Heavily interrupted,3,3
+Light share 30%,EUR,FL075-landing,Lightly interrupted,7,7
+Light share 30%,EUR,FL075-landing,Unknown,20606,20271
+Light share 30%,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Light share 30%,EUR,Takeoff-FL075,Heavily interrupted,17,17
+Light share 30%,EUR,Takeoff-FL075,Lightly interrupted,1,1
+Light share 30%,EUR,Takeoff-FL075,Unknown,4149,4147
+Primary,CHN,Approach-landing source LTO,Continuous at stated scale,0,0
+Primary,CHN,Approach-landing source LTO,Heavily interrupted,0,0
+Primary,CHN,Approach-landing source LTO,Lightly interrupted,0,0
+Primary,CHN,Approach-landing source LTO,Unknown,6421,6376
+Primary,CHN,Climb FL075-FL100,Continuous at stated scale,41,41
+Primary,CHN,Climb FL075-FL100,Heavily interrupted,0,0
+Primary,CHN,Climb FL075-FL100,Lightly interrupted,0,0
+Primary,CHN,Climb FL075-FL100,Unknown,6380,6337
+Primary,CHN,Climb FL100-FL180,Continuous at stated scale,0,0
+Primary,CHN,Climb FL100-FL180,Heavily interrupted,0,0
+Primary,CHN,Climb FL100-FL180,Lightly interrupted,0,0
+Primary,CHN,Climb FL100-FL180,Unknown,6421,6378
+Primary,CHN,Climb source window,Continuous at stated scale,0,0
+Primary,CHN,Climb source window,Heavily interrupted,0,0
+Primary,CHN,Climb source window,Lightly interrupted,0,0
+Primary,CHN,Climb source window,Unknown,6421,6381
+Primary,CHN,Climb-out source LTO,Continuous at stated scale,0,0
+Primary,CHN,Climb-out source LTO,Heavily interrupted,0,0
+Primary,CHN,Climb-out source LTO,Lightly interrupted,0,0
+Primary,CHN,Climb-out source LTO,Unknown,6421,6392
+Primary,CHN,Descent FL100-FL075,Continuous at stated scale,104,103
+Primary,CHN,Descent FL100-FL075,Heavily interrupted,0,0
+Primary,CHN,Descent FL100-FL075,Lightly interrupted,0,0
+Primary,CHN,Descent FL100-FL075,Unknown,6317,6265
+Primary,CHN,Descent FL180-FL100,Continuous at stated scale,0,0
+Primary,CHN,Descent FL180-FL100,Heavily interrupted,0,0
+Primary,CHN,Descent FL180-FL100,Lightly interrupted,0,0
+Primary,CHN,Descent FL180-FL100,Unknown,6421,6369
+Primary,CHN,Descent source window,Continuous at stated scale,0,0
+Primary,CHN,Descent source window,Heavily interrupted,0,0
+Primary,CHN,Descent source window,Lightly interrupted,0,0
+Primary,CHN,Descent source window,Unknown,6421,6366
+Primary,CHN,FL075-landing,Continuous at stated scale,0,0
+Primary,CHN,FL075-landing,Heavily interrupted,0,0
+Primary,CHN,FL075-landing,Lightly interrupted,0,0
+Primary,CHN,FL075-landing,Unknown,6421,6391
+Primary,CHN,Takeoff-FL075,Continuous at stated scale,0,0
+Primary,CHN,Takeoff-FL075,Heavily interrupted,0,0
+Primary,CHN,Takeoff-FL075,Lightly interrupted,0,0
+Primary,CHN,Takeoff-FL075,Unknown,6421,6391
+Primary,EUR,Approach-landing source LTO,Continuous at stated scale,3246,3246
+Primary,EUR,Approach-landing source LTO,Heavily interrupted,1,1
+Primary,EUR,Approach-landing source LTO,Lightly interrupted,0,0
+Primary,EUR,Approach-landing source LTO,Unknown,18256,18255
+Primary,EUR,Climb FL075-FL100,Continuous at stated scale,134,134
+Primary,EUR,Climb FL075-FL100,Heavily interrupted,2,2
+Primary,EUR,Climb FL075-FL100,Lightly interrupted,0,0
+Primary,EUR,Climb FL075-FL100,Unknown,21367,21363
+Primary,EUR,Climb FL100-FL180,Continuous at stated scale,17966,17965
+Primary,EUR,Climb FL100-FL180,Heavily interrupted,3,3
+Primary,EUR,Climb FL100-FL180,Lightly interrupted,0,0
+Primary,EUR,Climb FL100-FL180,Unknown,3534,3508
+Primary,EUR,Climb source window,Continuous at stated scale,1959,1959
+Primary,EUR,Climb source window,Heavily interrupted,0,0
+Primary,EUR,Climb source window,Lightly interrupted,9,9
+Primary,EUR,Climb source window,Unknown,19535,19534
+Primary,EUR,Climb-out source LTO,Continuous at stated scale,4798,4797
+Primary,EUR,Climb-out source LTO,Heavily interrupted,1,1
+Primary,EUR,Climb-out source LTO,Lightly interrupted,0,0
+Primary,EUR,Climb-out source LTO,Unknown,16704,16704
+Primary,EUR,Descent FL100-FL075,Continuous at stated scale,5094,5093
+Primary,EUR,Descent FL100-FL075,Heavily interrupted,86,86
+Primary,EUR,Descent FL100-FL075,Lightly interrupted,0,0
+Primary,EUR,Descent FL100-FL075,Unknown,16323,15830
+Primary,EUR,Descent FL180-FL100,Continuous at stated scale,9548,9548
+Primary,EUR,Descent FL180-FL100,Heavily interrupted,300,300
+Primary,EUR,Descent FL180-FL100,Lightly interrupted,2,2
+Primary,EUR,Descent FL180-FL100,Unknown,11653,11456
+Primary,EUR,Descent source window,Continuous at stated scale,68,68
+Primary,EUR,Descent source window,Heavily interrupted,0,0
+Primary,EUR,Descent source window,Lightly interrupted,3,3
+Primary,EUR,Descent source window,Unknown,21432,21431
+Primary,EUR,FL075-landing,Continuous at stated scale,887,887
+Primary,EUR,FL075-landing,Heavily interrupted,8,8
+Primary,EUR,FL075-landing,Lightly interrupted,2,2
+Primary,EUR,FL075-landing,Unknown,20606,20271
+Primary,EUR,Takeoff-FL075,Continuous at stated scale,17336,17336
+Primary,EUR,Takeoff-FL075,Heavily interrupted,18,18
+Primary,EUR,Takeoff-FL075,Lightly interrupted,0,0
+Primary,EUR,Takeoff-FL075,Unknown,4149,4147

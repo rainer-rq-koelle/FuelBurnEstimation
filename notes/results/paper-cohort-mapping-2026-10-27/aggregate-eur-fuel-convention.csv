@@ -1,0 +1,13 @@
+WINDOW,N,DIFFERENT_AIRBORNE_FUEL_VARIANTS
+Arrival ARP100-040,21502,0
+Arrival ARP200-100,16501,0
+Climb FL075-FL100,21499,0
+Climb FL100-FL180,21476,0
+Climb source window,21502,0
+Departure ARP040-100,21502,0
+Departure ARP100-200,16502,0
+Descent FL100-FL075,21009,0
+Descent FL180-FL100,21306,0
+Descent source window,21502,0
+Enroute source window,21427,0
+Whole airborne,21502,0

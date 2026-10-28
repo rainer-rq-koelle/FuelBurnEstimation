@@ -35,3 +35,14 @@
 
 # Preserve the bundled lookup bytes for reproducible helper ZIP checksums.
 helpers/chn-qar-v2/data/airports.csv -text whitespace=cr-at-eol
+
+# Preserve archived evidence bytes and their recorded checksums.
+notes/results/CHN/CHN-2026-10-27-001/aggregate-batches.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-domain-support.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-hold-categories.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-point-support.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-reasons.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-repair-share-bands.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-study-issues.csv -text whitespace=cr-at-eol
+notes/results/CHN/CHN-2026-10-27-001/aggregate-types.csv -text whitespace=cr-at-eol
+notes/results/paper-cohort-mapping-2026-10-27/input-manifest.csv -text whitespace=cr-at-eol

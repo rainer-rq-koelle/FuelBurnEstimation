@@ -1,6 +1,11 @@
 % IEEE-like working layout; the conference's official template takes precedence.
 \usepackage{titlesec}
 \usepackage{caption}
+\usepackage{placeins}
+\usepackage{etoolbox}
+% Keep study sections and result subsections with their own figures and tables.
+\pretocmd{\section}{\FloatBarrier}{}{}
+\pretocmd{\subsection}{\FloatBarrier}{}{}
 \setlength{\columnsep}{0.25in}
 \setlength{\parindent}{1em}
 \setlength{\parskip}{0pt}

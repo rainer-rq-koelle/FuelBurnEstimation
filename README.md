@@ -4,17 +4,46 @@ This repository is the 2026 workshop for the development, validation, and
 documentation of a flight-phase fuel-burn estimation workflow for multi-regional
 benchmarking.
 
-The immediate goal is a simple Quarto paper that can render to MS Word and PDF,
-plus a technical note that documents the data preparation pipeline step by step.
+The study has two document sources: an expanding technical note and a separate
+conference-paper draft. Both read the same checked numerical results and share
+the bibliography and working IEEE-like PDF style. Separate notes document data
+preparation and methodological decisions.
 
 ## Current Setup
 
-- `paper.qmd` is the first conference-paper skeleton, with reproducible regional
-  profile tables/figures, an IEEE-like two-column PDF in 10 pt Times New Roman,
-  and brief aides-memoires for introduction/background/conclusion.
+- `conference-paper.qmd` is the first developed conference draft, with five
+  classical sections and selected profile/fuel examples leading to the lookup
+  proposal. It produces `_output/conference-paper.pdf` and a single-column Word
+  review copy. The current draft has ten PDF pages including references; the
+  eventual conference target remains eight pages. Read
+  `notes/conference-paper-development.md` for structure and reproduction.
+- `paper.qmd` is the study technical note (the filename is retained), with the populated
+  directional FL075/100/180 references, both terminal alternatives, profile context
+  and ground fuel/time. The IEEE-like PDF uses two columns and 10 pt Times New Roman;
+  Word is a single-column review copy. Additional figures/tables are retained
+  without a page limit. It retains the fuller evidence behind the separate paper.
+- `scripts/19-explore-climb-fuel-patterns.R` develops the substantive FL100--180
+  results: similar-time/closer-distance fuel comparisons, within-source level
+  exposure, same-distance route direction, stage length and equal-size sampling.
+  See `notes/results/paper-climb-patterns-2026-10-27/README.md`. These result-led
+  sections precede the detailed support/grid material in the technical note.
+- `config/paper-profile-classes-2026-10-27.json` defines the working common
+  continuous/light/heavy interruption rules, feature scales and native-point
+  coverage requirements. `Rscript scripts/18-characterise-paper-interruptions.R`
+  exports analysis-specific support, source-segment evidence and threshold
+  sensitivities without changing canonical inputs. Read
+  `notes/paper-profile-classes.md` for interpretation, including unknown profiles
+  and the difference between sparse returned knots and local fuel support.
+- `config/paper-analysis-2026-10-27.json` explicitly adopts pinned candidate.6 CHN
+  and unchanged EUR cohort views. `R/paper-window-references.R` verifies the input
+  hashes and calculates metric/window-specific references without changing canonical
+  inputs. Build with `Rscript scripts/16-build-paper-window-references.R`;
+  export aggregate evidence with `Rscript scripts/17-export-paper-reference-snapshot.R`.
+  Detailed views remain under `FUELBURN_DATA_STORE/derived/paper/reference-tables/`.
+  See `notes/paper-window-references.md` for reproduction and scope.
 - `paper-references.bib` seeds the bibliography. `paper-style.tex` and
   `paper-numeric.csl` provide the working layout and numeric citations.
-- `R/paper-profile-characterisation.R` reads the pinned EUR parallel candidate
+- The preserved 22 October baseline in `R/paper-profile-characterisation.R` reads the pinned EUR parallel candidate
   and all fourteen returned CHN batches without changing them.
   `Rscript scripts/13-characterise-paper-profiles.R` saves the screen ledger,
   aggregate tables, input hashes and R session in the ignored
@@ -25,7 +54,7 @@ plus a technical note that documents the data preparation pipeline step by step.
   `Rscript scripts/14-characterise-enroute-levels.R` exports its restricted
   analysis and aggregate evidence to `outputs/paper-enroute-levels/`.
   See `notes/enroute-level-analysis.md` for assumptions and paper add-ons.
-- `R/paper-lookup-table.R` builds pooled and altitude-conditioned phase fuel
+- The preserved baseline `R/paper-lookup-table.R` builds pooled and altitude-conditioned phase fuel
   references with explicit engine/class slots and metric-specific support.
   `Rscript scripts/15-populate-paper-lookup.R` exports the long/wide lookup grid
   to `outputs/paper-lookup/`. See `notes/paper-lookup-table.md` for interpretation.
@@ -71,9 +100,14 @@ The [candidate.6 warning-fix validation](notes/results/CHN/CHN-v2-2026-10-22-003
 documents the isolated empty-table schema correction prepared for full-batch
 processing after the returned candidate.5 verification run. Repair thresholds,
 milestone selection and analysis policy are unchanged; private reviews remain
-separate from the source-only package. Candidate.6 has been emailed to CAUC for
-processing all fourteen batches. Results are pending; eligibility and candidate
-selection/review will resume once those outputs arrive.
+separate from the source-only package. Candidate.6 was emailed to CAUC for
+processing all fourteen batches. The [full-batch return audit](notes/results/CHN/CHN-2026-10-27-001/README.md)
+inventories the 6,421-flight return and forty verification sources, and separates
+position-share review holds from unsupported source streams and metric-specific
+eligibility. The active study explicitly adopts analysis-specific cohorts from
+this return through `config/paper-analysis-2026-10-27.json`. Existing canonical
+inputs remain unchanged; decoder development and coverage improvements are
+outside the current paper work.
 
 ## EUR Data Pipeline Status
 
@@ -310,9 +344,15 @@ Rscript scripts/r2-download-data-store.R
 Rscript scripts/00-check-data-store.R
 
 # Render documents
+Rscript scripts/16-build-paper-window-references.R
 quarto render paper.qmd --to html
 quarto render paper.qmd --to pdf
 quarto render paper.qmd --to docx
+python3 scripts/format-paper-docx.py _output/paper.docx
+Rscript scripts/22-export-conference-paper-snapshot.R
+quarto render conference-paper.qmd --to pdf
+quarto render conference-paper.qmd --to docx
+python3 scripts/format-conference-docx.py _output/conference-paper.docx
 quarto render technical-note-data-preparation.qmd --to html
 
 # EUR pipeline (if reprocessing)
@@ -324,11 +364,13 @@ Rscript scripts/07-enrich-eur-level-segments.R
 Rscript scripts/08-create-harmonized-analytical-datasets.R
 ```
 
-The paper's Word review copy is `_output/paper.docx`, rendered from the same
-`paper.qmd`, bibliography and analysis as the PDF. It uses a single-column layout
-for comments; the PDF retains the two-column conference layout. Generated
-documents remain outside version control. Integrate agreed review changes into
-`paper.qmd` before rendering the next review copy.
+The Technical Note exports are `_output/paper.pdf` and `_output/paper.docx`;
+the conference draft exports are `_output/conference-paper.pdf` and
+`_output/conference-paper.docx`. Word uses a single-column layout for comments;
+the PDFs use the two-column working style. Generated documents remain outside
+version control. The exact four local exports at the 28 October wrap-up are
+identified by checksums in `notes/document-exports-2026-10-28.json`. Integrate
+agreed review changes into the relevant Quarto source before rendering again.
 
 ## Data Quality Assurance
 

@@ -1,0 +1,17 @@
+WINDOW,N,VARIANT_DIFF_N,MEDIAN_DELIVERED_OVER_ORIGINAL
+Approach-landing source LTO,21502,0,1
+Climb FL075-FL100,21499,0,1
+Climb FL100-FL180,21476,0,1
+Climb FL180-source TOC,21374,0,1
+Climb source LTO-FL075,21343,0,1
+Climb-out source LTO,21502,0,1
+Descent FL075-source LTO,21057,0,1
+Descent FL100-FL075,21009,0,1
+Descent FL180-FL100,21306,0,1
+Descent source TOD-FL180,21414,0,1
+FL075-landing,21168,0,1
+Landing-roll/runway-exit source segment,21200,0,1
+Takeoff roll source segment,21502,21502,0.8
+Takeoff-FL075,21501,0,1
+Taxi-in recorded segment,21394,0,1
+Taxi-out recorded segment,21502,0,1

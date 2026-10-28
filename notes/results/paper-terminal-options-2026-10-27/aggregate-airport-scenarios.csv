@@ -1,0 +1,25 @@
+SCENARIO,REGION,WINDOW,INPUT,FUEL_N,PAIRED_FUEL_N
+All supplied airports,CHN,Approach-landing source LTO,6421,6376,1639
+All supplied airports,CHN,Climb source LTO-FL075,6421,5647,1647
+All supplied airports,CHN,Climb-out source LTO,6421,6392,1647
+All supplied airports,CHN,Descent FL075-source LTO,6421,5789,1639
+All supplied airports,CHN,FL075-landing,6421,6391,1648
+All supplied airports,CHN,Takeoff-FL075,6421,6391,1647
+All supplied airports,EUR,Approach-landing source LTO,21503,21502,6224
+All supplied airports,EUR,Climb source LTO-FL075,21503,21343,6221
+All supplied airports,EUR,Climb-out source LTO,21503,21502,6224
+All supplied airports,EUR,Descent FL075-source LTO,21503,21057,6085
+All supplied airports,EUR,FL075-landing,21503,21168,6086
+All supplied airports,EUR,Takeoff-FL075,21503,21501,6224
+Omit CHN ZPPP at relevant window endpoint,CHN,Approach-landing source LTO,5826,5790,1639
+Omit CHN ZPPP at relevant window endpoint,CHN,Climb source LTO-FL075,5660,5647,1647
+Omit CHN ZPPP at relevant window endpoint,CHN,Climb-out source LTO,5660,5648,1647
+Omit CHN ZPPP at relevant window endpoint,CHN,Descent FL075-source LTO,5826,5789,1639
+Omit CHN ZPPP at relevant window endpoint,CHN,FL075-landing,5826,5805,1648
+Omit CHN ZPPP at relevant window endpoint,CHN,Takeoff-FL075,5660,5647,1647
+Omit CHN ZPPP at relevant window endpoint,EUR,Approach-landing source LTO,21503,21502,6224
+Omit CHN ZPPP at relevant window endpoint,EUR,Climb source LTO-FL075,21503,21343,6221
+Omit CHN ZPPP at relevant window endpoint,EUR,Climb-out source LTO,21503,21502,6224
+Omit CHN ZPPP at relevant window endpoint,EUR,Descent FL075-source LTO,21503,21057,6085
+Omit CHN ZPPP at relevant window endpoint,EUR,FL075-landing,21503,21168,6086
+Omit CHN ZPPP at relevant window endpoint,EUR,Takeoff-FL075,21503,21501,6224

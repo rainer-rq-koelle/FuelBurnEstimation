@@ -1,0 +1,9 @@
+REGION,WINDOW,TIME_N,DURATION_P50,AT_LEAST_TEN_MIN_N,AT_LEAST_TEN_MIN_SHARE,MINIMUM_LIGHT_WINDOW_MIN,RULE
+CHN,Climb FL075-FL100,6382,1.023333332935969,0,0,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+CHN,Climb FL100-FL180,6383,4.351774100462595,17,0.002663324455585148,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+CHN,Descent FL100-FL075,6372,2.3634629150231676,17,0.0026679221594475833,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+CHN,Descent FL180-FL100,6373,9.404285717010499,2775,0.4354307233641927,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+EUR,Climb FL075-FL100,21500,0.8348349491755167,0,0,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+EUR,Climb FL100-FL180,21477,3.6513888835906982,22,0.0010243516319783956,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+EUR,Descent FL100-FL075,21010,2.246666665871938,157,0.007472632079961923,10,A 120s episode can meet a <=20% share only when window duration is >=10 min
+EUR,Descent FL180-FL100,21307,5.797499998410543,1506,0.0706809968554935,10,A 120s episode can meet a <=20% share only when window duration is >=10 min

@@ -1,0 +1,75 @@
+REGION,WINDOW,PROFILE_STATE,N,FUEL_N
+CHN,Approach-landing source LTO,Coverage not assessed for this descriptor,6421,6376
+CHN,Arrival ARP100-040,Profile support available; interruption class unassigned,2891,2891
+CHN,Arrival ARP100-040,Unknown or unsupported profile coverage,3530,22
+CHN,Arrival ARP200-100,Profile support available; interruption class unassigned,2887,2887
+CHN,Arrival ARP200-100,Unknown or unsupported profile coverage,3534,22
+CHN,Climb FL075-FL100,Profile support available; interruption class unassigned,6381,6377
+CHN,Climb FL075-FL100,Unknown or unsupported profile coverage,40,1
+CHN,Climb FL100-FL180,Profile support available; interruption class unassigned,6378,6373
+CHN,Climb FL100-FL180,Unknown or unsupported profile coverage,43,5
+CHN,Climb FL180-source TOC,Coverage not assessed for this descriptor,6421,6384
+CHN,Climb source LTO-FL075,Coverage not assessed for this descriptor,6421,5647
+CHN,Climb source window,Profile support available; interruption class unassigned,6376,6371
+CHN,Climb source window,Unknown or unsupported profile coverage,45,10
+CHN,Climb-out source LTO,Coverage not assessed for this descriptor,6421,6392
+CHN,Departure ARP040-100,Profile support available; interruption class unassigned,2889,2889
+CHN,Departure ARP040-100,Unknown or unsupported profile coverage,3532,22
+CHN,Departure ARP100-200,Profile support available; interruption class unassigned,2888,2888
+CHN,Departure ARP100-200,Unknown or unsupported profile coverage,3533,22
+CHN,Descent FL075-source LTO,Coverage not assessed for this descriptor,6421,5789
+CHN,Descent FL100-FL075,Profile support available; interruption class unassigned,6372,6368
+CHN,Descent FL100-FL075,Unknown or unsupported profile coverage,49,0
+CHN,Descent FL180-FL100,Profile support available; interruption class unassigned,6373,6369
+CHN,Descent FL180-FL100,Unknown or unsupported profile coverage,48,0
+CHN,Descent source TOD-FL180,Coverage not assessed for this descriptor,6421,6367
+CHN,Descent source window,Profile support available; interruption class unassigned,6370,6366
+CHN,Descent source window,Unknown or unsupported profile coverage,51,0
+CHN,Enroute source window,Profile support available; interruption class unassigned,6364,6360
+CHN,Enroute source window,Unknown or unsupported profile coverage,57,0
+CHN,FL075-landing,Profile support available; interruption class unassigned,6395,6391
+CHN,FL075-landing,Unknown or unsupported profile coverage,26,0
+CHN,Landing-roll/runway-exit source segment,Coverage not assessed for this descriptor,6420,6229
+CHN,Takeoff roll source segment,Coverage not assessed for this descriptor,6420,6229
+CHN,Takeoff-FL075,Profile support available; interruption class unassigned,6391,6387
+CHN,Takeoff-FL075,Unknown or unsupported profile coverage,30,4
+CHN,Taxi-in recorded segment,Coverage not assessed for this descriptor,6420,6229
+CHN,Taxi-out recorded segment,Coverage not assessed for this descriptor,6420,6229
+CHN,Whole airborne,Profile support available; interruption class unassigned,6362,6357
+CHN,Whole airborne,Unknown or unsupported profile coverage,59,31
+EUR,Approach-landing source LTO,Coverage not assessed for this descriptor,21503,21502
+EUR,Arrival ARP100-040,Profile support available; interruption class unassigned,21503,21502
+EUR,Arrival ARP200-100,Profile support available; interruption class unassigned,16502,16501
+EUR,Arrival ARP200-100,Unknown or unsupported profile coverage,5001,0
+EUR,Climb FL075-FL100,Profile support available; interruption class unassigned,21500,21499
+EUR,Climb FL075-FL100,Unknown or unsupported profile coverage,3,0
+EUR,Climb FL100-FL180,Profile support available; interruption class unassigned,21477,21476
+EUR,Climb FL100-FL180,Unknown or unsupported profile coverage,26,0
+EUR,Climb FL180-source TOC,Coverage not assessed for this descriptor,21503,21374
+EUR,Climb source LTO-FL075,Coverage not assessed for this descriptor,21503,21343
+EUR,Climb source window,Profile support available; interruption class unassigned,21500,21500
+EUR,Climb source window,Unknown or unsupported profile coverage,3,2
+EUR,Climb-out source LTO,Coverage not assessed for this descriptor,21503,21502
+EUR,Departure ARP040-100,Profile support available; interruption class unassigned,21503,21502
+EUR,Departure ARP100-200,Profile support available; interruption class unassigned,16503,16502
+EUR,Departure ARP100-200,Unknown or unsupported profile coverage,5000,0
+EUR,Descent FL075-source LTO,Coverage not assessed for this descriptor,21503,21057
+EUR,Descent FL100-FL075,Profile support available; interruption class unassigned,21010,21009
+EUR,Descent FL100-FL075,Unknown or unsupported profile coverage,493,0
+EUR,Descent FL180-FL100,Profile support available; interruption class unassigned,21307,21306
+EUR,Descent FL180-FL100,Unknown or unsupported profile coverage,196,0
+EUR,Descent source TOD-FL180,Coverage not assessed for this descriptor,21503,21414
+EUR,Descent source window,Profile support available; interruption class unassigned,21203,21203
+EUR,Descent source window,Unknown or unsupported profile coverage,300,299
+EUR,Enroute source window,Profile support available; interruption class unassigned,21427,21427
+EUR,Enroute source window,Unknown or unsupported profile coverage,76,0
+EUR,FL075-landing,Profile support available; interruption class unassigned,20873,20872
+EUR,FL075-landing,Unknown or unsupported profile coverage,630,296
+EUR,Landing-roll/runway-exit source segment,Coverage not assessed for this descriptor,21503,21200
+EUR,Takeoff roll source segment,Coverage not assessed for this descriptor,21503,21502
+EUR,Takeoff-FL075,Profile support available; interruption class unassigned,21500,21499
+EUR,Takeoff-FL075,Unknown or unsupported profile coverage,3,2
+EUR,Taxi-in recorded segment,Coverage not assessed for this descriptor,21503,21394
+EUR,Taxi-out recorded segment,Coverage not assessed for this descriptor,21503,21502
+EUR,Whole airborne,Profile support available; interruption class unassigned,21201,21201
+EUR,Whole airborne,Unknown or unsupported profile coverage,302,301

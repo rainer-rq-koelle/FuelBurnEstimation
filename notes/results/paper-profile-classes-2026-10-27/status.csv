@@ -1,0 +1,394 @@
+SPEC,REGION,WINDOW,PROFILE_STATUS,N
+Minute 60s / gap 30s,CHN,Approach-landing source LTO,Native gap exceeds limit,6380
+Minute 60s / gap 30s,CHN,Approach-landing source LTO,Unsupported window time,41
+Minute 60s / gap 30s,CHN,Climb FL075-FL100,Native gap exceeds limit,6379
+Minute 60s / gap 30s,CHN,Climb FL075-FL100,Source altitude support unavailable,1
+Minute 60s / gap 30s,CHN,Climb FL075-FL100,Unsupported window time,39
+Minute 60s / gap 30s,CHN,Climb FL075-FL100,Window shorter than feature scale,2
+Minute 60s / gap 30s,CHN,Climb FL100-FL180,Native gap exceeds limit,6378
+Minute 60s / gap 30s,CHN,Climb FL100-FL180,Source altitude support unavailable,5
+Minute 60s / gap 30s,CHN,Climb FL100-FL180,Unsupported window time,38
+Minute 60s / gap 30s,CHN,Climb source window,Native gap exceeds limit,6376
+Minute 60s / gap 30s,CHN,Climb source window,Source altitude support unavailable,10
+Minute 60s / gap 30s,CHN,Climb source window,Unsupported window time,35
+Minute 60s / gap 30s,CHN,Climb-out source LTO,Classifiable,1
+Minute 60s / gap 30s,CHN,Climb-out source LTO,Native gap exceeds limit,6395
+Minute 60s / gap 30s,CHN,Climb-out source LTO,Unsupported window time,25
+Minute 60s / gap 30s,CHN,Descent FL100-FL075,Native gap exceeds limit,6372
+Minute 60s / gap 30s,CHN,Descent FL100-FL075,Unsupported window time,49
+Minute 60s / gap 30s,CHN,Descent FL180-FL100,Native gap exceeds limit,6373
+Minute 60s / gap 30s,CHN,Descent FL180-FL100,Unsupported window time,48
+Minute 60s / gap 30s,CHN,Descent source window,Native gap exceeds limit,6370
+Minute 60s / gap 30s,CHN,Descent source window,Unsupported window time,51
+Minute 60s / gap 30s,CHN,FL075-landing,Native gap exceeds limit,6395
+Minute 60s / gap 30s,CHN,FL075-landing,Unsupported window time,26
+Minute 60s / gap 30s,CHN,Takeoff-FL075,Native gap exceeds limit,5646
+Minute 60s / gap 30s,CHN,Takeoff-FL075,Source altitude support unavailable,4
+Minute 60s / gap 30s,CHN,Takeoff-FL075,Unsupported window time,26
+Minute 60s / gap 30s,CHN,Takeoff-FL075,Window shorter than feature scale,745
+Minute 60s / gap 30s,EUR,Approach-landing source LTO,Classifiable,7
+Minute 60s / gap 30s,EUR,Approach-landing source LTO,Incomplete altitude bracketing,303
+Minute 60s / gap 30s,EUR,Approach-landing source LTO,Native gap exceeds limit,21186
+Minute 60s / gap 30s,EUR,Approach-landing source LTO,Window shorter than feature scale,7
+Minute 60s / gap 30s,EUR,Climb FL075-FL100,Classifiable,2819
+Minute 60s / gap 30s,EUR,Climb FL075-FL100,Native gap exceeds limit,8589
+Minute 60s / gap 30s,EUR,Climb FL075-FL100,Unsupported window time,3
+Minute 60s / gap 30s,EUR,Climb FL075-FL100,Window shorter than feature scale,10092
+Minute 60s / gap 30s,EUR,Climb FL100-FL180,Classifiable,2137
+Minute 60s / gap 30s,EUR,Climb FL100-FL180,Native gap exceeds limit,19340
+Minute 60s / gap 30s,EUR,Climb FL100-FL180,Unsupported window time,26
+Minute 60s / gap 30s,EUR,Climb source window,Classifiable,21
+Minute 60s / gap 30s,EUR,Climb source window,Incomplete altitude bracketing,13
+Minute 60s / gap 30s,EUR,Climb source window,Native gap exceeds limit,21449
+Minute 60s / gap 30s,EUR,Climb source window,Source altitude support unavailable,2
+Minute 60s / gap 30s,EUR,Climb source window,Unsupported window time,1
+Minute 60s / gap 30s,EUR,Climb source window,Window shorter than feature scale,17
+Minute 60s / gap 30s,EUR,Climb-out source LTO,Classifiable,6801
+Minute 60s / gap 30s,EUR,Climb-out source LTO,Incomplete altitude bracketing,15
+Minute 60s / gap 30s,EUR,Climb-out source LTO,Native gap exceeds limit,14001
+Minute 60s / gap 30s,EUR,Climb-out source LTO,Window shorter than feature scale,686
+Minute 60s / gap 30s,EUR,Descent FL100-FL075,Classifiable,1103
+Minute 60s / gap 30s,EUR,Descent FL100-FL075,Incomplete altitude bracketing,1
+Minute 60s / gap 30s,EUR,Descent FL100-FL075,Native gap exceeds limit,19759
+Minute 60s / gap 30s,EUR,Descent FL100-FL075,Unsupported window time,493
+Minute 60s / gap 30s,EUR,Descent FL100-FL075,Window shorter than feature scale,147
+Minute 60s / gap 30s,EUR,Descent FL180-FL100,Classifiable,262
+Minute 60s / gap 30s,EUR,Descent FL180-FL100,Incomplete altitude bracketing,1
+Minute 60s / gap 30s,EUR,Descent FL180-FL100,Native gap exceeds limit,21043
+Minute 60s / gap 30s,EUR,Descent FL180-FL100,Unsupported window time,196
+Minute 60s / gap 30s,EUR,Descent FL180-FL100,Window shorter than feature scale,1
+Minute 60s / gap 30s,EUR,Descent source window,Incomplete altitude bracketing,8
+Minute 60s / gap 30s,EUR,Descent source window,Native gap exceeds limit,21195
+Minute 60s / gap 30s,EUR,Descent source window,Source altitude support unavailable,299
+Minute 60s / gap 30s,EUR,Descent source window,Unsupported window time,1
+Minute 60s / gap 30s,EUR,FL075-landing,Incomplete altitude bracketing,7
+Minute 60s / gap 30s,EUR,FL075-landing,Native gap exceeds limit,20866
+Minute 60s / gap 30s,EUR,FL075-landing,Source altitude support unavailable,296
+Minute 60s / gap 30s,EUR,FL075-landing,Unsupported window time,334
+Minute 60s / gap 30s,EUR,Takeoff-FL075,Classifiable,3695
+Minute 60s / gap 30s,EUR,Takeoff-FL075,Incomplete altitude bracketing,13
+Minute 60s / gap 30s,EUR,Takeoff-FL075,Native gap exceeds limit,17792
+Minute 60s / gap 30s,EUR,Takeoff-FL075,Source altitude support unavailable,2
+Minute 60s / gap 30s,EUR,Takeoff-FL075,Unsupported window time,1
+Short 20s / gap 10s,CHN,Approach-landing source LTO,Native gap exceeds limit,6380
+Short 20s / gap 10s,CHN,Approach-landing source LTO,Unsupported window time,41
+Short 20s / gap 10s,CHN,Climb FL075-FL100,Native gap exceeds limit,6381
+Short 20s / gap 10s,CHN,Climb FL075-FL100,Source altitude support unavailable,1
+Short 20s / gap 10s,CHN,Climb FL075-FL100,Unsupported window time,39
+Short 20s / gap 10s,CHN,Climb FL100-FL180,Native gap exceeds limit,6378
+Short 20s / gap 10s,CHN,Climb FL100-FL180,Source altitude support unavailable,5
+Short 20s / gap 10s,CHN,Climb FL100-FL180,Unsupported window time,38
+Short 20s / gap 10s,CHN,Climb source window,Native gap exceeds limit,6376
+Short 20s / gap 10s,CHN,Climb source window,Source altitude support unavailable,10
+Short 20s / gap 10s,CHN,Climb source window,Unsupported window time,35
+Short 20s / gap 10s,CHN,Climb-out source LTO,Native gap exceeds limit,6396
+Short 20s / gap 10s,CHN,Climb-out source LTO,Unsupported window time,25
+Short 20s / gap 10s,CHN,Descent FL100-FL075,Native gap exceeds limit,6372
+Short 20s / gap 10s,CHN,Descent FL100-FL075,Unsupported window time,49
+Short 20s / gap 10s,CHN,Descent FL180-FL100,Native gap exceeds limit,6373
+Short 20s / gap 10s,CHN,Descent FL180-FL100,Unsupported window time,48
+Short 20s / gap 10s,CHN,Descent source window,Native gap exceeds limit,6370
+Short 20s / gap 10s,CHN,Descent source window,Unsupported window time,51
+Short 20s / gap 10s,CHN,FL075-landing,Native gap exceeds limit,6395
+Short 20s / gap 10s,CHN,FL075-landing,Unsupported window time,26
+Short 20s / gap 10s,CHN,Takeoff-FL075,Native gap exceeds limit,5744
+Short 20s / gap 10s,CHN,Takeoff-FL075,Source altitude support unavailable,4
+Short 20s / gap 10s,CHN,Takeoff-FL075,Unsupported window time,26
+Short 20s / gap 10s,CHN,Takeoff-FL075,Window shorter than feature scale,647
+Short 20s / gap 10s,EUR,Approach-landing source LTO,Incomplete altitude bracketing,303
+Short 20s / gap 10s,EUR,Approach-landing source LTO,Native gap exceeds limit,21200
+Short 20s / gap 10s,EUR,Climb FL075-FL100,Classifiable,21
+Short 20s / gap 10s,EUR,Climb FL075-FL100,Native gap exceeds limit,21472
+Short 20s / gap 10s,EUR,Climb FL075-FL100,Unsupported window time,3
+Short 20s / gap 10s,EUR,Climb FL075-FL100,Window shorter than feature scale,7
+Short 20s / gap 10s,EUR,Climb FL100-FL180,Native gap exceeds limit,21477
+Short 20s / gap 10s,EUR,Climb FL100-FL180,Unsupported window time,26
+Short 20s / gap 10s,EUR,Climb source window,Incomplete altitude bracketing,13
+Short 20s / gap 10s,EUR,Climb source window,Native gap exceeds limit,21487
+Short 20s / gap 10s,EUR,Climb source window,Source altitude support unavailable,2
+Short 20s / gap 10s,EUR,Climb source window,Unsupported window time,1
+Short 20s / gap 10s,EUR,Climb-out source LTO,Classifiable,5
+Short 20s / gap 10s,EUR,Climb-out source LTO,Incomplete altitude bracketing,15
+Short 20s / gap 10s,EUR,Climb-out source LTO,Native gap exceeds limit,21483
+Short 20s / gap 10s,EUR,Descent FL100-FL075,Classifiable,1
+Short 20s / gap 10s,EUR,Descent FL100-FL075,Incomplete altitude bracketing,1
+Short 20s / gap 10s,EUR,Descent FL100-FL075,Native gap exceeds limit,21007
+Short 20s / gap 10s,EUR,Descent FL100-FL075,Unsupported window time,493
+Short 20s / gap 10s,EUR,Descent FL100-FL075,Window shorter than feature scale,1
+Short 20s / gap 10s,EUR,Descent FL180-FL100,Incomplete altitude bracketing,1
+Short 20s / gap 10s,EUR,Descent FL180-FL100,Native gap exceeds limit,21305
+Short 20s / gap 10s,EUR,Descent FL180-FL100,Unsupported window time,196
+Short 20s / gap 10s,EUR,Descent FL180-FL100,Window shorter than feature scale,1
+Short 20s / gap 10s,EUR,Descent source window,Incomplete altitude bracketing,8
+Short 20s / gap 10s,EUR,Descent source window,Native gap exceeds limit,21195
+Short 20s / gap 10s,EUR,Descent source window,Source altitude support unavailable,299
+Short 20s / gap 10s,EUR,Descent source window,Unsupported window time,1
+Short 20s / gap 10s,EUR,FL075-landing,Incomplete altitude bracketing,7
+Short 20s / gap 10s,EUR,FL075-landing,Native gap exceeds limit,20866
+Short 20s / gap 10s,EUR,FL075-landing,Source altitude support unavailable,296
+Short 20s / gap 10s,EUR,FL075-landing,Unsupported window time,334
+Short 20s / gap 10s,EUR,Takeoff-FL075,Incomplete altitude bracketing,13
+Short 20s / gap 10s,EUR,Takeoff-FL075,Native gap exceeds limit,21487
+Short 20s / gap 10s,EUR,Takeoff-FL075,Source altitude support unavailable,2
+Short 20s / gap 10s,EUR,Takeoff-FL075,Unsupported window time,1
+Sustained 120s / gap 120s,CHN,Approach-landing source LTO,Classifiable,1
+Sustained 120s / gap 120s,CHN,Approach-landing source LTO,Native gap exceeds limit,6379
+Sustained 120s / gap 120s,CHN,Approach-landing source LTO,Unsupported window time,41
+Sustained 120s / gap 120s,CHN,Climb FL075-FL100,Classifiable,126
+Sustained 120s / gap 120s,CHN,Climb FL075-FL100,Native gap exceeds limit,43
+Sustained 120s / gap 120s,CHN,Climb FL075-FL100,Source altitude support unavailable,1
+Sustained 120s / gap 120s,CHN,Climb FL075-FL100,Unsupported window time,39
+Sustained 120s / gap 120s,CHN,Climb FL075-FL100,Window shorter than feature scale,6212
+Sustained 120s / gap 120s,CHN,Climb FL100-FL180,Classifiable,202
+Sustained 120s / gap 120s,CHN,Climb FL100-FL180,Insufficient intervals for episode,1
+Sustained 120s / gap 120s,CHN,Climb FL100-FL180,Native gap exceeds limit,6175
+Sustained 120s / gap 120s,CHN,Climb FL100-FL180,Source altitude support unavailable,5
+Sustained 120s / gap 120s,CHN,Climb FL100-FL180,Unsupported window time,38
+Sustained 120s / gap 120s,CHN,Climb source window,Classifiable,1
+Sustained 120s / gap 120s,CHN,Climb source window,Native gap exceeds limit,6375
+Sustained 120s / gap 120s,CHN,Climb source window,Source altitude support unavailable,10
+Sustained 120s / gap 120s,CHN,Climb source window,Unsupported window time,35
+Sustained 120s / gap 120s,CHN,Climb-out source LTO,Classifiable,5
+Sustained 120s / gap 120s,CHN,Climb-out source LTO,Native gap exceeds limit,13
+Sustained 120s / gap 120s,CHN,Climb-out source LTO,Unsupported window time,25
+Sustained 120s / gap 120s,CHN,Climb-out source LTO,Window shorter than feature scale,6378
+Sustained 120s / gap 120s,CHN,Descent FL100-FL075,Classifiable,1212
+Sustained 120s / gap 120s,CHN,Descent FL100-FL075,Native gap exceeds limit,3144
+Sustained 120s / gap 120s,CHN,Descent FL100-FL075,Unsupported window time,49
+Sustained 120s / gap 120s,CHN,Descent FL100-FL075,Window shorter than feature scale,2016
+Sustained 120s / gap 120s,CHN,Descent FL180-FL100,Classifiable,88
+Sustained 120s / gap 120s,CHN,Descent FL180-FL100,Insufficient intervals for episode,1
+Sustained 120s / gap 120s,CHN,Descent FL180-FL100,Native gap exceeds limit,6284
+Sustained 120s / gap 120s,CHN,Descent FL180-FL100,Unsupported window time,48
+Sustained 120s / gap 120s,CHN,Descent source window,Native gap exceeds limit,6370
+Sustained 120s / gap 120s,CHN,Descent source window,Unsupported window time,51
+Sustained 120s / gap 120s,CHN,FL075-landing,Native gap exceeds limit,5806
+Sustained 120s / gap 120s,CHN,FL075-landing,Unsupported window time,26
+Sustained 120s / gap 120s,CHN,FL075-landing,Window shorter than feature scale,589
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Classifiable,2214
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Insufficient intervals for episode,2
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Native gap exceeds limit,3430
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Source altitude support unavailable,4
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Unsupported window time,26
+Sustained 120s / gap 120s,CHN,Takeoff-FL075,Window shorter than feature scale,745
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Classifiable,14679
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Incomplete altitude bracketing,303
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Insufficient intervals for episode,3
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Material vertical reversal,68
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Native gap exceeds limit,4968
+Sustained 120s / gap 120s,EUR,Approach-landing source LTO,Window shorter than feature scale,1482
+Sustained 120s / gap 120s,EUR,Climb FL075-FL100,Classifiable,236
+Sustained 120s / gap 120s,EUR,Climb FL075-FL100,Native gap exceeds limit,22
+Sustained 120s / gap 120s,EUR,Climb FL075-FL100,Unsupported window time,3
+Sustained 120s / gap 120s,EUR,Climb FL075-FL100,Window shorter than feature scale,21242
+Sustained 120s / gap 120s,EUR,Climb FL100-FL180,Classifiable,21353
+Sustained 120s / gap 120s,EUR,Climb FL100-FL180,Insufficient intervals for episode,2
+Sustained 120s / gap 120s,EUR,Climb FL100-FL180,Native gap exceeds limit,108
+Sustained 120s / gap 120s,EUR,Climb FL100-FL180,Unsupported window time,26
+Sustained 120s / gap 120s,EUR,Climb FL100-FL180,Window shorter than feature scale,14
+Sustained 120s / gap 120s,EUR,Climb source window,Classifiable,12420
+Sustained 120s / gap 120s,EUR,Climb source window,Incomplete altitude bracketing,13
+Sustained 120s / gap 120s,EUR,Climb source window,Insufficient intervals for episode,6
+Sustained 120s / gap 120s,EUR,Climb source window,Material vertical reversal,45
+Sustained 120s / gap 120s,EUR,Climb source window,Native gap exceeds limit,8930
+Sustained 120s / gap 120s,EUR,Climb source window,Source altitude support unavailable,2
+Sustained 120s / gap 120s,EUR,Climb source window,Unsupported window time,1
+Sustained 120s / gap 120s,EUR,Climb source window,Window shorter than feature scale,86
+Sustained 120s / gap 120s,EUR,Climb-out source LTO,Classifiable,6291
+Sustained 120s / gap 120s,EUR,Climb-out source LTO,Incomplete altitude bracketing,15
+Sustained 120s / gap 120s,EUR,Climb-out source LTO,Native gap exceeds limit,70
+Sustained 120s / gap 120s,EUR,Climb-out source LTO,Window shorter than feature scale,15127
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Classifiable,10544
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Incomplete altitude bracketing,1
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Insufficient intervals for episode,2
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Material vertical reversal,7
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Native gap exceeds limit,2410
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Unsupported window time,493
+Sustained 120s / gap 120s,EUR,Descent FL100-FL075,Window shorter than feature scale,8046
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Classifiable,19172
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Incomplete altitude bracketing,1
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Insufficient intervals for episode,5
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Material vertical reversal,10
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Native gap exceeds limit,2110
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Unsupported window time,196
+Sustained 120s / gap 120s,EUR,Descent FL180-FL100,Window shorter than feature scale,9
+Sustained 120s / gap 120s,EUR,Descent source window,Classifiable,5557
+Sustained 120s / gap 120s,EUR,Descent source window,Incomplete altitude bracketing,8
+Sustained 120s / gap 120s,EUR,Descent source window,Insufficient intervals for episode,11
+Sustained 120s / gap 120s,EUR,Descent source window,Material vertical reversal,79
+Sustained 120s / gap 120s,EUR,Descent source window,Native gap exceeds limit,15548
+Sustained 120s / gap 120s,EUR,Descent source window,Source altitude support unavailable,299
+Sustained 120s / gap 120s,EUR,Descent source window,Unsupported window time,1
+Sustained 120s / gap 120s,EUR,FL075-landing,Classifiable,12013
+Sustained 120s / gap 120s,EUR,FL075-landing,Incomplete altitude bracketing,7
+Sustained 120s / gap 120s,EUR,FL075-landing,Insufficient intervals for episode,16
+Sustained 120s / gap 120s,EUR,FL075-landing,Material vertical reversal,89
+Sustained 120s / gap 120s,EUR,FL075-landing,Native gap exceeds limit,8748
+Sustained 120s / gap 120s,EUR,FL075-landing,Source altitude support unavailable,296
+Sustained 120s / gap 120s,EUR,FL075-landing,Unsupported window time,334
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Classifiable,21242
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Incomplete altitude bracketing,13
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Insufficient intervals for episode,2
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Material vertical reversal,8
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Native gap exceeds limit,198
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Source altitude support unavailable,2
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Unsupported window time,1
+Sustained 120s / gap 120s,EUR,Takeoff-FL075,Window shorter than feature scale,37
+Sustained 120s / gap 30s,CHN,Approach-landing source LTO,Native gap exceeds limit,6380
+Sustained 120s / gap 30s,CHN,Approach-landing source LTO,Unsupported window time,41
+Sustained 120s / gap 30s,CHN,Climb FL075-FL100,Native gap exceeds limit,6379
+Sustained 120s / gap 30s,CHN,Climb FL075-FL100,Source altitude support unavailable,1
+Sustained 120s / gap 30s,CHN,Climb FL075-FL100,Unsupported window time,39
+Sustained 120s / gap 30s,CHN,Climb FL075-FL100,Window shorter than feature scale,2
+Sustained 120s / gap 30s,CHN,Climb FL100-FL180,Native gap exceeds limit,6378
+Sustained 120s / gap 30s,CHN,Climb FL100-FL180,Source altitude support unavailable,5
+Sustained 120s / gap 30s,CHN,Climb FL100-FL180,Unsupported window time,38
+Sustained 120s / gap 30s,CHN,Climb source window,Native gap exceeds limit,6376
+Sustained 120s / gap 30s,CHN,Climb source window,Source altitude support unavailable,10
+Sustained 120s / gap 30s,CHN,Climb source window,Unsupported window time,35
+Sustained 120s / gap 30s,CHN,Climb-out source LTO,Native gap exceeds limit,6395
+Sustained 120s / gap 30s,CHN,Climb-out source LTO,Unsupported window time,25
+Sustained 120s / gap 30s,CHN,Climb-out source LTO,Window shorter than feature scale,1
+Sustained 120s / gap 30s,CHN,Descent FL100-FL075,Native gap exceeds limit,6372
+Sustained 120s / gap 30s,CHN,Descent FL100-FL075,Unsupported window time,49
+Sustained 120s / gap 30s,CHN,Descent FL180-FL100,Native gap exceeds limit,6373
+Sustained 120s / gap 30s,CHN,Descent FL180-FL100,Unsupported window time,48
+Sustained 120s / gap 30s,CHN,Descent source window,Native gap exceeds limit,6370
+Sustained 120s / gap 30s,CHN,Descent source window,Unsupported window time,51
+Sustained 120s / gap 30s,CHN,FL075-landing,Native gap exceeds limit,6395
+Sustained 120s / gap 30s,CHN,FL075-landing,Unsupported window time,26
+Sustained 120s / gap 30s,CHN,Takeoff-FL075,Native gap exceeds limit,5646
+Sustained 120s / gap 30s,CHN,Takeoff-FL075,Source altitude support unavailable,4
+Sustained 120s / gap 30s,CHN,Takeoff-FL075,Unsupported window time,26
+Sustained 120s / gap 30s,CHN,Takeoff-FL075,Window shorter than feature scale,745
+Sustained 120s / gap 30s,EUR,Approach-landing source LTO,Classifiable,5
+Sustained 120s / gap 30s,EUR,Approach-landing source LTO,Incomplete altitude bracketing,303
+Sustained 120s / gap 30s,EUR,Approach-landing source LTO,Native gap exceeds limit,21186
+Sustained 120s / gap 30s,EUR,Approach-landing source LTO,Window shorter than feature scale,9
+Sustained 120s / gap 30s,EUR,Climb FL075-FL100,Classifiable,28
+Sustained 120s / gap 30s,EUR,Climb FL075-FL100,Native gap exceeds limit,8589
+Sustained 120s / gap 30s,EUR,Climb FL075-FL100,Unsupported window time,3
+Sustained 120s / gap 30s,EUR,Climb FL075-FL100,Window shorter than feature scale,12883
+Sustained 120s / gap 30s,EUR,Climb FL100-FL180,Classifiable,2130
+Sustained 120s / gap 30s,EUR,Climb FL100-FL180,Native gap exceeds limit,19340
+Sustained 120s / gap 30s,EUR,Climb FL100-FL180,Unsupported window time,26
+Sustained 120s / gap 30s,EUR,Climb FL100-FL180,Window shorter than feature scale,7
+Sustained 120s / gap 30s,EUR,Climb source window,Classifiable,5
+Sustained 120s / gap 30s,EUR,Climb source window,Incomplete altitude bracketing,13
+Sustained 120s / gap 30s,EUR,Climb source window,Native gap exceeds limit,21449
+Sustained 120s / gap 30s,EUR,Climb source window,Source altitude support unavailable,2
+Sustained 120s / gap 30s,EUR,Climb source window,Unsupported window time,1
+Sustained 120s / gap 30s,EUR,Climb source window,Window shorter than feature scale,33
+Sustained 120s / gap 30s,EUR,Climb-out source LTO,Classifiable,751
+Sustained 120s / gap 30s,EUR,Climb-out source LTO,Incomplete altitude bracketing,15
+Sustained 120s / gap 30s,EUR,Climb-out source LTO,Native gap exceeds limit,14001
+Sustained 120s / gap 30s,EUR,Climb-out source LTO,Window shorter than feature scale,6736
+Sustained 120s / gap 30s,EUR,Descent FL100-FL075,Classifiable,407
+Sustained 120s / gap 30s,EUR,Descent FL100-FL075,Incomplete altitude bracketing,1
+Sustained 120s / gap 30s,EUR,Descent FL100-FL075,Native gap exceeds limit,19759
+Sustained 120s / gap 30s,EUR,Descent FL100-FL075,Unsupported window time,493
+Sustained 120s / gap 30s,EUR,Descent FL100-FL075,Window shorter than feature scale,843
+Sustained 120s / gap 30s,EUR,Descent FL180-FL100,Classifiable,260
+Sustained 120s / gap 30s,EUR,Descent FL180-FL100,Incomplete altitude bracketing,1
+Sustained 120s / gap 30s,EUR,Descent FL180-FL100,Native gap exceeds limit,21043
+Sustained 120s / gap 30s,EUR,Descent FL180-FL100,Unsupported window time,196
+Sustained 120s / gap 30s,EUR,Descent FL180-FL100,Window shorter than feature scale,3
+Sustained 120s / gap 30s,EUR,Descent source window,Incomplete altitude bracketing,8
+Sustained 120s / gap 30s,EUR,Descent source window,Native gap exceeds limit,21195
+Sustained 120s / gap 30s,EUR,Descent source window,Source altitude support unavailable,299
+Sustained 120s / gap 30s,EUR,Descent source window,Unsupported window time,1
+Sustained 120s / gap 30s,EUR,FL075-landing,Incomplete altitude bracketing,7
+Sustained 120s / gap 30s,EUR,FL075-landing,Native gap exceeds limit,20866
+Sustained 120s / gap 30s,EUR,FL075-landing,Source altitude support unavailable,296
+Sustained 120s / gap 30s,EUR,FL075-landing,Unsupported window time,334
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Classifiable,3681
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Incomplete altitude bracketing,13
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Native gap exceeds limit,17792
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Source altitude support unavailable,2
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Unsupported window time,1
+Sustained 120s / gap 30s,EUR,Takeoff-FL075,Window shorter than feature scale,14
+Sustained 120s / gap 60s,CHN,Approach-landing source LTO,Native gap exceeds limit,6380
+Sustained 120s / gap 60s,CHN,Approach-landing source LTO,Unsupported window time,41
+Sustained 120s / gap 60s,CHN,Climb FL075-FL100,Classifiable,41
+Sustained 120s / gap 60s,CHN,Climb FL075-FL100,Native gap exceeds limit,2879
+Sustained 120s / gap 60s,CHN,Climb FL075-FL100,Source altitude support unavailable,1
+Sustained 120s / gap 60s,CHN,Climb FL075-FL100,Unsupported window time,39
+Sustained 120s / gap 60s,CHN,Climb FL075-FL100,Window shorter than feature scale,3461
+Sustained 120s / gap 60s,CHN,Climb FL100-FL180,Native gap exceeds limit,6378
+Sustained 120s / gap 60s,CHN,Climb FL100-FL180,Source altitude support unavailable,5
+Sustained 120s / gap 60s,CHN,Climb FL100-FL180,Unsupported window time,38
+Sustained 120s / gap 60s,CHN,Climb source window,Native gap exceeds limit,6376
+Sustained 120s / gap 60s,CHN,Climb source window,Source altitude support unavailable,10
+Sustained 120s / gap 60s,CHN,Climb source window,Unsupported window time,35
+Sustained 120s / gap 60s,CHN,Climb-out source LTO,Native gap exceeds limit,6043
+Sustained 120s / gap 60s,CHN,Climb-out source LTO,Unsupported window time,25
+Sustained 120s / gap 60s,CHN,Climb-out source LTO,Window shorter than feature scale,353
+Sustained 120s / gap 60s,CHN,Descent FL100-FL075,Classifiable,104
+Sustained 120s / gap 60s,CHN,Descent FL100-FL075,Native gap exceeds limit,6176
+Sustained 120s / gap 60s,CHN,Descent FL100-FL075,Unsupported window time,49
+Sustained 120s / gap 60s,CHN,Descent FL100-FL075,Window shorter than feature scale,92
+Sustained 120s / gap 60s,CHN,Descent FL180-FL100,Native gap exceeds limit,6373
+Sustained 120s / gap 60s,CHN,Descent FL180-FL100,Unsupported window time,48
+Sustained 120s / gap 60s,CHN,Descent source window,Native gap exceeds limit,6370
+Sustained 120s / gap 60s,CHN,Descent source window,Unsupported window time,51
+Sustained 120s / gap 60s,CHN,FL075-landing,Native gap exceeds limit,5879
+Sustained 120s / gap 60s,CHN,FL075-landing,Unsupported window time,26
+Sustained 120s / gap 60s,CHN,FL075-landing,Window shorter than feature scale,516
+Sustained 120s / gap 60s,CHN,Takeoff-FL075,Native gap exceeds limit,5646
+Sustained 120s / gap 60s,CHN,Takeoff-FL075,Source altitude support unavailable,4
+Sustained 120s / gap 60s,CHN,Takeoff-FL075,Unsupported window time,26
+Sustained 120s / gap 60s,CHN,Takeoff-FL075,Window shorter than feature scale,745
+Sustained 120s / gap 60s,EUR,Approach-landing source LTO,Classifiable,3247
+Sustained 120s / gap 60s,EUR,Approach-landing source LTO,Incomplete altitude bracketing,303
+Sustained 120s / gap 60s,EUR,Approach-landing source LTO,Material vertical reversal,16
+Sustained 120s / gap 60s,EUR,Approach-landing source LTO,Native gap exceeds limit,17629
+Sustained 120s / gap 60s,EUR,Approach-landing source LTO,Window shorter than feature scale,308
+Sustained 120s / gap 60s,EUR,Climb FL075-FL100,Classifiable,136
+Sustained 120s / gap 60s,EUR,Climb FL075-FL100,Native gap exceeds limit,760
+Sustained 120s / gap 60s,EUR,Climb FL075-FL100,Unsupported window time,3
+Sustained 120s / gap 60s,EUR,Climb FL075-FL100,Window shorter than feature scale,20604
+Sustained 120s / gap 60s,EUR,Climb FL100-FL180,Classifiable,17969
+Sustained 120s / gap 60s,EUR,Climb FL100-FL180,Native gap exceeds limit,3494
+Sustained 120s / gap 60s,EUR,Climb FL100-FL180,Unsupported window time,26
+Sustained 120s / gap 60s,EUR,Climb FL100-FL180,Window shorter than feature scale,14
+Sustained 120s / gap 60s,EUR,Climb source window,Classifiable,1968
+Sustained 120s / gap 60s,EUR,Climb source window,Incomplete altitude bracketing,13
+Sustained 120s / gap 60s,EUR,Climb source window,Material vertical reversal,8
+Sustained 120s / gap 60s,EUR,Climb source window,Native gap exceeds limit,19450
+Sustained 120s / gap 60s,EUR,Climb source window,Source altitude support unavailable,2
+Sustained 120s / gap 60s,EUR,Climb source window,Unsupported window time,1
+Sustained 120s / gap 60s,EUR,Climb source window,Window shorter than feature scale,61
+Sustained 120s / gap 60s,EUR,Climb-out source LTO,Classifiable,4799
+Sustained 120s / gap 60s,EUR,Climb-out source LTO,Incomplete altitude bracketing,15
+Sustained 120s / gap 60s,EUR,Climb-out source LTO,Native gap exceeds limit,3109
+Sustained 120s / gap 60s,EUR,Climb-out source LTO,Window shorter than feature scale,13580
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Classifiable,5180
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Incomplete altitude bracketing,1
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Material vertical reversal,3
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Native gap exceeds limit,10061
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Unsupported window time,493
+Sustained 120s / gap 60s,EUR,Descent FL100-FL075,Window shorter than feature scale,5765
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Classifiable,9850
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Incomplete altitude bracketing,1
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Material vertical reversal,4
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Native gap exceeds limit,11443
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Unsupported window time,196
+Sustained 120s / gap 60s,EUR,Descent FL180-FL100,Window shorter than feature scale,9
+Sustained 120s / gap 60s,EUR,Descent source window,Classifiable,71
+Sustained 120s / gap 60s,EUR,Descent source window,Incomplete altitude bracketing,8
+Sustained 120s / gap 60s,EUR,Descent source window,Native gap exceeds limit,21124
+Sustained 120s / gap 60s,EUR,Descent source window,Source altitude support unavailable,299
+Sustained 120s / gap 60s,EUR,Descent source window,Unsupported window time,1
+Sustained 120s / gap 60s,EUR,FL075-landing,Classifiable,897
+Sustained 120s / gap 60s,EUR,FL075-landing,Incomplete altitude bracketing,7
+Sustained 120s / gap 60s,EUR,FL075-landing,Material vertical reversal,6
+Sustained 120s / gap 60s,EUR,FL075-landing,Native gap exceeds limit,19963
+Sustained 120s / gap 60s,EUR,FL075-landing,Source altitude support unavailable,296
+Sustained 120s / gap 60s,EUR,FL075-landing,Unsupported window time,334
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Classifiable,17354
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Incomplete altitude bracketing,13
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Material vertical reversal,3
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Native gap exceeds limit,4097
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Source altitude support unavailable,2
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Unsupported window time,1
+Sustained 120s / gap 60s,EUR,Takeoff-FL075,Window shorter than feature scale,33

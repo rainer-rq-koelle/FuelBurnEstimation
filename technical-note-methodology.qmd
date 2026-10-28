@@ -14,6 +14,14 @@ format:
 
 # Purpose and evidence status
 
+The active study synthesis is now `paper.qmd`, an expanding technical note with
+no page limit. The 27 October common interruption-class rules and native-point
+support assessment are recorded in `notes/paper-profile-classes.md` and its
+aggregate snapshot. They add working research definitions and an explicit
+unknown category to the decision register below; they do not certify common
+source detectors or change canonical releases. The historical decision trials
+below remain a methodological record rather than the current adoption status.
+
 This note supports the AICAP 2027 study and complements `technical-note-data-preparation.qmd`. It records choices that must be made before phase fuel coefficients can support international benchmarking. The exploratory paper provides the scientific argument and delivered-release diagnostics; `notes/study-worker-plan.md` turns the decisions below into executable work packages. This note is not a report of completed validation or final coefficients.
 
 The central estimand is a fuel reference conditional on aircraft type, phase, and independently observed operational profile. This differs from the causal fuel cost of an ATM restriction. The data can establish conditional associations and prediction accuracy; causal attribution needs additional information or a credible counterfactual.
