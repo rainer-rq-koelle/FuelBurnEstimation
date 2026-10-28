@@ -204,3 +204,35 @@ Completed validation:
 Full data regeneration and document rendering were intentionally not performed;
 the checks exercised the retained loaders/tests while preserving the pinned
 analyses and exact review exports.
+
+## Final milestone: render verification and temporary-file removal
+
+The subsequent final render check used an isolated temporary copy of revision
+`a1c20ab254693ba3df86cab0f238c2e498429c5c`. All four Quarto renders and both
+repository Word formatters completed successfully, with no warnings or errors
+in the captured render and preview logs.
+
+| Document | PDF pages | Word preview pages | Figures | Editable data tables |
+|---|---:|---:|---:|---:|
+| Conference paper | 10 | 19 | 7 | 8 |
+| Technical Note | 21 | 49 | 29 | 33 |
+
+All 99 pages were visually reviewed without a blocking layout issue. Word
+previews used LibreOffice; native Microsoft Word pagination may differ. Figure,
+table and equation counts matched the saved Word copies, and both PDFs retained
+their saved page counts. Conference text matched the saved copies. Technical
+Note text differed only in reference [1], reflecting the already committed
+bibliography update adding pages 1–8 and DOI `10.1109/ICNS65417.2025.10976852`.
+
+Before/after verification covered **6,670 files**: tracked sources, saved review
+exports, analysis caches, outputs and restricted/pinned data. Their inventories,
+sizes, modification times and SHA-256 hashes were unchanged. Git remained clean;
+no preprocessing or analysis products were rebuilt and no saved export was
+replaced.
+
+At the user's request, the temporary render workspace and its location pointer
+were then removed, including all fresh exports, page previews, logs, comparison
+reports and temporary project files. This entry retains the verification result
+without retaining the exercise's generated files. The scientific baseline,
+saved review copies, analysis caches, pinned data and preprocessing lessons
+remain unchanged. This documentation-only commit closes the cleanup milestone.
