@@ -124,6 +124,9 @@ some of these files are read directly by the documents.
 
 ## Historical work and supporting records
 
+The [28 October cleanup record](notes/repository-cleanup-2026-10-28.md) lists
+retired branches, recovery tags, archived chats and the unchanged W2 hold.
+
 The following records remain available for provenance. Their original schedules,
 release labels and readiness claims describe earlier work, not current tasks:
 
