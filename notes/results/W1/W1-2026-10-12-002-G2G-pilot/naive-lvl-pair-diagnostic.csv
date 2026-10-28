@@ -1,0 +1,4 @@
+flight_date,naive_adjacent_pairs,median_pair_duration_sec,p05_pair_duration_sec,p95_pair_duration_sec,pairs_abs_altitude_change_gt_1000ft,pairs_same_altitude
+2025-06-11,449,300,21,3624.5999999999985,253,118
+2025-06-27,393,363,15,3991.5999999999967,248,79
+2025-08-13,424,336.5,20.150000000000002,3541.1999999999966,255,85

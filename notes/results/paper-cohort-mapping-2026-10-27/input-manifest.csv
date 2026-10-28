@@ -1,0 +1,65 @@
+PATH,SHA256
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output1/CHN-canonical-milestones.parquet,087702de1eb8e7d98b569ccbf1b336bdc0d07e869a068157bed6297e6fd85950
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output1/CHN-flight-quality.parquet,4a46ec2d6ec1edb8ee892d325062e9966b16550e22caf26ec807865426f189f7
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output1/CHN-level-segments.parquet,62ca1b5cbb305788563722653ba8d442193a6f5e60bae6365c32d0086911596a
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output1/CHN-phase-intervals.parquet,7f0fb5935bbb802f1a774588ba87f827d0df300dde32bcb6024dab3b45bf22fe
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output10/CHN-canonical-milestones.parquet,6a90b695b87abaa0841e75712f0f708de942b67c90b5f3e5ad2e80a768f94a84
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output10/CHN-flight-quality.parquet,f7b35a5935a5b74fcde7af21dc676347832b6210a8fad1d313cf9e114ff224a2
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output10/CHN-level-segments.parquet,dfd329bc1b33da57ea9888575daccbc87012f91af24c497c6fd91a9031c5a0ca
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output10/CHN-phase-intervals.parquet,8e55dcfa8d2e5915395479c2cd8b26b58c9a9b47c0c3c14526afe6c68ee5795d
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output11/CHN-canonical-milestones.parquet,955490a0d9b35b91945993a572b61275eca82f0d8bd3b8053664e809c30570e0
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output11/CHN-flight-quality.parquet,7c732bf46549602b0dc3c41002c09406f458bb852d4571f5540ae6c2ca58b1f9
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output11/CHN-level-segments.parquet,51fd80ea453da1ed70c49488647a18784c16dea32565df79626632189eda6cac
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output11/CHN-phase-intervals.parquet,bb706daf073c6ea7b8f26e28ee6e127fe6b3fcfca5d07b13c966f2543996be16
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output12/CHN-canonical-milestones.parquet,345d371c22dd974966a52df1b4f5bb778adb014a69039ec64dd230dab445a142
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output12/CHN-flight-quality.parquet,5b7b50dbd460b66f2dfecea37a1ef26c201cde5ddfeb2749eebeb23dd09f7720
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output12/CHN-level-segments.parquet,f9f71762beec8d9a43bb55b47a39e01ab506334ba54ee2ba849de95e39efa061
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output12/CHN-phase-intervals.parquet,11a5070c3c5294abdad5b329d184f377aaa045c340c43dfe8a3998a7e7b8925f
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output13/CHN-canonical-milestones.parquet,cca2d6989052750ed1006d05c4018c374bb31fc6fa75b43ae28a3e6117858d3f
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output13/CHN-flight-quality.parquet,3a00032d0ae579d4ba8ec45da3d082175407d6cb24dbafb6477bc1f509000ae8
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output13/CHN-level-segments.parquet,3b1aec953bd73dcddff41d16da6e19b8c7cf334df3d914233ba8f51545ad99a1
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output13/CHN-phase-intervals.parquet,d71819c00a05327077a3a5ec63db04797618f022a21cc529bd2e372a89c2c968
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output14/CHN-canonical-milestones.parquet,f7a9680c05d180c13900e74bd4c499aed48b6cb2e7a83fe1780e96cf589abd8d
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output14/CHN-flight-quality.parquet,a0cfd1d5529b74aab1ef273184f03515ab93c912cb99c7032296281361d84729
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output14/CHN-level-segments.parquet,302c416060ec684e17711ce65582ce2f7d14be969e51644263ff18ef2b6c30d6
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output14/CHN-phase-intervals.parquet,b567048799bb469611c02086333fcfa06a81ace5fb18557a20af9dbbffd8af6c
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output2/CHN-canonical-milestones.parquet,645226c9a8648a1c2f0e9b7fb286eca3e47eace5b85735dd7ebba381daf53be8
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output2/CHN-flight-quality.parquet,3bdb13be5292a9bb0058ee8b15860474fff79457b4f539a0200ecadc2879f899
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output2/CHN-level-segments.parquet,bff3df2556ab3483de0418e4d66ed94bbcfb0559d5bc3811f1aa5ae5f0ba5b81
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output2/CHN-phase-intervals.parquet,7ae164018f11bf67de5a4f24ce7bffe24fb91ff5f32d85f4130171ae3872814e
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output3/CHN-canonical-milestones.parquet,50cc4a0061fa07b1bf9cdd768d8488d514c07bee29c0dbe168603e5b37aabad0
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output3/CHN-flight-quality.parquet,3cbd1201250edc686c07579b063b99bd6361093bbb9a7f0568eb380394d40728
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output3/CHN-level-segments.parquet,a25600121d225777a690a3b8dcfceef61529778707519d0cf4646e3763631d80
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output3/CHN-phase-intervals.parquet,64f0e922ede51f09697e9524ad3351a4100faa21165199ae9892349a8c13bb89
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output4/CHN-canonical-milestones.parquet,48eeb689b07229e7c565b22bbee0ffa5667484690e5a304270b451e87f89ac16
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output4/CHN-flight-quality.parquet,dc09db7a985aa24981ee009e06714f0074d9c1241a0d900592dbcd4d8774c34b
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output4/CHN-level-segments.parquet,ad749000ab3e20bdf3574b1cb41426cf3345c48ecac85e365653d855620e7db8
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output4/CHN-phase-intervals.parquet,241a3da75d1d75e6ecb079688a978d0cff737a8dc939130534c2f81845faa1e6
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output5/CHN-canonical-milestones.parquet,0576bc9fd1eee5d87c80e59bffa59e0ee0429a126a72968fa1e82ce84abbc11a
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output5/CHN-flight-quality.parquet,995dd87dcee8ae95478c03939a27005f78122b55e81d9cd28ccfcd1a2f0aa86e
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output5/CHN-level-segments.parquet,9acadcd2c9df6bbe3af794220391da480d979f61b9f088ca022b2771aca29f81
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output5/CHN-phase-intervals.parquet,949814bfc2616f0c64fa75f97dd16d25e4427d3e8ff20207640eca053efb19d6
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output6/CHN-canonical-milestones.parquet,992e8509a372d2e4b4fb694375df7b84622c8ab830bc80bcf23f12cdfe8fdefb
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output6/CHN-flight-quality.parquet,7c4e302ecb9b2267933522161f1105760ddaecbcb087c120e3106c621fe98714
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output6/CHN-level-segments.parquet,2713d0764ec0dd5a90df89389cdec085df80f6cc6843fd96ea66f96c48eef084
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output6/CHN-phase-intervals.parquet,ef4efecc416ce7f7795511513ea7f7f684791ddeb38999f038e8d489de91e602
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output7/CHN-canonical-milestones.parquet,3e7368c45ed5e4577d1938bd391e9645391a1ec36a4205df176582d16a7c8e76
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output7/CHN-flight-quality.parquet,61f7898bcd285000dee98cd8fe829e9b02eaf8690096bec478d7485ed2b8939c
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output7/CHN-level-segments.parquet,91e4633d1a1f2721d3d538444637ca2269dc24dcccff26aa247fcf8133ec57e9
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output7/CHN-phase-intervals.parquet,c5c861857f3cd75e351303eec33edcc100d2681aca5ffe884d0d48361d50c63a
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output8/CHN-canonical-milestones.parquet,3e8f104ce1f15d06d72c8e39e01cc18642a05b3115892060d614918a1086920e
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output8/CHN-flight-quality.parquet,46f95e7a3cd62d4b372fb498d1b88ee86d0ce49efa98d1b9c8ed100d7156f2b7
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output8/CHN-level-segments.parquet,f39dee5bd8d08bf1d71deab05f67c30ab2d421e1ede2c329ea18e223f2e5b277
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output8/CHN-phase-intervals.parquet,c8080f4a1eb9d4d0f39b1ba48a06345cba40d28a66bc1f92f5a7967520b89351
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output9/CHN-canonical-milestones.parquet,7429ddf5f9f35be444ecd82033eb81a3c85f3e776a22639e219b623d434f6ce5
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output9/CHN-flight-quality.parquet,a4ada2e1e45c6bec8ca8f7fdf9df71c3a2fb2a7e99c937d80ec91fac8d6ecd04
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output9/CHN-level-segments.parquet,04a4adf1e2a6e866e4e51f81aed6ef59f0b3b85f1ad07494f5661cdde4996aec
+data-store/derived/chn/verification/CHN-2026-10-27-001/returned/data result20261022/output9/CHN-phase-intervals.parquet,78c646c25ecfe68d988d80768be9d5767b3dfed64a3fa67906054ac6be3c2252
+data-store/derived/eur/parallel-preprocessing/EUR-2026-10-13-002/EUR-canonical-milestones-parallel.parquet,8131f9c4454b0ffffe1b90b4bd1f39ab02ba6439d2e3e3cdf9b838c2f113113b
+data-store/derived/eur/parallel-preprocessing/EUR-2026-10-13-002/EUR-level-segments-parallel.parquet,4713b7a6eca77cfcb74596a73f6bfef8ea4097aef8140263c62d4d277ddbbfa4
+data-store/derived/eur/parallel-preprocessing/EUR-2026-10-13-002/EUR-milestone-crossing-candidates.parquet,c4610fbbb69b02c7fa3b246bc17fd81802842ab450e96f4b9428fdc76d76d82a
+data-store/raw/eur/source-sample/m3-ctfm-2025-06.parquet,6adcf0f3a3c3c9eab621e106ca7606778befce8821927ffac25b2bf99543eb26
+data-store/raw/eur/source-sample/m3-ctfm-2025-07.parquet,89f4a6882f04fed018998e2ebf2889b5ce2eab05484643090e960fc8f8d57702
+data-store/raw/eur/source-sample/m3-ctfm-2025-08.parquet,c1390c574816e39e7f2b9bce0232133005daecaa6a2ec6cc4666401af9c543cf
+helpers/chn-qar-v2/data/airports.csv,80ee08138175bb7988b66baf2a578f9d72c7c25c81b4c3a648dd11b0144b0f87
+notes/reference-data/EUR-airport-coordinates-2024-12-27.csv,c9cc2c2a986556ee12127dc48c3870d5f9c869ebf8b52dd0500864bc11fbe11e

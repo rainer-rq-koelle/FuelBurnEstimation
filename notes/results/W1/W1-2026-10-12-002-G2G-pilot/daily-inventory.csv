@@ -1,0 +1,4 @@
+flight_date,flights,rows,duplicate_flight_time_keys,missing_time,missing_altitude,missing_distance,missing_adjusted_fuel,missing_original_fuel,missing_fir
+2025-06-11,255,7549,0,0,0,0,0,0,0
+2025-06-27,252,7274,0,0,0,0,0,0,0
+2025-08-13,246,7271,0,0,0,0,0,0,0

@@ -1,0 +1,49 @@
+REGION,WINDOW,ROWS,MISSING_WINDOW_GCD
+CHN,Approach-landing source LTO,6421,0
+CHN,Arrival ARP100-040,6421,0
+CHN,Arrival ARP200-100,6421,0
+CHN,Climb FL075-FL100,6421,0
+CHN,Climb FL100-FL180,6421,0
+CHN,Climb FL180-source TOC,6421,0
+CHN,Climb source LTO-FL075,6421,0
+CHN,Climb source window,6421,0
+CHN,Climb-out source LTO,6421,0
+CHN,Departure ARP040-100,6421,0
+CHN,Departure ARP100-200,6421,0
+CHN,Descent FL075-source LTO,6421,0
+CHN,Descent FL100-FL075,6421,0
+CHN,Descent FL180-FL100,6421,0
+CHN,Descent source TOD-FL180,6421,0
+CHN,Descent source window,6421,0
+CHN,Enroute source window,6421,0
+CHN,FL075-landing,6421,0
+CHN,Landing-roll/runway-exit source segment,6420,6420
+CHN,Takeoff roll source segment,6420,6420
+CHN,Takeoff-FL075,6421,0
+CHN,Taxi-in recorded segment,6420,6420
+CHN,Taxi-out recorded segment,6420,6420
+CHN,Whole airborne,6421,0
+EUR,Approach-landing source LTO,21503,0
+EUR,Arrival ARP100-040,21503,0
+EUR,Arrival ARP200-100,21503,0
+EUR,Climb FL075-FL100,21503,0
+EUR,Climb FL100-FL180,21503,0
+EUR,Climb FL180-source TOC,21503,0
+EUR,Climb source LTO-FL075,21503,0
+EUR,Climb source window,21503,0
+EUR,Climb-out source LTO,21503,0
+EUR,Departure ARP040-100,21503,0
+EUR,Departure ARP100-200,21503,0
+EUR,Descent FL075-source LTO,21503,0
+EUR,Descent FL100-FL075,21503,0
+EUR,Descent FL180-FL100,21503,0
+EUR,Descent source TOD-FL180,21503,0
+EUR,Descent source window,21503,0
+EUR,Enroute source window,21503,0
+EUR,FL075-landing,21503,0
+EUR,Landing-roll/runway-exit source segment,21503,21503
+EUR,Takeoff roll source segment,21503,21503
+EUR,Takeoff-FL075,21503,0
+EUR,Taxi-in recorded segment,21503,21503
+EUR,Taxi-out recorded segment,21503,21503
+EUR,Whole airborne,21503,0

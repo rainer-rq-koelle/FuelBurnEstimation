@@ -1,0 +1,5 @@
+CLASS,DEFINITION
+Continuous at stated scale,No qualifying episode in a completely resolved window at the stated feature scale
+Lightly interrupted,"1-2 qualifying episodes, level share <=20%, longest <=180 seconds; all three limits required"
+Heavily interrupted,At least 3 episodes OR level share >20% OR longest >180 seconds
+Unknown,"Unsupported time, incomplete altitude/gap coverage, window shorter than feature scale, or material reversal"

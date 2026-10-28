@@ -1,0 +1,7 @@
+ROLE,STATUS,files
+historical_reference,INVESTIGATE_EXCLUDE,142
+historical_reference,REPAIRED_INCLUDED,78
+modern_control,INVESTIGATE_EXCLUDE,2
+modern_control,REPAIRED_INCLUDED,1
+verification,INVESTIGATE_EXCLUDE,8
+verification,REPAIRED_INCLUDED,2

@@ -1,0 +1,13 @@
+UNRESOLVED_REASONS,before,after
+altitude_unresolved,1,1
+ambiguous_clock,37,0
+fuel_repair_budget,11,11
+fuel_unit_review,28,28
+fuel_unresolved,65,28
+invalid_clock,4,4
+missing_engine_flow_column,28,28
+nonunique_or_backward_time,6,6
+position_repair_budget,11,11
+position_unresolved,37,37
+profile_boundaries_unresolved,71,29
+sampling_gap,2,2

@@ -12,6 +12,8 @@ desktop.ini
 *_files/
 /.quarto/
 /_output/
+/paper.tex
+/conference-paper.tex
 /outputs/*
 !outputs/.gitkeep
 
@@ -29,3 +31,6 @@ desktop.ini
 **/*.quarto_ipynb
 data-store/
 /figures/
+
+# Flight-identified diagnostic examples stay local; aggregate evidence is versioned.
+/notes/results/EUR/G2G-LVL-profile-inspection-2026-10-17/

@@ -1,0 +1,51 @@
+ICAO,LAT,LON,AIRPORT_NAME,COORDINATE_SOURCE,SOURCE_COMMIT,COORDINATE_STATUS
+RKSI,37.469101,126.450996,Incheon International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+WMKK,2.74558,101.709999,Kuala Lumpur International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBAA,40.080101013183594,116.58499908447266,Beijing Capital International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBAD,39.509945,116.41092,Beijing Daxing International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBHH,40.849658,111.824598,Hohhot Baita International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBLA,49.205002,119.824997,Hulunbuir Hailar Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBLL,37.683333,111.142778,Lüliang Dawu Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBSJ,38.280701,114.696999,Shijiazhuang Zhengding International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZBTJ,39.124401092499994,117.346000671,Tianjin Binhai International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGDY,29.1028,110.443001,Zhangjiajie Hehua International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGFS,23.0825,113.070833,Foshan Shadi Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGGG,23.392401,113.299004,Guangzhou Baiyun International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGHA,28.189199,113.220001,Changsha Huanghua International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGHY,26.72208,112.617958,Hengyang Nanyue Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGHZ,23.049999,114.599998,Huizhou Pingtan Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGNN,22.608544,108.175335,Nanning Wuxu Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGSD,22.006399,113.375999,Zhuhai Jinwan Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZGSZ,22.639299,113.810997,Shenzhen Bao'an International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZHCC,34.526497,113.849165,Zhengzhou Xinzheng International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZHHH,30.774798,114.213723,Wuhan Tianhe International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZHNY,32.982696,112.617467,Nanyang Jiangying Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZHSY,32.592889,110.906296,Shiyan Wudangshan Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZJHK,19.9349,110.459,Haikou Meilan International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZLDH,40.161098,94.809196,Dunhuang Mogao International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZLLL,36.515202,103.620003,Lanzhou Zhongchuan International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZLXY,34.447102,108.751999,Xi'an Xianyang International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZPPP,25.110313,102.936743,Kunming Changshui International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSAM,24.54400062561035,118.12799835205078,Xiamen Gaoqi International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSDY,37.50137,118.789863,Dongying Shengli Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSFZ,25.934669,119.66318,Fuzhou Changle International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSHC,30.23609,120.428865,Hangzhou Xiaoshan International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSJH,30.7403,117.6856,Chizhou Jiuhuashan Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSNB,29.82670021057129,121.46199798583984,Ningbo Lishe International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSNJ,31.735032,118.865949,Nanjing Lukou International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSPD,31.1434,121.805,Shanghai Pudong International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSSS,31.198104,121.33426,Shanghai Hongqiao International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSWA,31.1045,118.66687,Wuhu Xuanzhou Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSWX,31.494400024399997,120.429000854,Sunan Shuofang International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSWZ,27.910572,120.853465,Wenzhou Longwan International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSYW,29.342095,120.03116,Yiwu Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZSZS,29.9342,122.362,Zhoushan Putuoshan Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUCK,29.712254,106.651895,Chongqing Jiangbei International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUGY,26.541466,106.803331,Guiyang Longdongbao International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUMY,31.428101,104.740997,Mianyang Nanjiao Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUTF,30.31252,104.441284,Chengdu Tianfu International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUYI,25.083423,104.960804,Xingyi Wanfenglin Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZUZY,27.810723,107.247189,Zunyi Xinzhou Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZWWW,43.907101,87.474197,Ürümqi Tianshan International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZWYN,43.955799,81.330299,Yining Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP
+ZYCC,43.996201,125.684998,Changchun Longjia International Airport,OurAirports 2025-08-31,65beeb51c64fa411eb113c5d6680715309cd808a,airport_coordinate_proxy_for_ARP

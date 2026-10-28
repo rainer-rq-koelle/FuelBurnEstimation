@@ -1,0 +1,9 @@
+REGION,WINDOW,SOURCE_ROWS,ZERO_DURATION_N,NEGATIVE_DURATION_N,MISSING_DURATION_N,POSITIVE_TIME_ZERO_DISTANCE_N
+CHN,Landing-roll/runway-exit source segment,6420,0,0,0,0
+CHN,Takeoff roll source segment,6420,0,0,0,0
+CHN,Taxi-in recorded segment,6420,0,0,0,1
+CHN,Taxi-out recorded segment,6420,0,0,0,0
+EUR,Landing-roll/runway-exit source segment,21503,298,0,4,0
+EUR,Takeoff roll source segment,21503,0,0,0,21503
+EUR,Taxi-in recorded segment,21503,105,0,4,0
+EUR,Taxi-out recorded segment,21503,0,0,0,21503

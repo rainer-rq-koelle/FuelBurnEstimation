@@ -1,0 +1,6 @@
+ROLE,OLD_EXCLUDE,NEW_EXCLUDE,INPUTS
+historical_reference,FALSE,FALSE,186
+historical_reference,TRUE,TRUE,34
+modern_control,FALSE,FALSE,3
+verification,FALSE,FALSE,7
+verification,TRUE,TRUE,3

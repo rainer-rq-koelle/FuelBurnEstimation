@@ -1,51 +1,874 @@
 ---
-title: "Fuel Burn Estimation and Summarisation"
-subtitle: "Flight-phase based comparison framework"
+title: "Regional flight profiles and empirical fuel burn references"
+subtitle: "Technical note"
 author:
   - name: Lingling Ma
   - name: Wei Dai
   - name: Rainer Koelle
-date: today
+date: "28 October 2026"
+date-format: "D MMMM YYYY"
+bibliography: paper-references.bib
+csl: paper-numeric.csl
+number-sections: true
 format:
+  pdf:
+    documentclass: article
+    classoption: [twocolumn]
+    fontsize: 10pt
+    mainfont: Times New Roman
+    sansfont: Times New Roman
+    pdf-engine: xelatex
+    geometry: [letterpaper, top=0.75in, bottom=1in, left=0.625in, right=0.625in]
+    include-in-header: paper-style.tex
+    keep-tex: true
+    toc: false
   html:
-    toc: true
-  docx: default
-  pdf: default
+    toc: false
+    theme: cosmo
+    embed-resources: true
+  docx:
+    toc: false
+    fig-dpi: 300
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
 ---
 
 ```{r}
 #| label: setup
-source(here::here("R", "setup.R"))
+#| include: false
+suppressPackageStartupMessages({library(dplyr);library(tidyr);library(ggplot2)})
+source("R/enroute-level-exposure.R")
+source("R/paper-window-references.R")
+source("R/paper-profile-classes.R")
+source("R/paper-climb-patterns.R")
+source("R/paper-descent-enroute-lookup.R")
+if(isTRUE(knitr::pandoc_to("docx")))knitr::opts_chunk$set(out.width="3.45in")
+study <- load_paper_window_references()
+interruptions <- load_paper_profile_classes()
+climb_patterns <- load_paper_climb_patterns()
+lookup_review <- load_paper_descent_enroute_lookup()
+enroute <- study$enroute
+core <- study$config$core_windows
+colors <- c(CHN="#A33A32",EUR="#245C89")
+base <- theme_bw(base_size=8) + theme(legend.position="bottom",panel.grid.minor=element_blank())
+fmt <- function(x,digits=0)formatC(x,format="f",digits=digits,big.mark=",")
+paper_table <- function(data,caption,widths=NULL) {
+  if(knitr::is_latex_output()) {
+    if(is.null(widths))widths<-rep(.94/ncol(data),ncol(data))
+    tab<-knitr::kable(data,format="latex",booktabs=TRUE,row.names=FALSE,escape=TRUE)
+    lines<-strsplit(tab,"\n",fixed=TRUE)[[1]]
+    lines[grepl("\\begin{tabular}",lines,fixed=TRUE)]<-paste0("\\begin{tabular}{@{}",paste0("p{",widths,"\\linewidth}",collapse=""),"@{}}")
+    cat("\\begin{table}[htbp]\n\\centering\n\\caption{",caption,"}\n\\footnotesize\n\\setlength{\\tabcolsep}{2pt}\n\\renewcommand{\\arraystretch}{1.08}\n",paste(lines,collapse="\n"),"\n\\end{table}\n",sep="")
+  } else print(knitr::kable(data,caption=caption,row.names=FALSE))
+}
+reference_table <- function(window,metric) {
+  cells<-study$paired_cells |>filter(WINDOW==window,METRIC=="FUEL_KG",PAIRED_SUPPORT) |>select(TYPE,BAND100)
+  digits<-if(metric=="FUEL_KG")0 else if(metric=="KG_NM")2 else 1
+  z<-study$grid |>filter(WINDOW==window,METRIC==metric) |>semi_join(cells,by=c("TYPE","BAND100")) |>
+    mutate(VALUE=if_else(STATUS=="Populated",paste(fmt(P20,digits),fmt(P50,digits),fmt(P80,digits),sep="/"),"--")) |>
+    select(REGION,TYPE,BAND100,N,VALUE) |>pivot_wider(names_from=REGION,values_from=c(N,VALUE)) |>arrange(TYPE,BAND100)
+  label<-switch(metric,FUEL_KG="fuel kg",DURATION_MIN="duration min",KG_MIN="kg/min",KG_NM="kg/NM")
+  paper_table(data.frame(Cell=paste(z$TYPE,z$BAND100),China=z$VALUE_CHN,Europe=z$VALUE_EUR,
+    `n CHN/EUR`=paste(z$N_CHN,z$N_EUR,sep="/"),check.names=FALSE),
+    paste0(window,": ",label," P20/P50/P80. Cell label gives aircraft and GCD-band lower bound (NM)."),c(.18,.27,.27,.22))
+}
 ```
+
+# Scope of this technical note {.unnumbered}
+
+This technical note brings together the study's analytical aspects: regional flight-profile characterisation, phase and finer-window fuel references, enroute altitude exposure, terminal alternatives, ground movement, and interruption-conditioned lookup design. It retains the supporting figures, tables and sensitivity analyses without a page limit. A conference paper can subsequently select from this evidence. The two research questions remain regional differences in observed profiles and fuel consumption conditional on comparable aircraft, stage length and profiles.
+
+- Preserve the milestone-based link between trajectory observations and consumed fuel developed in the 2025 study.
+- Describe regional profile composition before conditioning on a common profile class.
+- Keep the four directional FL075/100/180 windows central, alongside whole-phase, terminal, enroute and ground context.
+- Distinguish fuel/time support, distance support and support for detecting interruptions; each analysis has its own cohort.
+- Treat all percentile values as descriptive references. Profile labels describe vertical progress rather than fuel-efficiency ranks.
+- Propose interpretable distance, fleet, altitude and level-exposure categories, using the observed patterns to justify practical thresholds and identify their applicable windows.
 
 # Introduction
 
-Air transport performance work increasingly needs comparable fuel-burn summaries across operational contexts, data providers, and regions. This paper develops a flight-phase based approach for estimating and comparing fuel burn using Chinese QAR/FDR-derived data and European gate-to-gate fuel-burn data.
+- Environmental motivation carried forward from @ma2025fuel: quantify aviation fuel consumption and associated emissions, and identify operational opportunities for improvement.
+- Performance-monitoring link: translate observed differences in time, distance and vertical profiles into contextual fuel-consumption references.
+- Practical need: detailed performance models and operator fuel records have access and computational constraints; compact empirical lookup tables can complement trajectory-based modelling.
+- Starting point in the 2025 paper: attach cumulative fuel to characteristic trajectory milestones, reducing full trajectories to comparable phases [@ma2025fuel].
+- Extension: the expanded summer-2025 sample supports aircraft/stage-length stratification, regional profile characterisation, and source-aware percentile references.
+- Keep two questions distinct: **regional operations** (do comparable aircraft encounter different profiles?) and **conditional consumption** (for comparable aircraft and profiles, are consumption distributions similar?).
+- Intended contribution: a compact phase-reference lookup that preserves total fuel alongside rates, with explicit profile definitions and sample support; descriptive references do not establish ATM-recoverable savings.
+
+
 
 # Background
 
-The 2025 ICNS draft established the first CHN-EUR comparison workflow. It treated each flight as a trajectory with characteristic milestones, then summarised fuel burn by phase and aircraft type.
+- Prior study: milestone discretisation and distance-defined phases; its whole-flight regressions are not phase lookup coefficients or validation targets [@ma2025fuel].
+- Comparative design: aircraft type, distance, phase and profile dimensions. Describe regional profile distributions before matching on profile.
+- Keep CCO/CDO concepts separate from empirical interruption descriptors and demonstrated fuel effects [@eurocontrol2020ccocdo].
 
-# Data and Methods
 
-The data-preparation workflow is documented separately in `technical-note-data-preparation.qmd`. The core architecture is:
 
-1. Inventory source data and metadata.
-2. Standardise raw trajectory and fuel-flow fields.
-3. Derive or validate milestones.
-4. Summarise fuel burn by flight phase.
-5. Build comparable CHN and EUR analysis tables.
+# Model, concept, methods, and data
 
-# Results
+## Trajectory profile and windows
 
-To be developed once the refreshed data extracts and processing choices are agreed.
+The trajectory carries time, pressure altitude, cumulative fuel and flown distance. Source macro phases are ATOT--TOC, TOC--TOD and TOD--ALDT. The core fine windows are climb FL075--100 and FL100--180, with the corresponding downward windows. Pressure altitude, airport-centred great-circle radii and flown distance are distinct references.
 
-# Discussion
+```{r}
+#| label: fig-concept
+#| fig-cap: "Milestone scheme at a schematic low-elevation airport. The source 3,000 ft boundary and FL075 are alternative terminal endpoints; their ordering can differ at high airports. Ground endpoints are source operational/record-edge proxies."
+#| fig-width: 3.45
+#| fig-height: 2.5
+z<-data.frame(t=c(0,6,8,11,15,18,24,32,54,62,68,71,75,78,81,84),h=c(0,0,0,3,7.5,10,18,34,34,18,10,7.5,3,0,0,0))
+ggplot(z,aes(t,h))+geom_line(linewidth=.7,color="#245C89")+
+  geom_vline(xintercept=c(8,11,15,18,24,32,54,62,68,71,75,78),linetype=3,color="grey75")+
+  annotate("text",x=c(8,15,18,24,32,54,62,68,71,78),y=c(2,8.5,11.5,19.5,37,37,19.5,11.5,8.5,2),
+    label=c("ATOT","075","100","180","TOC","TOD","180","100","075","ALDT"),size=2.1)+
+  labs(x="Elapsed time (schematic)",y="Altitude (schematic)")+theme_classic(base_size=8)+
+  theme(axis.text=element_blank(),axis.ticks=element_blank())
+```
 
-To be developed.
+Two departure terminal options remain explicit: **ATOT--source DLTO**, representing the supplied 3,000 ft boundary, and **ATOT--FL075**. Arrival counterparts are source ALTO--ALDT and FL075--ALDT. CHN DLTO/ALTO use a 3,000 ft increment above observed field pressure; EUR source LTO boundaries use different source definitions. The source option is not automatically a harmonised FL030. Each interval requires its own ordered endpoints; a missing optional window does not remove other supported quantities.
 
-# Conclusions
+- Operational milestones: AOBT, ERWY, ATOT, TOC, TOD, ALDT, XRWY, AIBT.
+- Lower-altitude anchors: source DLTO/ALTO; directional FL075, FL100 and FL180.
+- Spatial anchors: departure/arrival 40, 100 and 200 NM airport radii.
+- Level intervals: linked starts/ends with coverage and source detector metadata.
 
-To be developed.
+## Study data and analysis cohorts
 
-# References
+The supplied summer-2025 campaign contains fourteen Chinese QAR batches and a European G2G sample with M3 trajectory support. Chinese fuel is integrated from recorded engine flow; European fuel is modelled [@eurocontrolAEM]. Region and fuel-source method remain confounded. Campaign membership is retained, with actual UTC dates reported; two CHN ATOT timestamps fall in September and one is missing.
+
+```{r}
+#| results: asis
+i<-study$inventory |>arrange(REGION)
+paper_table(data.frame(Item=c("Source flights","Airports / directed pairs","Aircraft types","GCD range (NM)","GCD median (NM)","First ATOT UTC date","Last ATOT UTC date"),
+  China=c(fmt(i$INPUT[1]),paste(i$AIRPORTS[1],i$ROUTES[1],sep="/"),i$TYPES[1],paste(fmt(i$GCD_MIN[1]),fmt(i$GCD_MAX[1]),sep="--"),fmt(i$GCD_P50[1]),i$FIRST_ATOT_UTC[1],i$LAST_ATOT_UTC[1]),
+  Europe=c(fmt(i$INPUT[2]),paste(i$AIRPORTS[2],i$ROUTES[2],sep="/"),i$TYPES[2],paste(fmt(i$GCD_MIN[2]),fmt(i$GCD_MAX[2]),sep="--"),fmt(i$GCD_P50[2]),i$FIRST_ATOT_UTC[2],i$LAST_ATOT_UTC[2])),
+  "Source inventory. Analysis support is specific to each window and metric.",c(.40,.27,.27))
+```
+
+CHN covers ZSSS connections with ZBAA, ZLXY and ZPPP in both directions. Retain independently supported time, fuel, altitude and distance quantities. Complete whole-flight/profile/geometry support is not a prerequisite for a local pressure window. A complete airborne decomposition requires the phase intersection only for that particular analysis.
+
+```{r}
+#| label: sector-group-source-inventory
+#| results: asis
+sg <- study$flights |>
+ mutate(Group=cut(GCD_NM,c(0,300,500,700,1000,Inf),right=FALSE,
+  labels=c("0 to under 300","300 to under 500","500 to under 700","700 to under 1000","1000 and above"))) |>
+ count(REGION,Group,.drop=FALSE,name="N") |>pivot_wider(names_from=REGION,values_from=N,values_fill=0)
+paper_table(data.frame(`GCD group NM`=sg$Group,China=fmt(sg$CHN),Europe=fmt(sg$EUR),check.names=FALSE),
+ "Source flights in the proposed sector groups. Empty cells describe this supplied sample and do not imply that such sectors are absent from regional operations.",c(.42,.26,.26))
+```
+
+```{r}
+#| results: asis
+ss<-study$support |>filter(WINDOW%in%c("Whole airborne",core,study$config$terminal_options)) |>
+  select(REGION,WINDOW,TIME_N,FUEL_N,KG_NM_N) |>pivot_wider(names_from=REGION,values_from=c(TIME_N,FUEL_N,KG_NM_N))
+labels<-c("Whole airborne"="Whole airborne","Climb FL075-FL100"="Climb 075--100","Climb FL100-FL180"="Climb 100--180","Descent FL180-FL100"="Descent 180--100","Descent FL100-FL075"="Descent 100--075","Climb-out source LTO"="ATOT--source 3000","Takeoff-FL075"="ATOT--FL075","Approach-landing source LTO"="Source 3000--ALDT","FL075-landing"="FL075--ALDT")
+ss$Label<-unname(labels[ss$WINDOW])
+paper_table(data.frame(Window=ss$Label,`Time n`=paste(ss$TIME_N_CHN,ss$TIME_N_EUR,sep="/"),
+ `Fuel n`=paste(ss$FUEL_N_CHN,ss$FUEL_N_EUR,sep="/"),`kg/NM n`=paste(ss$KG_NM_N_CHN,ss$KG_NM_N_EUR,sep="/"),check.names=FALSE),
+ "Independent window support, CHN/EUR. Overlapping counts must not be added.",c(.27,.22,.23,.22))
+```
+
+## Reference construction and comparison design
+
+For CHN, the supplied non-overlapping fine intervals establish local time/fuel coverage. For EUR, cumulative model fuel at enriched events is time-interpolated from the supplied model series. Positive local increments and ordered supported boundaries are required; unavailable fuel prefixes outside the window do not invalidate an independently supported local interval. Pressure and geometry gates remain separate. Repeated pressure crossings retain direction, source candidate availability and first-departure/last-arrival selection provenance.
+
+The reference key is **source/region × exact aircraft/engine group × airport-GCD band × phase/window definition × profile axis/class**. Engine identity is explicitly unstratified where unavailable. The proposed reporting groups are 0--<300, 300--<500, 500--<700, 700--<1000 and at least 1000 NM. Retain the existing 100 NM cells and closer-distance checks to identify composition effects within a broader group. Airport GCD never replaces flown phase distance in kg/NM. Source LTO schemes remain separately labelled.
+
+For flight $i$, calculate local fuel $F_i$, elapsed minutes $T_i$, and supported flown NM $D_i$. Publish P20/P50/P80 of $F_i$, $T_i$, $F_i/T_i$ and $F_i/D_i$, with independent support counts. Rate percentiles are computed from individual-flight rates. Separate percentile columns are not one joint reference flight. Suppress percentiles below 30 observations, and require at least 30 in each region for a populated paired comparison. Sparse/unpaired observations remain in regional descriptions.
+
+Marginal references pool profile classes within each aircraft/stage/window cell. Profile-conditioned references additionally require a common descriptor and its measurement coverage. Missing coverage does not imply uninterrupted flight. Effective vertical rate in a fixed pressure window equals its altitude difference divided by duration; conditioning on it constrains duration and is not independent smoothness evidence.
+
+## Common interruption model
+
+The common classification experiment uses the same physical rules in both regions and is defined independently of fuel outcomes and regional quantiles. It tests continuous, lightly interrupted and heavily interrupted labels alongside numerical exposure descriptors. A low-rate episode consists of consecutive altitude-time intervals with absolute vertical rate at most 300 ft/min. This rate threshold has established vertical-flight-efficiency lineage [@eurocontrolVerticalMethod]; the two-minute feature scale and three classes below are study definitions. They are distinct from the shorter 20-second level-segment convention discussed in @eurocontrol2020fuelstudy and do not establish formal CCO/CDO compliance.
+
+- **Feature and resolution:** retain episodes lasting at least 120 s within the selected window, supported by at least two original altitude-time intervals. Every original interval overlapping the complete window must be no longer than 60 s, with finite altitude at both ends. Interpolate only to clip an existing interval at a window boundary. Do not insert a milestone as a new observed interior sample or bridge a longer gap.
+- **Continuous at the stated scale:** no qualifying episode in a classifiable window. This label does not exclude shorter interruptions or resolve all motion between supplied points.
+- **Lightly interrupted:** one or two qualifying episodes, combined level time no more than 20% of window duration, and longest episode no more than 180 s. All three limits must hold.
+- **Heavily interrupted:** at least three qualifying episodes, level share greater than 20%, or longest episode greater than 180 s. One sufficiently long interruption can therefore qualify.
+- **Unknown:** unsupported window time, a negative source local-altitude support flag, incomplete altitude bracketing, a gap exceeding the resolution limit, insufficient native intervals, or a window shorter than 120 s. More than 300 ft of cumulative motion opposite to the window direction at rates exceeding 300 ft/min is also kept outside the three-class taxonomy. Unknown is a measurement/taxonomy status, not an intermediate operational class.
+
+Preserve total level seconds, level share, episode count, longest episode and altitude, together with boundary-censored episode flags. Duration and count are calculated within the selected window; no duration outside that window is borrowed to qualify an episode. A window class is not transferred to the whole climb or descent. The full-window requirement applies only to profile classification; independently supported fuel references retain their own eligibility.
+
+Sensitivity specifications assess 20 s features with 10 s gaps, 60 s features with 30 s gaps, and 120 s features with 30/60/120 s gaps. The last is a deliberately coarser reconstruction sensitivity, not equivalent evidence for detecting a two-minute episode. At fixed primary coverage, also vary the light-class share limit (10/20/30%), maximum count (1/2/3) and longest-duration limit (120/180/240 s), one at a time. These trials characterise sensitivity rather than select settings to obtain a particular regional ordering or larger comparison cohort.
+
+Native source level intervals provide separate positive evidence of sustained low-rate flight. Clip them to each window and count flights with at least 120 s of a source episode and a source endpoint-average rate at most 300 ft/min. These counts do not close gaps in the common reconstruction. The CHN inventory uses a 31-sample median altitude detector, whereas the EUR delivered inventory carries source CCO/CDO segment semantics. An endpoint filter does not make those detectors equivalent, and absence of a qualifying source interval does not prove continuity.
+
+## Proposed categories for the reference lookup
+
+We propose compact categories that preserve the physical quantity being described. Their role is to make observed profiles and associated fuel references interpretable. The evidence below supports working choices for this sample; the categories are not presented as universally validated operating standards.
+
+- Use the five GCD reporting groups above to separate short sectors with little enroute exposure from longer sectors. Preserve exact aircraft types within newer single-aisle, older single-aisle and widebody reporting groups. A20N/A21N and A319/A320/A321/B738 illustrate the first two groups; coefficients are not pooled across unlike types or inferred engines.
+- For climb FL100--180, retain traversal bands below 3, 3--4, 4--5 and at least 5 minutes. These are elapsed-time categories, with inclusive lower and exclusive upper boundaries. The five-minute marker identifies longer traversals in this window.
+- For descent FL180--100, propose total source-tagged level-time categories **up to 2 minutes**, **over 2 and up to 5 minutes**, and **over 5 minutes**. Sum episodes lasting at least 20 s inside the window. Keep the finer no-tag, over 0--1 and over 1--2 minute descriptors available. These numerical categories retain source-specific detector provenance and are not assigned the common continuous/light/heavy labels.
+- For source TOC--TOD, qualify fuel references by time-weighted mean pressure altitude **below FL300**, **FL300--339**, and **FL340 and above**. These describe the whole enroute window; they do not imply constant flight at its mean altitude or allocate fuel to individual altitude bands.
+- Retain episode count, longest episode and level-time share alongside total level time. Keep unknown coverage separate from an observed zero. The same numerical definitions apply in both regions, while comparability of their source measurements remains an explicit property of the reference.
+
+The original common light-class rule has a structural implication: even one 120 s episode can occupy at most 20% of a window only if $T \geq 120/0.20 = 600$ s. Thus the window must last at least ten minutes before that light class is possible. This motivates window-specific exposure categories rather than transferring one classification unchanged to every finer phase.
+
+## Exploratory fuel and profile comparisons
+
+For climb FL100--180, describe fuel and traversal-time distributions within exact aircraft and 100 NM GCD cells before assigning interruption classes. Duration bands are less than 3, 3--4, 4--5 and at least 5 minutes, with inclusive lower and exclusive upper edges. A closer-distance sensitivity compares A320neo flights at 650--699 NM and A321neo flights at 570--599 NM, restricted to 3--4 minutes. These narrower bands follow the shared proximity to the Chinese route distances; they do not replace the primary 100 NM lookup grid. Retain the existing n>=30 rule for reporting percentiles.
+
+Separately describe within-source level exposure using the supplied level inventories: clip intervals at the selected window, require a source endpoint-average absolute vertical rate <=300 ft/min, and assess in-window minimum durations of 20, 60 and 120 s. Audit non-overlap before summing durations. Retain the local source altitude-support gate. Missing or absent source tags do not establish uninterrupted flight. These descriptors permit within-source associations with time, fuel and route direction without substituting native detectors for the common classifier.
+
+For the same Chinese airport pair and aircraft type, decompose mean window time into mean source-tagged level time and mean time outside those tags. Means are additive; differences of medians are not used for this accounting. The remainder is not independently verified active-climb time. No fuel is proportionally allocated to partial level intervals, and the accounting is not a causal decomposition of ATM delay or fuel savings. Examine GCD and route direction as covariates; do not infer aircraft mass or loaded fuel from distance alone.
+
+An equal-size sensitivity repeatedly draws 187 EUR A320neo flights without replacement from the fixed 481-flight sample (5,000 draws, seed 20261027). Its central resampling range tests the influence of unequal sample numbers within this observed sample; it is not a population confidence interval and does not balance route, date or operator composition.
+
+## Profile exposure and boundary sensitivity
+
+Describe regional profile composition before conditioning on it. Estimate enroute altitude residence from CHN altitude-time milestone/level knots and EUR M3 knots. Linear interpolation splits spans at common pressure-band crossings. Retain unbracketed time explicitly; do not extrapolate. A span-limited sensitivity uses only brackets no longer than 300 s. Long flat spans in sparse M3 support are a reconstruction assumption rather than proof of missing level flight.
+
+Source TOC/TOD retain their supplied definitions. The independent level-envelope sensitivity uses complete sustained levels of at least 120 s, absolute vertical rate at most 300 ft/min and altitude span at most 1,000 ft. Departure/arrival 200 NM contexts establish a near-ceiling altitude floor (maximum minus the greater of 1,000 ft or 3%); actual boundaries are level entry/exit, not radius crossings. Where geometry context is unsupported, use the altitude ceiling fallback. Compare both definitions on identical flights. The boundary sensitivity here concerns altitude/time; fuel references use their labelled source or fixed-pressure endpoints.
+
+## Ground references and source conventions
+
+Recorded taxi-out, take-off roll, landing roll/runway exit and taxi-in support kg, minutes and kg/min with their own eligibility. CHN AOBT/AIBT are recorder-edge proxies, not independently observed block times. Operational boundaries are source-derived and need not have identical physical timing precision. Retain aircraft and airport context in ground comparisons.
+
+The delivered EUR take-off-roll fuel already incorporates the agreed 0.8 adjustment. Stakeholders confirm that the source model retains a 100% take-off-thrust assumption while reduced-thrust operation motivates the adjustment. Preserve original model fuel as provenance/sensitivity; apply no second factor and no blanket factor to airborne phases. This is a model convention, not a measured per-flight thrust setting.
+
+A ground-distance proxy is a separately labelled estimator with airport/runway/path provenance and uncertainty. It must not be mixed silently with supplied distance. The supplied zero EUR taxi-out/roll distances support no observed-distance kg/NM reference, while their time/fuel observations remain usable. Numerical proxy-distance coefficients are not assumed here.
+
+# Results and discussion
+
+## Fuel references for modern narrowbody aircraft
+
+For 600--699 NM sectors, A320neo mean window fuel is about 336 kg in CHN and 299 kg in EUR, with medians of 318 and 293 kg. A321neo means are about 402 and 354 kg, with medians of 377 and 352 kg. These are fuel references for the 8,000 ft climb interval alone. The distribution, its duration and its composition matter alongside the average; the values do not establish a universal coefficient for all modern aircraft.
+
+```{r}
+#| label: modern-climb-overview-table
+#| results: asis
+mo <- climb_patterns$modern_overview |>arrange(TYPE,REGION)
+paper_table(data.frame(Aircraft=paste(ifelse(mo$TYPE=="A20N","A320neo","A321neo"),mo$REGION),
+  n=mo$N,`Mean kg`=fmt(mo$FUEL_MEAN),`P20/P50/P80 kg`=paste(fmt(mo$FUEL_P20),fmt(mo$FUEL_P50),fmt(mo$FUEL_P80),sep="/"),check.names=FALSE),
+  "Climb FL100--180 fuel references for 600--699 NM sectors. Both aircraft retain source-specific fuel methods; engine identity is unstratified.",c(.31,.10,.18,.35))
+```
+
+For the A320neo sample, 61/187 CHN flights (32.6%) and 12/481 EUR flights (2.5%) take at least five minutes. Equal-size EUR subsamples of 187 have long-traversal shares from approximately 1.1% to 4.3% in the central 95% of draws. The observed gap therefore persists after equalising the sample number in this sensitivity. Its interpretation still depends on which routes and operations the samples contain.
+
+## Fuel for similar traversal times and closer sector distances
+
+Within 3--4 minutes and the closer-distance sensitivity bands, A320neo median fuel is 271 kg for CHN and 284 kg for EUR; A321neo median fuel is 310 and 315 kg. Median traversal times are also close in these comparisons. The central fuel distributions overlap substantially. This is a descriptive similarity pattern, not a statistical equivalence claim or a calibration of recorded versus modelled fuel.
+
+```{r}
+#| label: closer-distance-fuel-table
+#| results: asis
+nc <- climb_patterns$closer_distance_comparison |>arrange(TYPE,REGION)
+paper_table(data.frame(Aircraft=paste(ifelse(nc$TYPE=="A20N","A320neo","A321neo"),nc$REGION),
+  `GCD mean`=fmt(nc$GCD_MEAN),n=nc$N,`Median min`=fmt(nc$TIME_P50,2),
+  `Fuel P20/P50/P80 kg`=paste(fmt(nc$FUEL_P20),fmt(nc$FUEL_P50),fmt(nc$FUEL_P80),sep="/"),check.names=FALSE),
+  "Similar-time fuel comparison: three to under four minutes; GCD bands 650--699 NM for A320neo and 570--599 NM for A321neo. These are narrower exploratory sensitivities to the primary 100 NM bands.",c(.24,.13,.09,.14,.34))
+```
+
+```{r}
+#| label: fig-similar-time-fuel
+#| fig-width: 3.45
+#| fig-height: 3.6
+#| fig-cap: "Fuel distributions for similar traversal times and closer sector distances. The A320neo comparison has 87 CHN / 90 EUR flights; A321neo has 109 / 67. Both panels restrict climb FL100--180 to 3--4 minutes. Source fuel methods remain recorded CHN versus modelled EUR."
+climb_patterns$plots$similar_fuel+labs(title=NULL,subtitle=NULL)+base
+```
+
+The higher overall CHN reference thus coexists with similar or lower fuel among observations taking comparable time. Duration is an informative profile descriptor here, although matching on it constrains the time denominator and does not reveal the cause of the original duration distribution.
+
+## Level exposure and route direction within the Chinese sample
+
+All 187 CHN A320neo observations in the 600--699 NM band fly the same airport pair at approximately 664 NM. Direction separates two different patterns: Shanghai Hongqiao to Xi'an (ZSSS--ZLXY) has mean window fuel of 379 kg and mean duration of 5.47 minutes; the reverse direction has 292 kg and 3.72 minutes. The two groups contain 94 and 93 flights. Sector distance is identical, so longer sector length alone cannot explain this contrast.
+
+```{r}
+#| label: same-route-mean-table
+#| results: asis
+rd <- climb_patterns$routes |>filter(REGION=="CHN",TYPE=="A20N",BAND100==600) |>arrange(ADEP)
+paper_table(data.frame(Route=paste(rd$ADEP,rd$ADES,sep="--"),n=rd$N,`Mean kg`=fmt(rd$FUEL_MEAN),
+  `Mean min`=fmt(rd$TIME_MEAN,2),`Tagged min`=fmt(rd$LEVEL20_MEAN,2),check.names=FALSE),
+  "Same Chinese airport pair, A320neo, identical 664 NM GCD. Tagged minutes use source episodes of at least 20 s within FL100--180; both time columns are means.",c(.29,.09,.16,.18,.22))
+```
+
+```{r}
+#| label: fig-same-route-components
+#| fig-width: 3.45
+#| fig-height: 2.8
+#| fig-cap: "Mean FL100--180 traversal time on the same Chinese airport pair. The additive components are source-tagged level time and time outside those tags; the remainder is not independently validated active-climb time."
+climb_patterns$plots$route_components+labs(title=NULL,subtitle=NULL)+base+
+  theme(legend.text=element_text(size=6))+guides(fill=guide_legend(ncol=1))
+```
+
+- Of the 61 CHN A320neo traversals lasting at least five minutes, 59 have a qualifying source-tagged episode of at least 20 s. Fifty-four have one such episode, five have two, and two have none. This pattern points to sustained level exposure rather than primarily a large number of repeated interruptions.
+- Forty-eight of those 61 flights still have a qualifying episode at a 60 s threshold; 29 do at 120 s. None of the 87 CHN 3--4 minute traversals has a qualifying 20 s source tag. These are source-native annotation patterns, not common CCO/CDO classifications.
+- The directional mean-duration gap is 1.75 minutes. Its arithmetic partition is 1.22 minutes of additional tagged level time (about 70%) and 0.53 minutes of additional time outside tags. This does not assign either component to a cause or attribute the 87 kg mean fuel difference to level-offs.
+- Source-tagged exposure also has an altitude pattern: 53 of the 61 tagged outbound flights include a qualifying episode between 11,000 and 12,000 ft. This concentration supplies a more specific operational-profile question than an undifferentiated slow-climb category.
+
+```{r}
+#| label: fig-time-fuel-level-exposure
+#| fig-width: 3.45
+#| fig-height: 3
+#| fig-cap: "Within the Chinese A320neo sample, longer window times and higher fuel accompany greater source-tagged level exposure. All flights have the same 664 NM GCD; the dashed line marks five minutes. Colour shows native tagged time, not independently measured ATM inefficiency."
+climb_patterns$plots$time_fuel_levels+labs(title=NULL,subtitle=NULL)+base+
+  geom_vline(xintercept=5,linetype=3,color="grey50")
+```
+
+## Sector distance and the aircraft weight hypothesis
+
+The A321neo offers two supported Chinese stage bands. In both directions, the longer sector has higher median window fuel and longer median traversal time. This is compatible with a weight-related hypothesis, but GCD is also tied to destination and route procedures, and neither take-off mass nor loaded fuel is observed.
+
+```{r}
+#| label: a321-stage-direction-table
+#| results: asis
+ad <- climb_patterns$routes |>filter(REGION=="CHN",TYPE=="A21N",BAND100%in%c(500,600)) |>arrange(BAND100,ADEP)
+paper_table(data.frame(Route=paste(ad$ADEP,ad$ADES,sep="--"),`GCD NM`=fmt(ad$GCD_MEAN),n=ad$N,
+  `Median min`=fmt(ad$TIME_P50,2),`Median kg`=fmt(ad$FUEL_P50),check.names=FALSE),
+  "A321neo stage and direction patterns within CHN. ZSSS is Shanghai Hongqiao, ZBAA Beijing Capital, and ZLXY Xi'an. Each row has sufficient percentile support.",c(.29,.15,.10,.20,.20))
+```
+
+The directional contrast repeats across these stages: outbound Shanghai medians are approximately 414 versus 305 kg on the 581 NM pair and 460 versus 340 kg on the 664 NM pair. A shorter outbound sector can therefore have more window fuel and time than a longer inbound sector. The data support investigating stage length, departure context, direction and level exposure together; they do not support treating every long traversal as a heavy-aircraft effect or an ATM restriction. The remaining time outside tagged levels leaves room for weight, speed, climb strategy and other unmeasured influences.
+
+## Descent fuel and level exposure
+
+The descent results extend the climb finding: greater sustained level exposure accompanies longer time and higher total fuel within each source. For A320neo flights over 500--<700 NM, median FL180--100 fuel rises from 131 to 249 and 433 kg across the proposed up-to-two, over-two-to-five and over-five minute level-time categories in CHN. EUR medians rise from 47 to 190 and 345 kg. These associations justify a compact exposure-based reference while retaining the two native detector definitions.
+
+```{r}
+#| label: descent-exposure-reference-table
+#| results: asis
+de <- lookup_review$fine_window_level_thresholds |>
+  filter(TYPE=="A20N",GCD_GROUP=="500-<700",WINDOW=="Descent FL180-FL100",CUT_MIN==2,EXPOSURE=="<=2 min") |>
+  mutate(Level="Up to 2 min") |>
+  bind_rows(lookup_review$descent_level_groups |>
+    filter(TYPE=="A20N",GCD_GROUP=="500-<700",WINDOW=="Descent FL180-FL100",LEVEL_GROUP%in%c(">2-5 min",">5 min")) |>
+    mutate(Level=if_else(LEVEL_GROUP==">2-5 min","Over 2--5 min","Over 5 min"))) |>
+  arrange(REGION,factor(Level,levels=c("Up to 2 min","Over 2--5 min","Over 5 min")))
+paper_table(data.frame(Source=de$REGION,`Level time`=de$Level,n=de$FUEL_N,
+  `Fuel P20/P50/P80 kg`=paste(fmt(de$FUEL_P20),fmt(de$FUEL_P50),fmt(de$FUEL_P80),sep="/"),
+  `Median min`=fmt(de$TIME_P50,2),check.names=FALSE),
+  "A320neo descent FL180--100, GCD 500 to under 700 NM. Exposure sums source episodes of at least 20 s inside the window. Fuel and duration are descriptive; detector provenance remains source-specific.",c(.11,.22,.10,.32,.19))
+```
+
+```{r}
+#| label: fig-descent-level-time-fuel
+#| fig-width: 3.45
+#| fig-height: 4.1
+#| fig-cap: "Descent FL180--100 fuel by finer source-tagged exposure bins, GCD 500 to under 700 NM. Points are P50 and bars P20--P80, shown only for fuel n of at least 30. No source tag does not establish a continuous profile; the missing EUR A321neo over-five-minute point has n=14."
+dg <- lookup_review$descent_level_groups |>
+  filter(TYPE%in%c("A20N","A21N"),GCD_GROUP=="500-<700",WINDOW=="Descent FL180-FL100",FUEL_N>=30) |>
+  mutate(Level=factor(LEVEL_GROUP,levels=c("No >=20s source tag",">0-1 min",">1-2 min",">2-5 min",">5 min"),
+    labels=c("No tag",">0--1",">1--2",">2--5",">5")))
+ggplot(dg,aes(Level,FUEL_P50,color=REGION))+
+ geom_linerange(aes(ymin=FUEL_P20,ymax=FUEL_P80),position=position_dodge(width=.45))+
+ geom_point(position=position_dodge(width=.45),size=1.5)+facet_wrap(~TYPE,ncol=1)+
+ scale_color_manual(values=colors)+labs(x="Source-tagged level minutes",y="Window fuel (kg)",color=NULL)+base
+```
+
+A321neo repeats the two-minute contrast: median fuel is 146 versus 307 kg in CHN (n=118/227), and 56 versus 242 kg in EUR (n=602/57), for up-to-two versus over-two minutes of tagged exposure. The over-five-minute EUR tail has only 14 observations, so its percentiles remain suppressed. The two-minute split can therefore support a compact primary comparison while the five-minute category describes a longer-exposure tail where sample support permits.
+
+Episode count adds context to the duration descriptor. Among 202 CHN A320neo descents, 85 have multiple source episodes. Of the 46 flights with more than five minutes of tagged time, 36 have multiple episodes and ten have a single episode. A count-only classifier would miss some sustained exposure. Fuel also increases across the EUR bins below two minutes, so the evidence is a gradient rather than a demonstrated discontinuity at either proposed boundary.
+
+## Fuel comparisons in the upper and lower descent windows
+
+The similarity observed in the comparable-time climb sample does not transfer uniformly to descent. For A320neo at 600--699 NM, FL180--100 traversals taking seven to under eight minutes have median fuel 136 kg in CHN and 107 kg in EUR. Their central ranges overlap partly. At six to under seven minutes the corresponding medians are 114 and 57 kg, with only a small central overlap. The lower FL100--075 window gives a closer comparison: two to under three minute traversals have medians 26.35 and 22.70 kg, with nearly identical median times of 2.426 and 2.422 minutes.
+
+```{r}
+#| label: descent-time-comparison-table
+#| results: asis
+dt <- lookup_review$fine_window_time_groups_exact |>
+ filter(TYPE=="A20N",BAND100==600,WINDOW=="Descent FL180-FL100",TIME_GROUP%in%c("6-<7","7-<8")) |>
+ mutate(Comparison=if_else(TIME_GROUP=="6-<7","180--100; 6--7 min","180--100; 7--8 min")) |>
+ bind_rows(lookup_review$lower_descent_two_three_minutes |>
+   filter(TYPE=="A20N",BAND100==600) |>mutate(Comparison="100--075; 2--3 min")) |>
+ mutate(Value=paste(fmt(FUEL_P20,1),fmt(FUEL_P50,1),fmt(FUEL_P80,1),sep="/")) |>
+ select(Comparison,REGION,FUEL_N,Value) |>pivot_wider(names_from=REGION,values_from=c(FUEL_N,Value))
+paper_table(data.frame(Window=dt$Comparison,China=dt$Value_CHN,Europe=dt$Value_EUR,
+  `n CHN/EUR`=paste(dt$FUEL_N_CHN,dt$FUEL_N_EUR,sep="/"),check.names=FALSE),
+  "A320neo, GCD 600--699 NM: descent fuel P20/P50/P80 kg at comparable traversal times. Time bands include the lower endpoint and exclude the upper endpoint.",c(.27,.26,.26,.15))
+```
+
+This supports finer altitude-specific reference values rather than one pooled descent coefficient. The closer 650--<700 NM upper-descent check has only 17 EUR observations at six to under seven minutes and one at seven to under eight; its percentile estimates are suppressed. Region, source fuel method, route procedures and unobserved mass cannot be separated by these comparisons. Airspace and operational explanations remain hypotheses consistent with the profile patterns, rather than identified causes of the residual fuel differences.
+
+## Source composition and support
+
+```{r}
+#| label: fig-stage
+#| fig-cap: "Airport-GCD distributions of the source samples, before metric-specific eligibility. Route and stage mixtures differ."
+#| fig-width: 3.45
+#| fig-height: 2.3
+ggplot(study$flights,aes(GCD_NM,color=REGION))+stat_ecdf(linewidth=.7)+scale_color_manual(values=colors)+
+ labs(x="Airport GCD (NM)",y="Cumulative flight share",color=NULL)+base
+```
+
+```{r}
+#| label: fig-fleet
+#| fig-cap: "Source counts for aircraft types present in CHN. Additional EUR-only types remain in the source inventory. Exact designators remain separate; unresolved engine/MAX variants are not invented."
+#| fig-width: 3.45
+#| fig-height: 3.7
+ft<-study$types |>filter(CHN>0) |>pivot_longer(c(CHN,EUR),names_to="REGION",values_to="N")
+ggplot(ft,aes(N,reorder(TYPE,N),fill=REGION))+geom_col()+facet_wrap(~REGION,ncol=1,scales="free_x")+
+ scale_fill_manual(values=colors)+labs(x="Source flights",y=NULL,fill=NULL)+base+
+ theme(legend.position="none",plot.margin=margin(5.5,15,5.5,5.5))
+```
+
+```{r}
+#| label: fig-cohorts
+#| fig-cap: "Analysis-specific support for selected windows: colour is the fraction of source flights; labels are actual n. Time, fuel and supplied-distance rates have different denominators."
+#| fig-width: 3.45
+#| fig-height: 5.9
+cs<-study$support |>filter(WINDOW%in%c(core,study$config$terminal_options,"Whole airborne","Taxi-out recorded segment","Takeoff roll source segment","Taxi-in recorded segment")) |>
+ select(REGION,WINDOW,INPUT,TIME_N,FUEL_N,KG_NM_N) |>pivot_longer(c(TIME_N,FUEL_N,KG_NM_N),names_to="METRIC",values_to="N") |>
+ mutate(SHARE=N/INPUT,WINDOW=gsub(" source window| recorded segment| source segment","",WINDOW),METRIC=factor(METRIC,levels=c("TIME_N","FUEL_N","KG_NM_N"),labels=c("Time","Fuel","kg/NM")))
+ggplot(cs,aes(REGION,WINDOW,fill=SHARE))+geom_tile(color="white")+geom_text(aes(label=fmt(N)),size=1.8)+
+ facet_wrap(~METRIC,nrow=1)+scale_fill_gradient(low="white",high="#468CB9",limits=c(0,1))+
+ labs(x=NULL,y=NULL,fill="Share")+base+theme(axis.text.y=element_text(size=6),legend.position="bottom")
+```
+
+```{r}
+#| label: fig-macro-time
+#| fig-cap: "Source macro-phase durations using independent time support in each phase. Regional mixtures are not matched here."
+#| fig-width: 3.45
+#| fig-height: 2.7
+mt<-study$windows |>filter(FAMILY=="Macro",TIME_OK)
+ggplot(mt,aes(DURATION_MIN,color=REGION))+stat_ecdf(linewidth=.6)+facet_wrap(~WINDOW,ncol=1,scales="free_x")+
+ scale_color_manual(values=colors)+labs(x="Duration (min)",y="Cumulative flight share",color=NULL)+base
+```
+
+Eight exact-type/GCD cells support all four core pressure-window fuel comparisons: A20N/600, A21N/500, A21N/600, A319/600, A320/600, A321/500, A321/600 and B738/600. A suffix of 600 denotes 600--699 NM. These are support strata rather than controls for engine, payload, weather, speed, direction or airport procedures. Regional overviews must not be read as within-cell fuel differences.
+
+## Sector groups and enroute exposure
+
+The proposed sector groups distinguish different amounts of enroute flying. EUR A320neo median source-enroute time is approximately 4.6, 14.3, 35.7 and 94.3 minutes across the four groups below 1000 NM. The median enroute share is about 13% for sectors below 300 NM and 64% for 700--<1000 NM. A short sector can therefore offer very little enroute exposure even when a source TOC--TOD interval is present.
+
+```{r}
+#| label: fig-sector-enroute-duration
+#| fig-width: 3.45
+#| fig-height: 2.8
+#| fig-cap: "EUR source-enroute duration by proposed sector group, with independent time eligibility. Points show P50 and bars P20--P80 for A320neo and A321neo. These are source-sample descriptions rather than matched regional comparisons."
+sx <- lookup_review$phase_sector_context |>
+ filter(REGION=="EUR",TYPE%in%c("A20N","A21N"),WINDOW=="Enroute source window") |>
+ mutate(Group=factor(GCD_GROUP,levels=c("0-<300","300-<500","500-<700","700-<1000",">=1000"),
+  labels=c("<300","300-<500","500-<700","700-<1000","1000+")))
+ggplot(sx,aes(Group,DURATION_P50,color=TYPE))+geom_linerange(aes(ymin=DURATION_P20,ymax=DURATION_P80),
+ position=position_dodge(width=.25))+geom_point(position=position_dodge(width=.25),size=1.5)+
+ scale_color_manual(values=c(A20N="#245C89",A21N="#A33A32"))+labs(x="Airport GCD group (NM)",y="Enroute minutes",color="Type")+base+
+ theme(axis.text.x=element_text(size=6))
+```
+
+The EUR A320neo median enroute intensity is 5.96 kg/NM below 300 NM, compared with 4.52, 4.46 and 4.38 kg/NM in the longer groups. These observations support a separate short-sector context. The boundaries are practical reporting choices, rather than identified physical discontinuities; the relatively stable rate across the longer groups contrasts with their substantial increase in enroute duration.
+
+## Enroute altitude context
+
+```{r}
+#| label: fig-enroute-exposure
+#| fig-cap: "Reconstructed pressure-altitude residence within source TOC--TOD. Each row uses equal flight weights and sums to 100%, including unbracketed time. This enroute cohort is independent of fine-window fuel eligibility."
+#| fig-width: 3.45
+#| fig-height: 4.2
+plot_enroute_exposure(enroute)
+```
+
+```{r}
+#| results: asis
+es<-enroute$support |>filter(WINDOW=="Source",COMMON)
+paper_table(data.frame(Cell=paste(es$TYPE,es$BAND100),China=es$CHN,Europe=es$EUR),
+ "Source-window enroute exposure support; independently eligible flights per cell.",c(.34,.30,.30))
+```
+
+```{r}
+#| label: fig-boundary-altitude
+#| fig-cap: "Median time-weighted enroute altitude on identical flights under source and level-envelope windows. Source sampling and detector differences remain measurement limitations."
+#| fig-width: 3.45
+#| fig-height: 4.0
+ez<-enroute$paired_summary |>mutate(CELL=paste(TYPE,BAND100))
+ggplot(ez,aes(MEAN_ALT_P50/100,CELL,color=REGION))+geom_point(position=position_dodge(width=.5))+
+ geom_linerange(aes(xmin=MEAN_ALT_P20/100,xmax=MEAN_ALT_P80/100),position=position_dodge(width=.5),orientation="y")+
+ facet_wrap(~WINDOW,ncol=1)+scale_color_manual(values=colors)+labs(x="Time-weighted pressure altitude / 100 ft",y=NULL,color=NULL)+base
+```
+
+```{r}
+#| results: asis
+bs<-enroute$boundary_summary |>group_by(REGION) |>summarise(N=sum(N),Paired=sum(PAIRED_N),
+ TOC=100*sum(TOC_WITHIN_60S)/sum(PAIRED_N),TOD=100*sum(TOD_WITHIN_60S)/sum(PAIRED_N),.groups="drop")
+paper_table(data.frame(Region=bs$REGION,Source=fmt(bs$N),Paired=fmt(bs$Paired),`TOC/TOD %`=paste(fmt(bs$TOC,1),fmt(bs$TOD,1),sep="/"),check.names=FALSE),
+ "Paired boundary-sensitivity support and source/envelope agreement within 60 s.",c(.18,.23,.23,.30))
+```
+
+The altitude-band view separates levels occupied from phase duration. It does not establish an independently measured fuel penalty or an ATM cause. Source and reconstructed boundary schemes accompany their own support; shifting a boundary cannot justify reusing the original phase's fuel increment.
+
+## Enroute fuel per flown nautical mile
+
+Five exact-type/distance/mean-altitude cells support paired enroute kg/NM references. All have some overlap of their P20--P80 ranges, while median offsets vary in magnitude and direction. For A321 at 500--599 NM and mean altitude FL300--339, the medians are particularly close at 6.25 and 6.29 kg/NM. A320neo and A320 have higher CHN medians, whereas A321neo at FL340 and above has a lower CHN median. This supports type- and profile-qualified central reference ranges rather than one regional multiplier.
+
+```{r}
+#| label: enroute-altitude-rate-table
+#| results: asis
+ac <- lookup_review$enroute_exact_cell_contrasts |>arrange(TYPE,BAND100)
+paper_table(data.frame(Cell=paste(ac$TYPE,ac$BAND100),`Mean FL`=gsub("FL","",ac$PROFILE_CLASS,fixed=TRUE),
+ China=paste(fmt(ac$P20_CHN,2),fmt(ac$P50_CHN,2),fmt(ac$P80_CHN,2),sep="/"),
+ Europe=paste(fmt(ac$P20_EUR,2),fmt(ac$P50_EUR,2),fmt(ac$P80_EUR,2),sep="/"),
+ `n CHN/EUR`=paste(ac$N_CHN,ac$N_EUR,sep="/"),check.names=FALSE),
+ "Enroute kg per flown NM, P20/P50/P80. Cell identifies type and 100 NM GCD-band lower bound; mean FL is the time-weighted pressure-altitude class. Each rate uses its own eligible phase distance.",c(.18,.13,.24,.24,.15))
+```
+
+```{r}
+#| label: fig-enroute-altitude-fuel-rate
+#| fig-width: 3.45
+#| fig-height: 3.8
+#| fig-cap: "Paired enroute fuel-intensity references at the source TOC/TOD boundaries. Bars show P20--P80 and points P50; all cells have at least 30 kg/NM observations per source. Labels combine exact type, GCD-band lower bound and mean-altitude class."
+ar <- ac |>select(TYPE,BAND100,PROFILE_CLASS,starts_with("P20_"),starts_with("P50_"),starts_with("P80_")) |>
+ pivot_longer(cols=matches("^P[258]0_(CHN|EUR)$"),names_to=c(".value","REGION"),names_pattern="(P[258]0)_(CHN|EUR)") |>
+ mutate(Cell=paste0(TYPE," ",BAND100,"\n",PROFILE_CLASS))
+ggplot(ar,aes(P50,Cell,color=REGION))+geom_linerange(aes(xmin=P20,xmax=P80),orientation="y",
+ position=position_dodge(width=.5))+geom_point(position=position_dodge(width=.5),size=1.5)+
+ scale_color_manual(values=colors)+labs(x="Enroute fuel / flown NM",y=NULL,color=NULL)+base+
+ theme(axis.text.y=element_text(size=6.7))
+```
+
+The 500--<700 NM A321neo cohort provides an altitude association within each source. CHN median kg/NM decreases from 5.68 below FL300 to 5.18 at FL300--339 and 4.84 at FL340 and above (n=98/180/71). EUR medians are 5.59 and 5.29 in the middle and higher classes (n=69/594); the below-FL300 EUR sample has only five observations. Route, direction, aircraft mass and operating strategy remain mixed within these groups. The altitude bands are useful reference qualifiers, without establishing a fuel-optimal flight level.
+
+Broad grouping requires a composition check. The A321neo FL300--339 cell at 500--<700 NM has n=180/69 for kg/NM, but its underlying 500--599 NM cell has n=157/21 and its 600--699 NM cell n=23/48. Pooling therefore produces a populated pair by combining different stage mixtures. Preserve both broad reporting categories and the narrower checks. For A321neo at FL340 and above, the closer 570--<600 NM comparison still retains n=71/113, with medians 4.84/5.32 kg/NM.
+
+## Fleet groups and populated lookup entries
+
+The newer/older single-aisle distinction is supported by the A320-family comparison. At 600--699 NM and mean enroute altitude FL300--339, A320neo median kg/NM is 12.8% below A320 within CHN and 14.1% below within EUR. The same direction appears under both source fuel methods. This supports a fleet-generation reporting group while retaining exact types for numerical lookup values; the comparison does not separately estimate engine technology, payload or mass effects.
+
+```{r}
+#| label: modern-older-enroute-reference-table
+#| results: asis
+tg <- lookup_review$modern_older_same_altitude |>arrange(REGION)
+paper_table(data.frame(Source=tg$REGION,`A20N median`=fmt(tg$P50_A20N,2),`A320 median`=fmt(tg$P50_A320,2),
+ `n A20N/A320`=paste(tg$N_A20N,tg$N_A320,sep="/"),`Lower %`=fmt(tg$NEWER_MEDIAN_PERCENT_LOWER,1),check.names=FALSE),
+ "Newer and older A320-family enroute references, kg per flown NM, at 600--699 NM and mean altitude FL300--339. Percentage compares the two observed medians within each source.",c(.13,.20,.20,.23,.18))
+```
+
+The lookup can already retain total fuel, duration and both rates together. A321neo at 500--599 NM and mean altitude FL340 and above supplies a complete example. Its source-specific central rates are approximately five kg/NM, with overlapping central ranges, while total fuel and elapsed time retain the amount of phase exposure.
+
+```{r}
+#| label: complete-enroute-lookup-example
+#| results: asis
+ex <- lookup_review$lookup_exact_enroute_wide |>
+ filter(TYPE=="A21N",BAND100==500,PROFILE_CLASS=="FL340+") |>arrange(REGION)
+ms <- c("FUEL_KG","DURATION_MIN","KG_MIN","KG_NM","FLOWN_NM")
+ds <- c(0,1,2,2,0)
+vals <- function(region) vapply(seq_along(ms),function(i){
+ r<-ex[ex$REGION==region,];paste(fmt(r[[paste0("P20_",ms[i])]],ds[i]),
+  fmt(r[[paste0("P50_",ms[i])]],ds[i]),fmt(r[[paste0("P80_",ms[i])]],ds[i]),sep="/")},character(1))
+paper_table(data.frame(Metric=c("Fuel kg","Minutes","kg/min","kg/NM","Flown NM"),China=vals("CHN"),Europe=vals("EUR"),
+ `n CHN/EUR`=vapply(ms,function(m)paste(ex[[paste0("N_",m)]],collapse="/"),character(1)),check.names=FALSE),
+ "Populated A321neo lookup: GCD 500--599 NM, source TOC--TOD and mean pressure altitude FL340 and above. Entries give P20/P50/P80 with separate metric n; the columns do not describe one joint reference flight.",c(.19,.29,.29,.17))
+```
+
+Total fuel must accompany intensity. In CHN B738 observations, median enroute fuel is 2,356 kg for 500--<700 NM and 4,432 kg for sectors of at least 1000 NM, while median intensity is 5.95 and 5.46 kg/NM. The fuel counts are 213/652 and distance-rate counts 134/622. These independent marginal summaries demonstrate why a lower kg/NM reference need not imply lower phase fuel.
+
+Widebody source-specific fuel/time references remain a separate reporting group. No widebody exact type currently has paired kg/NM support in the same proposed GCD group at n of at least 30. A Chinese 500--700 NM cohort and a European 700--1000 NM cohort should not be pooled to create an apparent matched reference. All 24 adopted windows, including both terminal alternatives and four ground segments, retain their marginal lookup rows and independent eligibility.
+
+## Climb FL075 to FL100
+
+```{r}
+#| label: fig-climb-075-fuel
+#| fig-cap: "Climb FL075--100 fuel: P20--P80 with P50 points in each supported aircraft/GCD cell."
+#| fig-width: 3.45
+#| fig-height: 3.0
+paper_reference_plot(study,core[1])+base
+```
+
+```{r}
+#| label: fig-climb-075-distribution
+#| fig-cap: "Climb FL075--100 fuel distributions within each supported aircraft/GCD cell. Each panel retains its own horizontal scale."
+#| fig-width: 3.45
+#| fig-height: 5.4
+paper_reference_plot(study,core[1],kind="ecdf")+base
+```
+
+```{r}
+#| results: asis
+for(m in c("FUEL_KG","DURATION_MIN","KG_MIN"))reference_table(core[1],m)
+```
+
+## Climb FL100 to FL180
+
+```{r}
+#| label: fig-climb-100-fuel
+#| fig-cap: "Climb FL100--180 fuel: P20--P80 with P50 points. The fixed pressure interval removes dependence on source TOC selection."
+#| fig-width: 3.45
+#| fig-height: 3.0
+paper_reference_plot(study,core[2])+base
+```
+
+```{r}
+#| label: fig-climb-100-distribution
+#| fig-cap: "Climb FL100--180 fuel distributions by aircraft/GCD cell. Matching stage and aircraft does not control source fuel methodology."
+#| fig-width: 3.45
+#| fig-height: 5.4
+paper_reference_plot(study,core[2],kind="ecdf")+base
+```
+
+```{r}
+#| results: asis
+for(m in c("FUEL_KG","DURATION_MIN","KG_MIN"))reference_table(core[2],m)
+```
+
+## Descent FL180 to FL100
+
+```{r}
+#| label: fig-descent-180-fuel
+#| fig-cap: "Descent FL180--100 fuel: P20--P80 with P50 points. Total fuel is retained alongside duration and rates."
+#| fig-width: 3.45
+#| fig-height: 3.0
+paper_reference_plot(study,core[3])+base
+```
+
+```{r}
+#| label: fig-descent-180-distribution
+#| fig-cap: "Descent FL180--100 fuel distributions by aircraft/GCD cell. Short-interruption resolution is a separate property from endpoint fuel/time support."
+#| fig-width: 3.45
+#| fig-height: 5.4
+paper_reference_plot(study,core[3],kind="ecdf")+base
+```
+
+```{r}
+#| results: asis
+for(m in c("FUEL_KG","DURATION_MIN","KG_MIN"))reference_table(core[3],m)
+```
+
+## Descent FL100 to FL075
+
+```{r}
+#| label: fig-descent-100-fuel
+#| fig-cap: "Descent FL100--075 fuel: P20--P80 with P50 points. This lower pressure window complements FL180--100."
+#| fig-width: 3.45
+#| fig-height: 3.0
+paper_reference_plot(study,core[4])+base
+```
+
+```{r}
+#| label: fig-descent-100-distribution
+#| fig-cap: "Descent FL100--075 fuel distributions by aircraft/GCD cell. Sample support is specific to this window."
+#| fig-width: 3.45
+#| fig-height: 5.4
+paper_reference_plot(study,core[4],kind="ecdf")+base
+```
+
+```{r}
+#| results: asis
+for(m in c("FUEL_KG","DURATION_MIN","KG_MIN"))reference_table(core[4],m)
+```
+
+## Fuel and duration within fixed windows
+
+```{r}
+#| label: fig-reference-ratios
+#| fig-cap: "Ratios of within-cell medians (CHN/EUR) for fuel, duration and individual-flight kg/min. These are separate distribution summaries, not a joint reference flight or a causal regional effect."
+#| fig-width: 3.45
+#| fig-height: 6.7
+ratios<-study$grid |>filter(WINDOW%in%core,METRIC%in%c("FUEL_KG","DURATION_MIN","KG_MIN"),PAIRED_SUPPORT) |>
+ select(REGION,TYPE,BAND100,WINDOW,METRIC,P50) |>pivot_wider(names_from=REGION,values_from=P50) |>
+ mutate(RATIO=CHN/EUR,LOG_RATIO=log2(RATIO),CELL=paste(TYPE,BAND100),
+  W=factor(WINDOW,levels=core,labels=c("Climb 075-100","Climb 100-180","Descent 180-100","Descent 100-075")),
+  M=factor(METRIC,levels=c("FUEL_KG","DURATION_MIN","KG_MIN"),labels=c("Fuel median ratio","Duration median ratio","kg/min median ratio")))
+ratio_range<-function(w,m){v<-ratios$RATIO[ratios$WINDOW==w&ratios$METRIC==m];paste(fmt(min(v),2),fmt(max(v),2),sep="--")}
+ratio_higher<-function(w,m)sum(ratios$RATIO[ratios$WINDOW==w&ratios$METRIC==m]>1)
+ggplot(ratios,aes(W,CELL,fill=LOG_RATIO))+geom_tile(color="white")+geom_text(aes(label=fmt(RATIO,2)),size=2.1)+
+ facet_wrap(~M,ncol=1)+scale_fill_gradient2(low="#85B8D7",mid="white",high="#D9867D",midpoint=0)+
+ labs(x=NULL,y=NULL,fill="log2 ratio")+base+theme(axis.text.x=element_text(angle=25,hjust=1,size=5.8))
+```
+
+```{r}
+#| label: fig-fuel-time
+#| fig-cap: "A320 / 600--699 NM: local fuel versus duration in the four pressure windows. Fuel-valid flights only. The joint pattern is descriptive; duration is not an independently measured interruption class."
+#| fig-width: 3.45
+#| fig-height: 4.5
+joint<-study$windows |>filter(TYPE=="A320",BAND100==600,WINDOW%in%core,FUEL_OK)
+ggplot(joint,aes(DURATION_MIN,FUEL_KG,color=REGION))+geom_point(alpha=.22,size=.5)+
+ facet_wrap(~WINDOW,ncol=2,scales="free")+scale_color_manual(values=colors)+labs(x="Duration (min)",y="Fuel (kg)",color=NULL)+base+
+ theme(strip.text=element_text(size=6))
+```
+
+The tables report independent duration support alongside fuel support; the joint plot uses the fuel-valid subset. A lower kg/min does not necessarily imply lower fuel for completing a comparable pressure interval. P20/P50/P80 describe distributions and are not optimal trajectories or recoverable savings.
+
+```{r}
+#| label: fig-distance-rates
+#| fig-cap: "Supplied flown-distance kg/NM references for the four pressure windows. P20--P80/P50 are calculated on each flight's own distance denominator, with stricter support than fuel/time."
+#| fig-width: 3.45
+#| fig-height: 5.2
+dr<-study$grid |>filter(WINDOW%in%core,METRIC=="KG_NM",PAIRED_SUPPORT) |>mutate(CELL=paste(TYPE,BAND100),
+ W=factor(WINDOW,levels=core,labels=c("Climb 075-100","Climb 100-180","Descent 180-100","Descent 100-075")))
+ggplot(dr,aes(P50,CELL,color=REGION))+geom_linerange(aes(xmin=P20,xmax=P80),position=position_dodge(width=.5),orientation="y")+
+ geom_point(position=position_dodge(width=.5),size=1.3)+facet_wrap(~W,ncol=2,scales="free_x")+
+ scale_color_manual(values=colors)+labs(x="Fuel / flown phase NM",y=NULL,color=NULL)+base+theme(axis.text.y=element_text(size=6))
+```
+
+The median-ratio view separates differences in total fuel, elapsed time and per-flight fuel rate:
+
+- Both climb windows have longer CHN median duration and lower CHN median kg/min in all eight cells. Total median fuel is higher in `r ratio_higher(core[1],"FUEL_KG")` cells for FL075--100 and `r ratio_higher(core[2],"FUEL_KG")` for FL100--180. A rate alone would therefore conceal a different total-fuel comparison.
+- For descent FL180--100, CHN/EUR median ratios are `r ratio_range(core[3],"DURATION_MIN")` for duration, `r ratio_range(core[3],"FUEL_KG")` for fuel and `r ratio_range(core[3],"KG_MIN")` for kg/min. These substantial source-sample contrasts require the different recorded/modelled fuel methods to remain explicit.
+- Descent FL100--075 has mixed signs: CHN median fuel is higher in `r ratio_higher(core[4],"FUEL_KG")` of eight cells and median duration in `r ratio_higher(core[4],"DURATION_MIN")`. The two descent windows should not be collapsed into one regional characterisation.
+
+Similar medians alone do not demonstrate statistical equivalence. None of these descriptive contrasts identifies an independently measured regional fuel penalty or a recoverable ATM saving.
+
+## Both terminal options
+
+```{r}
+#| label: fig-terminal-departure
+#| fig-cap: "Departure alternatives retained side by side: ATOT--source 3,000 ft and ATOT--FL075. P20--P80 fuel with P50 points. Boundary references differ between sources and are explicitly labelled."
+#| fig-width: 3.45
+#| fig-height: 5.2
+paper_terminal_plot(study)+base
+```
+
+```{r}
+#| results: asis
+reference_table("Climb-out source LTO","FUEL_KG")
+reference_table("Takeoff-FL075","FUEL_KG")
+```
+
+Within the eight supported departure aircraft/GCD cells, both terminal alternatives use the same 1,647 CHN and 6,224 EUR fuel-valid flights. Thus their fuel/time differences can be compared on identical flights. This does not make a field-relative 3,000 ft increment equivalent to FL030 or to FL075.
+
+```{r}
+#| label: fig-terminal-arrival
+#| fig-cap: "Arrival counterparts: source 3,000 ft--ALDT and FL075--ALDT, with P20--P80/P50 fuel. Unlike departure, their eligible flight sets differ."
+#| fig-width: 3.45
+#| fig-height: 5.2
+paper_terminal_plot(study,side="Arrival")+base
+```
+
+```{r}
+#| label: fig-airport-boundary
+#| fig-cap: "Stored altitude of CHN source DLTO/ALTO by relevant airport. A field-relative 3,000 ft increment can exceed FL075; the dashed line marks 7,500 ft standard-pressure altitude."
+#| fig-width: 3.45
+#| fig-height: 3.4
+ap<-study$events |>filter(REGION=="CHN",MST%in%c("DLTO","ALTO")) |>
+ left_join(select(study$flights,REGION,SOURCE_UID,ADEP,ADES),by=c("REGION","SOURCE_UID")) |>
+ mutate(AIRPORT=if_else(MST=="DLTO",ADEP,ADES))
+ggplot(ap,aes(AIRPORT,ALT_FT/1000,fill=MST))+geom_boxplot(outlier.size=.3)+geom_hline(yintercept=7.5,linetype=2)+
+ facet_wrap(~MST,ncol=1)+labs(x=NULL,y="Stored altitude (thousand ft)",fill=NULL)+base+theme(legend.position="none")
+```
+
+ZPPP source DLTO/ALTO medians are approximately 9,786/9,764 ft. Its optional source-LTO--FL075 subdivisions therefore have reversed order, while ATOT--source-DLTO and ATOT--FL075 remain independently usable. Omitting ZPPP at the relevant endpoint changes full-sample terminal support but none of the existing eight paired-cell counts. Airport restriction is a sensitivity, not a blanket exclusion from other analyses.
+
+## Ground movement references
+
+```{r}
+#| label: fig-ground-fuel
+#| fig-cap: "Source ground-segment fuel distributions in supported aircraft/GCD cells. Regional cell mixtures are not standardised in these pooled displays. Ground/record-edge and fuel-model conventions remain explicit."
+#| fig-width: 3.45
+#| fig-height: 4.5
+gc<-study$paired_cells |>filter(METRIC=="FUEL_KG",PAIRED_SUPPORT) |>select(TYPE,BAND100,WINDOW)
+g<-study$windows |>filter(FAMILY=="Ground",FUEL_OK) |>semi_join(gc,by=c("TYPE","BAND100","WINDOW"))
+ggplot(g,aes(FUEL_KG,color=REGION))+stat_ecdf(linewidth=.6)+facet_wrap(~WINDOW,ncol=1,scales="free_x")+
+ scale_color_manual(values=colors)+labs(x="Ground segment fuel (kg)",y="Cumulative flight share",color=NULL)+base+
+ theme(strip.text=element_text(size=6))
+```
+
+```{r}
+#| results: asis
+gs<-study$support |>filter(FAMILY=="Ground") |>select(REGION,WINDOW,TIME_N,FUEL_N) |>
+ pivot_wider(names_from=REGION,values_from=c(TIME_N,FUEL_N))
+paper_table(data.frame(Segment=gsub(" recorded segment| source segment","",gs$WINDOW),
+ `Time CHN/EUR`=paste(gs$TIME_N_CHN,gs$TIME_N_EUR,sep="/"),
+ `Fuel CHN/EUR`=paste(gs$FUEL_N_CHN,gs$FUEL_N_EUR,sep="/"),check.names=FALSE),
+ "Ground reference support. Each metric retains its own source-valid observations.",c(.40,.27,.27))
+```
+
+The four ground segments each retain eight paired fuel/time cells, including 1,585 CHN observations per segment. Supplied EUR taxi-out and take-off-roll distances are zero, so their fuel/time support does not imply supplied-distance kg/NM support. Proxy distances require a named denominator method and separate uncertainty; elapsed time multiplied by one assumed speed would merely rescale kg/min. The agreed roll-fuel adjustment is already included in the EUR values shown.
+
+## Profile composition and conditional interpretation
+
+- Keep regional distributions of profile descriptors alongside conditional fuel references. Matching on profile can conceal a regional difference in interruption prevalence.
+- Use common physical definitions for sustained-level time/share, interruption count, longest interruption and altitude. Preserve unknown coverage separately from a resolved profile with no detected sustained interruption.
+- Crossing-bracket resolution and interior profile resolution are distinct. A 30 s crossing-bracket sensitivity retains eight cells for the FL100--180 comparisons; a 30 s full-interior requirement leaves six climb and no descent cells. Resolution must follow the feature being measured.
+- The preceding fine-window fuel tables are marginal references. The following common-class assessment has its own native-point coverage requirement and does not retroactively restrict those tables.
+- Matching aircraft/stage/profile does not remove fuel-method, engine, payload, atmospheric, speed, operator or airport confounding. Any pooled regional contrast requires common cell weights applied to flight-level distributions.
+
+## Interruption classes and analysis support
+
+The CHN returned altitude points are selected observations at event brackets and coverage boundaries, rather than a dense copy of the recorder trajectory. Source QC support for local altitude change is therefore different from having the interior knots needed to run a common episode detector. EUR M3 points also have irregular spacing. The coverage assessment uses the supplied original points in both regions; source level endpoints are not added as independent observations.
+
+```{r}
+#| label: common-class-support-table
+#| results: asis
+ps <- interruptions$support |>filter(SPEC==interruptions$config$primary_spec,WINDOW%in%core) |>
+  arrange(match(WINDOW,core),REGION)
+paper_table(data.frame(Window=gsub("Climb ","C ",gsub("Descent ","D ",ps$WINDOW)),Region=ps$REGION,
+  `C/L/H n`=paste(ps$CONTINUOUS_N,ps$LIGHT_N,ps$HEAVY_N,sep="/"),Unknown=fmt(ps$UNKNOWN_N),
+  `Fuel n`=fmt(ps$CLASSIFIABLE_FUEL_N),check.names=FALSE),
+  "Primary two-minute interruption classes. C/L/H are continuous at this scale, light and heavy. Fuel n is the classifiable subset with independent fuel support. Unknown includes unsupported, unresolved and too-short windows; all source flights remain in the denominator.",c(.30,.10,.22,.16,.16))
+```
+
+```{r}
+#| label: fig-common-profile-coverage
+#| fig-width: 3.45
+#| fig-height: 4.2
+#| fig-cap: "Flights supporting a complete common reconstruction by feature/gap specification. Counts concern the selected windows and include fuel-independent profile support. The primary rule is 120 s features with at most 60 s native gaps; the 120/120 specification is a coarser sensitivity. Unequal support and event-selected CHN knots preclude interpreting the classifiable subset as representative regional profile frequencies."
+cp <- interruptions$support |>filter(WINDOW%in%core) |>
+  mutate(Feature=factor(SPEC,levels=interruptions$feature_specs$SPEC[c(1,2,4,3,5)],
+    labels=c("20/10","60/30","120/30","120/60","120/120")),
+    WINDOW=factor(WINDOW,levels=core))
+ggplot(cp,aes(Feature,CLASSIFIABLE_N,color=REGION,group=REGION))+geom_line(linewidth=.5)+
+  geom_point(size=1.5)+facet_wrap(~WINDOW,scales="free_y",ncol=1)+scale_color_manual(values=colors)+
+  labs(x="Minimum episode / maximum native gap (s)",y="Classifiable flights",color=NULL)+base
+```
+
+```{r}
+#| label: native-level-evidence-table
+#| results: asis
+ne <- interruptions$native_level_evidence |>filter(WINDOW%in%core) |>
+  select(WINDOW,REGION,SOURCE_LEVEL_EVIDENCE_N,COMMON_CLASSIFIABLE_WITH_SOURCE_LEVEL_N) |>
+  pivot_wider(names_from=REGION,values_from=c(SOURCE_LEVEL_EVIDENCE_N,COMMON_CLASSIFIABLE_WITH_SOURCE_LEVEL_N)) |>
+  arrange(match(WINDOW,core))
+paper_table(data.frame(Window=ne$WINDOW,`Source evidence CHN/EUR`=paste(fmt(ne$SOURCE_LEVEL_EVIDENCE_N_CHN),fmt(ne$SOURCE_LEVEL_EVIDENCE_N_EUR),sep="/"),
+  `Also common-classifiable CHN/EUR`=paste(fmt(ne$COMMON_CLASSIFIABLE_WITH_SOURCE_LEVEL_N_CHN),fmt(ne$COMMON_CLASSIFIABLE_WITH_SOURCE_LEVEL_N_EUR),sep="/"),check.names=FALSE),
+  "Flights with qualifying native source level-segment evidence, and the intersection with primary common classification. These are positive-evidence counts under different native detectors, not comparable interruption prevalence or proof that flights without tags were continuous.",c(.34,.30,.30))
+```
+
+- A large marginal fuel cohort does not imply the same support for an interruption-conditioned lookup. In the two FL100--180 directional windows, no CHN flight meets primary common-class eligibility with the 60 s native-gap limit and existing source altitude-support gate. This finding concerns the supplied representation and eligibility, not an absence of usable fuel or an assertion about the actual profiles.
+- Source-tagged long levels remain valuable evidence. Their presence together with sparse event knots also shows why the complete-knot subset can select against interrupted CHN profiles. Long flat spans in irregular EUR M3 can likewise fail the short-gap requirement. The surviving class proportions cannot establish regional prevalence.
+- Count support within each exact aircraft/GCD/window/class cell. At least 30 independently eligible observations per region remain necessary for a populated paired fuel reference. Across all ten assessed windows, the primary rule supports `r sum(interruptions$paired_support$FUEL_CELLS[interruptions$paired_support$SPEC==interruptions$config$primary_spec])` such class-specific paired cells. Counts from overlapping windows must not be added as independent flights.
+- Moving the light/heavy cut points changes labels only for classifiable profiles. It cannot resolve an unknown profile or recover missing interior observations; threshold sensitivity and coverage sensitivity answer different questions.
+- Retain the marginal pressure/terminal tables, the explicit unknown category and the source-evidence diagnostic. The common thresholds define a testable lookup design; source detector labels cannot substitute for unsupported common classes.
+
+At fixed primary coverage, increasing only the light-class level-share limit from 20% to 30% changes the EUR light count for descent FL180--100 from `r interruptions$threshold_sensitivity |> filter(SCENARIO=="Primary",REGION=="EUR",WINDOW=="Descent FL180-FL100",PROFILE_CLASS=="Lightly interrupted") |> pull(N)` to `r interruptions$threshold_sensitivity |> filter(SCENARIO=="Light share 30%",REGION=="EUR",WINDOW=="Descent FL180-FL100",PROFILE_CLASS=="Lightly interrupted") |> pull(N)`. This illustrates a substantive class-boundary sensitivity, not evidence favouring either cut point. Retain the continuous descriptors and these working alternatives alongside the compact classes; no threshold choice resolves the lack of paired primary support.
+
+## Threshold choices for a practical reference lookup
+
+The study proposes numerical reference categories because they describe the observed exposure directly and keep the distinction between profile shape and fuel outcome. Up-to-two, over-two-to-five and over-five minutes of tagged level time give an interpretable upper-descent progression, with the longer tail retained only where its sample supports percentiles. The existing five-minute climb marker remains a traversal-time category. Transferring that traversal cut to upper descent would flag 201 of 202 CHN A320neo observations and provide little discrimination.
+
+The common-class experiment also reveals a definition effect beyond native-point coverage. A light class with a minimum two-minute episode and a maximum 20% level share requires at least ten minutes of window duration. Fewer than 1% of either region's FL100--180 climbs or FL100--075 descents meet that necessary condition, and none of the FL075--100 climbs does. A near-empty light class in these windows therefore cannot be interpreted as evidence that operations naturally split into continuous and heavily interrupted profiles.
+
+```{r}
+#| label: light-class-window-compatibility
+#| results: asis
+lc <- lookup_review$feature_share_compatibility |>
+ mutate(Value=paste0(fmt(AT_LEAST_TEN_MIN_N),"/",fmt(TIME_N)," (",fmt(100*AT_LEAST_TEN_MIN_SHARE,1),"%)")) |>
+ select(REGION,WINDOW,Value) |>pivot_wider(names_from=REGION,values_from=Value) |>
+ arrange(match(WINDOW,core))
+paper_table(data.frame(Window=gsub("Climb ","C ",gsub("Descent ","D ",lc$WINDOW)),China=lc$CHN,Europe=lc$EUR),
+ "Windows lasting at least ten minutes, as count / time-eligible n (percent). This duration is necessary for a 120 s episode to satisfy the original light-class 20 percent limit; it is not sufficient common-class eligibility.",c(.29,.325,.325))
+```
+
+The working proposal is consequently window-specific: sector and fleet reporting groups; altitude-qualified enroute kg/NM references; climb traversal bands; and source-specific descent level-time bins, accompanied by count, share and longest-episode descriptors. The original common continuous/light/heavy model remains a documented comparison. A regional common-class reference requires commensurate observations, whereas the numerical source-specific bins already support descriptive fuel references. The threshold choices are defensible study proposals supported by the patterns shown here, rather than claimed universal breakpoints or final validation.
+
+## Study aspects retained in this technical note
+
+```{r}
+#| label: study-aspects-table
+#| results: asis
+paper_table(data.frame(Aspect=c("Regional composition","Fuel and profile patterns","Fine pressure windows","Terminal alternatives","Enroute levels","TOC/TOD sensitivity","Ground movement","Interruption classes","Conditional fuel references"),
+  Evidence=c("Aircraft, proposed sector groups and phase duration","Climb/descent time, native level exposure and route direction","Four directional FL075/100/180 references","Source 3,000 ft and FL075 endpoints","Altitude residence and conditional kg/NM references","Paired source and level-envelope boundaries","Four segment fuel/time references","Common model and proposed numerical exposure bins","Populated fuel/time/rate entries with metric-specific n"),
+  Interpretation=c("Source composition and narrower stage checks","Phase-specific associations; weight unobserved","Total kg alongside rates","Pressure reference and airport elevation explicit","Mean-altitude classes and source boundaries explicit","Boundary effects evaluated on identical flights","Supplied zero-distance channels retain no kg/NM","Window-compatible thresholds; unknown kept separate","Descriptive central ranges; no automatic ATM savings")),
+  "Study components retained without a page limit. Ground-distance proxies remain an additional denominator method requiring explicit assumptions; other FL anchors remain outside the present window set.",c(.24,.35,.35))
+```
+
+# Conclusion
+
+- Develop the similar-time/closer-distance fuel findings for A320neo and A321neo, retaining the distinction between recorded and modelled fuel.
+- Describe the repeated route-direction pattern and its association with source-tagged level time at identical sector distances. Sector length alone does not identify the mechanism or aircraft weight.
+- Summarise the supported pressure-window references and both terminal alternatives, with metric-specific n.
+- Propose up-to-two, over-two-to-five and over-five minute upper-descent level-time categories, retaining the observed fuel gradient and source detector provenance.
+- Present the five altitude-qualified enroute kg/NM comparisons and the complete A321neo lookup example. Keep exact type within the proposed fleet and sector groups.
+- Explain the ten-minute constraint implied by the original two-minute/20% light-class rule, motivating window-specific categories rather than one universal interruption scale.
+- Keep regional profile composition distinct from consumption conditional on comparable profiles.
+- Distinguish the proposed common interruption rules from the support to apply them: native-point selection limits matched class references despite substantial marginal fuel and source-segment evidence.
+- Relate enroute altitude and ground movement to the window references without claiming causal ATM savings or an equivalence test.
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

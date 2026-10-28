@@ -1,0 +1,47 @@
+WINDOW,FAMILY,METRIC,CELLS,CHN,EUR
+Approach-landing source LTO,Source_LTO,DISTANCE_RATE_OK,8,1560,6224
+Approach-landing source LTO,Source_LTO,FUEL_OK,8,1639,6224
+Approach-landing source LTO,Source_LTO,TIME_OK,8,1639,6224
+Climb FL075-FL100,Pressure,DISTANCE_RATE_OK,8,1561,6223
+Climb FL075-FL100,Pressure,FUEL_OK,8,1648,6223
+Climb FL075-FL100,Pressure,TIME_OK,8,1648,6223
+Climb FL100-FL180,Pressure,DISTANCE_RATE_OK,8,1560,6223
+Climb FL100-FL180,Pressure,FUEL_OK,8,1648,6223
+Climb FL100-FL180,Pressure,TIME_OK,8,1648,6223
+Climb FL180-source TOC,Upper_context,DISTANCE_RATE_OK,8,1557,6224
+Climb FL180-source TOC,Upper_context,FUEL_OK,8,1646,6224
+Climb FL180-source TOC,Upper_context,TIME_OK,8,1646,6224
+Climb source LTO-FL075,Lower_pressure,DISTANCE_RATE_OK,8,1560,6221
+Climb source LTO-FL075,Lower_pressure,FUEL_OK,8,1647,6221
+Climb source LTO-FL075,Lower_pressure,TIME_OK,8,1647,6221
+Climb-out source LTO,Source_LTO,DISTANCE_RATE_OK,8,1560,6215
+Climb-out source LTO,Source_LTO,FUEL_OK,8,1647,6224
+Climb-out source LTO,Source_LTO,TIME_OK,8,1647,6224
+Descent FL075-source LTO,Lower_pressure,DISTANCE_RATE_OK,8,1560,6085
+Descent FL075-source LTO,Lower_pressure,FUEL_OK,8,1639,6085
+Descent FL075-source LTO,Lower_pressure,TIME_OK,8,1639,6085
+Descent FL100-FL075,Pressure,DISTANCE_RATE_OK,8,1553,6041
+Descent FL100-FL075,Pressure,FUEL_OK,8,1639,6041
+Descent FL100-FL075,Pressure,TIME_OK,8,1639,6041
+Descent FL180-FL100,Pressure,DISTANCE_RATE_OK,8,1553,6170
+Descent FL180-FL100,Pressure,FUEL_OK,8,1639,6170
+Descent FL180-FL100,Pressure,TIME_OK,8,1639,6170
+Descent source TOD-FL180,Upper_context,DISTANCE_RATE_OK,8,1559,6221
+Descent source TOD-FL180,Upper_context,FUEL_OK,8,1639,6221
+Descent source TOD-FL180,Upper_context,TIME_OK,8,1639,6221
+FL075-landing,Pressure_terminal,DISTANCE_RATE_OK,8,1561,6086
+FL075-landing,Pressure_terminal,FUEL_OK,8,1648,6086
+FL075-landing,Pressure_terminal,TIME_OK,8,1648,6086
+Landing-roll/runway-exit source segment,Ground,DISTANCE_RATE_OK,1,81,1004
+Landing-roll/runway-exit source segment,Ground,FUEL_OK,8,1585,6176
+Landing-roll/runway-exit source segment,Ground,TIME_OK,8,1645,6176
+Takeoff roll source segment,Ground,FUEL_OK,8,1585,6224
+Takeoff roll source segment,Ground,TIME_OK,8,1645,6224
+Takeoff-FL075,Pressure_terminal,DISTANCE_RATE_OK,8,1560,6224
+Takeoff-FL075,Pressure_terminal,FUEL_OK,8,1647,6224
+Takeoff-FL075,Pressure_terminal,TIME_OK,8,1647,6224
+Taxi-in recorded segment,Ground,DISTANCE_RATE_OK,1,81,1005
+Taxi-in recorded segment,Ground,FUEL_OK,8,1585,6214
+Taxi-in recorded segment,Ground,TIME_OK,8,1645,6214
+Taxi-out recorded segment,Ground,FUEL_OK,8,1585,6224
+Taxi-out recorded segment,Ground,TIME_OK,8,1645,6224

@@ -1,0 +1,18 @@
+PATH,SHA256
+data-store/derived/eur/parallel-preprocessing/EUR-2026-10-13-002/EUR-canonical-milestones-parallel.parquet,8131f9c4454b0ffffe1b90b4bd1f39ab02ba6439d2e3e3cdf9b838c2f113113b
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output1/CHN-canonical-milestones.parquet,b65147e4809b8284d80bc9ced01a45beca7687a37544bdcbb5cce848d061901d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output10/CHN-canonical-milestones.parquet,b3f5961bf1f20f234b36c9ba91828f0d649c497df58e5ec33e32d2cec3f8a523
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output11/CHN-canonical-milestones.parquet,6217c0f462054432e537975e1cb9137c2920c6faf00f5e970729484aab879eee
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output12/CHN-canonical-milestones.parquet,4fbde8a3839d6f65839fe107a7596a2e2ba927998ade836da0b97c67c620ec00
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output13/CHN-canonical-milestones.parquet,eabef8c9340a5566d91e37fabfdfc28968535c5bdd4ad6321d9c8ec872f676d5
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output14/CHN-canonical-milestones.parquet,c3eef07edbbf46aa22de22606f72757c9d9ba58c7a2a91ccd8cce8e5c986bda5
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output2/CHN-canonical-milestones.parquet,f4d0bf04da6c07c912784339295dfd22c73ac2cad91d19b61c393b19bf41ab3d
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output3/CHN-canonical-milestones.parquet,0b619fab74eb7ced8fb8545896620bd7e0c3fb837281041467d7add0d6742b81
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output4/CHN-canonical-milestones.parquet,903f8676d594574c1e6afdeda88728ae41b897f1d213a519086828176e10e29e
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output5/CHN-canonical-milestones.parquet,c0699daee0523dce80ee73a63a4c4d840b9b634cbf7c06f4dca03d88a25ec388
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output6/CHN-canonical-milestones.parquet,fbcd74439efb8acce08e3c818e16238c1491a61de94f5c5efd4f5898c0f468ec
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output7/CHN-canonical-milestones.parquet,862413a551d845ae484d3634afac5d30c1c413ecf985a6e748712aac53a1e998
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output8/CHN-canonical-milestones.parquet,c0e3c0651a2ce9d703904b897873ad333932dcaab2f3637d700b3616feb07e4f
+data-store/derived/chn/verification/CHN-2026-10-18-001/returned-batches/CHN QAR summary（June July and August）/output9/CHN-canonical-milestones.parquet,d3d2cd6bcb059b776e08124dfc313d8ea46a835acd1fd9b976926dcab5daac51
+helpers/chn-qar-v2/data/airports.csv,80ee08138175bb7988b66baf2a578f9d72c7c25c81b4c3a648dd11b0144b0f87
+notes/reference-data/EUR-airport-coordinates-2024-12-27.csv,c9cc2c2a986556ee12127dc48c3870d5f9c869ebf8b52dd0500864bc11fbe11e

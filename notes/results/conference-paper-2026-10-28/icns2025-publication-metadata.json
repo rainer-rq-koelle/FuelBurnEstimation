@@ -1,0 +1,97 @@
+{
+  "retrieved": "2026-10-28",
+  "source": "https://api.crossref.org/works/10.1109%2FICNS65417.2025.10976852",
+  "publisher_deposited_fields": {
+    "title": [
+      "Fuel Flow Analysis for Different Flight Phases Based on a Data-Driven Approach"
+    ],
+    "author": [
+      {
+        "given": "Lingling",
+        "family": "Ma",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "College of Air Traffic Management, Civil Aviation University of China,Tianjin,China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Wei",
+        "family": "Dai",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Research Institute of Science &#x0026; Technology Innovation, Civil Aviation University of China,Tianjin,China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rainer",
+        "family": "Koelle",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Performance Review Unit,EUROCONTROL,Brussels,Belgium"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "DOI": "10.1109/icns65417.2025.10976852",
+    "page": "1-8",
+    "publisher": "IEEE",
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          4,
+          8
+        ]
+      ]
+    },
+    "event": {
+      "name": "2025 Integrated Communications, Navigation and Surveillance Conference (ICNS)",
+      "location": "Brussels, Belgium",
+      "start": {
+        "date-parts": [
+          [
+            2025,
+            4,
+            8
+          ]
+        ]
+      },
+      "end": {
+        "date-parts": [
+          [
+            2025,
+            4,
+            10
+          ]
+        ]
+      }
+    },
+    "URL": "https://doi.org/10.1109/icns65417.2025.10976852",
+    "container-title": [
+      "2025 Integrated Communications, Navigation and Surveillance Conference (ICNS)"
+    ]
+  }
+}

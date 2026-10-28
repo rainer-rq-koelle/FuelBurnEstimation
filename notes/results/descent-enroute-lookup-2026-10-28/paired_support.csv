@@ -1,0 +1,142 @@
+PROFILE_AXIS,WINDOW,METRIC,PAIRED_CELLS,CHN_N,EUR_N
+Marginal baseline,Approach-landing source LTO,DURATION_MIN,6,1677,10895
+Marginal baseline,Approach-landing source LTO,FLOWN_NM,6,1598,10895
+Marginal baseline,Approach-landing source LTO,FUEL_KG,6,1677,10895
+Marginal baseline,Approach-landing source LTO,KG_MIN,6,1677,10895
+Marginal baseline,Approach-landing source LTO,KG_NM,6,1598,10895
+Marginal baseline,Arrival ARP100-040,DURATION_MIN,6,1599,10895
+Marginal baseline,Arrival ARP100-040,FLOWN_NM,6,1599,10895
+Marginal baseline,Arrival ARP100-040,FUEL_KG,6,1599,10895
+Marginal baseline,Arrival ARP100-040,KG_MIN,6,1599,10895
+Marginal baseline,Arrival ARP100-040,KG_NM,6,1599,10895
+Marginal baseline,Arrival ARP200-100,DURATION_MIN,6,1598,10895
+Marginal baseline,Arrival ARP200-100,FLOWN_NM,6,1598,10895
+Marginal baseline,Arrival ARP200-100,FUEL_KG,6,1598,10895
+Marginal baseline,Arrival ARP200-100,KG_MIN,6,1598,10895
+Marginal baseline,Arrival ARP200-100,KG_NM,6,1598,10895
+Marginal baseline,Climb FL075-FL100,DURATION_MIN,6,1686,10894
+Marginal baseline,Climb FL075-FL100,FLOWN_NM,6,1599,10894
+Marginal baseline,Climb FL075-FL100,FUEL_KG,6,1686,10894
+Marginal baseline,Climb FL075-FL100,KG_MIN,6,1686,10894
+Marginal baseline,Climb FL075-FL100,KG_NM,6,1599,10894
+Marginal baseline,Climb FL100-FL180,DURATION_MIN,6,1686,10892
+Marginal baseline,Climb FL100-FL180,FLOWN_NM,6,1598,10892
+Marginal baseline,Climb FL100-FL180,FUEL_KG,6,1686,10892
+Marginal baseline,Climb FL100-FL180,KG_MIN,6,1686,10892
+Marginal baseline,Climb FL100-FL180,KG_NM,6,1598,10892
+Marginal baseline,Climb FL180-source TOC,DURATION_MIN,6,1684,10893
+Marginal baseline,Climb FL180-source TOC,FLOWN_NM,6,1595,10893
+Marginal baseline,Climb FL180-source TOC,FUEL_KG,6,1684,10893
+Marginal baseline,Climb FL180-source TOC,KG_MIN,6,1684,10893
+Marginal baseline,Climb FL180-source TOC,KG_NM,6,1595,10893
+Marginal baseline,Climb source LTO-FL075,DURATION_MIN,6,1685,10888
+Marginal baseline,Climb source LTO-FL075,FLOWN_NM,6,1598,10888
+Marginal baseline,Climb source LTO-FL075,FUEL_KG,6,1685,10888
+Marginal baseline,Climb source LTO-FL075,KG_MIN,6,1685,10888
+Marginal baseline,Climb source LTO-FL075,KG_NM,6,1598,10888
+Marginal baseline,Climb source window,DURATION_MIN,6,1683,10895
+Marginal baseline,Climb source window,FLOWN_NM,6,1593,10895
+Marginal baseline,Climb source window,FUEL_KG,6,1683,10895
+Marginal baseline,Climb source window,KG_MIN,6,1683,10895
+Marginal baseline,Climb source window,KG_NM,6,1593,10895
+Marginal baseline,Climb-out source LTO,DURATION_MIN,6,1685,10895
+Marginal baseline,Climb-out source LTO,FLOWN_NM,6,1598,10863
+Marginal baseline,Climb-out source LTO,FUEL_KG,6,1685,10895
+Marginal baseline,Climb-out source LTO,KG_MIN,6,1685,10895
+Marginal baseline,Climb-out source LTO,KG_NM,6,1598,10863
+Marginal baseline,Departure ARP040-100,DURATION_MIN,6,1597,10895
+Marginal baseline,Departure ARP040-100,FLOWN_NM,6,1597,10895
+Marginal baseline,Departure ARP040-100,FUEL_KG,6,1597,10895
+Marginal baseline,Departure ARP040-100,KG_MIN,6,1597,10895
+Marginal baseline,Departure ARP040-100,KG_NM,6,1597,10895
+Marginal baseline,Departure ARP100-200,DURATION_MIN,6,1599,10895
+Marginal baseline,Departure ARP100-200,FLOWN_NM,6,1599,10895
+Marginal baseline,Departure ARP100-200,FUEL_KG,6,1599,10895
+Marginal baseline,Departure ARP100-200,KG_MIN,6,1599,10895
+Marginal baseline,Departure ARP100-200,KG_NM,6,1599,10895
+Marginal baseline,Descent FL075-source LTO,DURATION_MIN,6,1677,10691
+Marginal baseline,Descent FL075-source LTO,FLOWN_NM,6,1598,10691
+Marginal baseline,Descent FL075-source LTO,FUEL_KG,6,1677,10691
+Marginal baseline,Descent FL075-source LTO,KG_MIN,6,1677,10691
+Marginal baseline,Descent FL075-source LTO,KG_NM,6,1598,10691
+Marginal baseline,Descent FL100-FL075,DURATION_MIN,6,1677,10607
+Marginal baseline,Descent FL100-FL075,FLOWN_NM,6,1591,10607
+Marginal baseline,Descent FL100-FL075,FUEL_KG,6,1677,10607
+Marginal baseline,Descent FL100-FL075,KG_MIN,6,1677,10607
+Marginal baseline,Descent FL100-FL075,KG_NM,6,1591,10607
+Marginal baseline,Descent FL180-FL100,DURATION_MIN,6,1677,10796
+Marginal baseline,Descent FL180-FL100,FLOWN_NM,6,1591,10796
+Marginal baseline,Descent FL180-FL100,FUEL_KG,6,1677,10796
+Marginal baseline,Descent FL180-FL100,KG_MIN,6,1677,10796
+Marginal baseline,Descent FL180-FL100,KG_NM,6,1591,10796
+Marginal baseline,Descent source TOD-FL180,DURATION_MIN,6,1677,10891
+Marginal baseline,Descent source TOD-FL180,FLOWN_NM,6,1597,10891
+Marginal baseline,Descent source TOD-FL180,FUEL_KG,6,1677,10891
+Marginal baseline,Descent source TOD-FL180,KG_MIN,6,1677,10891
+Marginal baseline,Descent source TOD-FL180,KG_NM,6,1597,10891
+Marginal baseline,Descent source window,DURATION_MIN,6,1677,10895
+Marginal baseline,Descent source window,FLOWN_NM,6,1597,10895
+Marginal baseline,Descent source window,FUEL_KG,6,1677,10895
+Marginal baseline,Descent source window,KG_MIN,6,1677,10895
+Marginal baseline,Descent source window,KG_NM,6,1597,10895
+Marginal baseline,Enroute source window,DURATION_MIN,6,1677,10895
+Marginal baseline,Enroute source window,FLOWN_NM,6,1597,10895
+Marginal baseline,Enroute source window,FUEL_KG,6,1677,10895
+Marginal baseline,Enroute source window,KG_MIN,6,1677,10895
+Marginal baseline,Enroute source window,KG_NM,6,1597,10895
+Marginal baseline,FL075-landing,DURATION_MIN,6,1686,10696
+Marginal baseline,FL075-landing,FLOWN_NM,6,1599,10696
+Marginal baseline,FL075-landing,FUEL_KG,6,1686,10696
+Marginal baseline,FL075-landing,KG_MIN,6,1686,10696
+Marginal baseline,FL075-landing,KG_NM,6,1599,10696
+Marginal baseline,Landing-roll/runway-exit source segment,DURATION_MIN,6,1683,10776
+Marginal baseline,Landing-roll/runway-exit source segment,FLOWN_NM,1,81,1118
+Marginal baseline,Landing-roll/runway-exit source segment,FUEL_KG,6,1623,10776
+Marginal baseline,Landing-roll/runway-exit source segment,KG_MIN,6,1623,10776
+Marginal baseline,Landing-roll/runway-exit source segment,KG_NM,1,81,1118
+Marginal baseline,Takeoff roll source segment,DURATION_MIN,6,1683,10895
+Marginal baseline,Takeoff roll source segment,FUEL_KG,6,1623,10895
+Marginal baseline,Takeoff roll source segment,KG_MIN,6,1623,10895
+Marginal baseline,Takeoff-FL075,DURATION_MIN,6,1685,10895
+Marginal baseline,Takeoff-FL075,FLOWN_NM,6,1598,10895
+Marginal baseline,Takeoff-FL075,FUEL_KG,6,1685,10895
+Marginal baseline,Takeoff-FL075,KG_MIN,6,1685,10895
+Marginal baseline,Takeoff-FL075,KG_NM,6,1598,10895
+Marginal baseline,Taxi-in recorded segment,DURATION_MIN,6,1683,10831
+Marginal baseline,Taxi-in recorded segment,FLOWN_NM,1,81,1072
+Marginal baseline,Taxi-in recorded segment,FUEL_KG,6,1623,10831
+Marginal baseline,Taxi-in recorded segment,KG_MIN,6,1623,10831
+Marginal baseline,Taxi-in recorded segment,KG_NM,1,81,1072
+Marginal baseline,Taxi-out recorded segment,DURATION_MIN,6,1683,10895
+Marginal baseline,Taxi-out recorded segment,FUEL_KG,6,1623,10895
+Marginal baseline,Taxi-out recorded segment,KG_MIN,6,1623,10895
+Marginal baseline,Whole airborne,DURATION_MIN,6,1683,10895
+Marginal baseline,Whole airborne,FLOWN_NM,6,1593,10895
+Marginal baseline,Whole airborne,FUEL_KG,6,1683,10895
+Marginal baseline,Whole airborne,KG_MIN,6,1683,10895
+Marginal baseline,Whole airborne,KG_NM,6,1593,10895
+Source-window time-weighted mean pressure altitude,Enroute source window,DURATION_MIN,5,533,1304
+Source-window time-weighted mean pressure altitude,Enroute source window,FLOWN_NM,5,533,1304
+Source-window time-weighted mean pressure altitude,Enroute source window,FUEL_KG,5,533,1304
+Source-window time-weighted mean pressure altitude,Enroute source window,KG_MIN,5,533,1304
+Source-window time-weighted mean pressure altitude,Enroute source window,KG_NM,5,533,1304
+Traversal duration; not interruption class,Climb FL075-FL100,DURATION_MIN,6,1685,10893
+Traversal duration; not interruption class,Climb FL075-FL100,FLOWN_NM,6,1598,10893
+Traversal duration; not interruption class,Climb FL075-FL100,FUEL_KG,6,1685,10893
+Traversal duration; not interruption class,Climb FL075-FL100,KG_MIN,6,1685,10893
+Traversal duration; not interruption class,Climb FL075-FL100,KG_NM,6,1598,10893
+Traversal duration; not interruption class,Climb FL100-FL180,DURATION_MIN,7,1169,9787
+Traversal duration; not interruption class,Climb FL100-FL180,FLOWN_NM,7,1113,9787
+Traversal duration; not interruption class,Climb FL100-FL180,FUEL_KG,7,1169,9787
+Traversal duration; not interruption class,Climb FL100-FL180,KG_MIN,7,1169,9787
+Traversal duration; not interruption class,Climb FL100-FL180,KG_NM,7,1113,9787
+Traversal duration; not interruption class,Descent FL100-FL075,DURATION_MIN,6,1635,9745
+Traversal duration; not interruption class,Descent FL100-FL075,FLOWN_NM,6,1553,9745
+Traversal duration; not interruption class,Descent FL100-FL075,FUEL_KG,6,1635,9745
+Traversal duration; not interruption class,Descent FL100-FL075,KG_MIN,6,1635,9745
+Traversal duration; not interruption class,Descent FL100-FL075,KG_NM,6,1553,9745
+Traversal duration; not interruption class,Descent FL180-FL100,DURATION_MIN,20,1335,3899
+Traversal duration; not interruption class,Descent FL180-FL100,FLOWN_NM,16,1157,3651
+Traversal duration; not interruption class,Descent FL180-FL100,FUEL_KG,20,1335,3899
+Traversal duration; not interruption class,Descent FL180-FL100,KG_MIN,20,1335,3899
+Traversal duration; not interruption class,Descent FL180-FL100,KG_NM,16,1157,3651

@@ -1,0 +1,451 @@
+TYPE,BAND100,PHASE,ROW_KIND,PROFILE_CLASS,METRIC,CHN,EUR,PAIRED_SUPPORT
+A20N,600,Climb,Marginal baseline,All profiles,DURATION_MIN,56,481,TRUE
+A20N,600,Climb,Marginal baseline,All profiles,FLOWN_NM,38,481,TRUE
+A20N,600,Climb,Marginal baseline,All profiles,FUEL_KG,56,481,TRUE
+A20N,600,Climb,Marginal baseline,All profiles,KG_MIN,56,481,TRUE
+A20N,600,Climb,Marginal baseline,All profiles,KG_NM,38,481,TRUE
+A20N,600,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A20N,600,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A20N,600,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A20N,600,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A20N,600,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A20N,600,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A20N,600,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A20N,600,Descent,Marginal baseline,All profiles,DURATION_MIN,56,481,TRUE
+A20N,600,Descent,Marginal baseline,All profiles,FLOWN_NM,38,481,TRUE
+A20N,600,Descent,Marginal baseline,All profiles,FUEL_KG,56,481,TRUE
+A20N,600,Descent,Marginal baseline,All profiles,KG_MIN,56,481,TRUE
+A20N,600,Descent,Marginal baseline,All profiles,KG_NM,38,481,TRUE
+A20N,600,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A20N,600,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A20N,600,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A20N,600,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A20N,600,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A20N,600,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A20N,600,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A20N,600,Enroute,Marginal baseline,All profiles,DURATION_MIN,56,481,TRUE
+A20N,600,Enroute,Marginal baseline,All profiles,FLOWN_NM,38,481,TRUE
+A20N,600,Enroute,Marginal baseline,All profiles,FUEL_KG,56,481,TRUE
+A20N,600,Enroute,Marginal baseline,All profiles,KG_MIN,56,481,TRUE
+A20N,600,Enroute,Marginal baseline,All profiles,KG_NM,38,481,TRUE
+A20N,600,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+A20N,600,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+A20N,600,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+A20N,600,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+A20N,600,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+A20N,600,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,42,4,FALSE
+A20N,600,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,28,4,FALSE
+A20N,600,Enroute,Profile-conditioned,Below FL300,FUEL_KG,42,4,FALSE
+A20N,600,Enroute,Profile-conditioned,Below FL300,KG_MIN,42,4,FALSE
+A20N,600,Enroute,Profile-conditioned,Below FL300,KG_NM,28,4,FALSE
+A20N,600,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,12,52,FALSE
+A20N,600,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,8,52,FALSE
+A20N,600,Enroute,Profile-conditioned,FL300-339,FUEL_KG,12,52,FALSE
+A20N,600,Enroute,Profile-conditioned,FL300-339,KG_MIN,12,52,FALSE
+A20N,600,Enroute,Profile-conditioned,FL300-339,KG_NM,8,52,FALSE
+A20N,600,Enroute,Profile-conditioned,FL340+,DURATION_MIN,2,425,FALSE
+A20N,600,Enroute,Profile-conditioned,FL340+,FLOWN_NM,2,425,FALSE
+A20N,600,Enroute,Profile-conditioned,FL340+,FUEL_KG,2,425,FALSE
+A20N,600,Enroute,Profile-conditioned,FL340+,KG_MIN,2,425,FALSE
+A20N,600,Enroute,Profile-conditioned,FL340+,KG_NM,2,425,FALSE
+A21N,500,Climb,Marginal baseline,All profiles,DURATION_MIN,121,290,TRUE
+A21N,500,Climb,Marginal baseline,All profiles,FLOWN_NM,115,290,TRUE
+A21N,500,Climb,Marginal baseline,All profiles,FUEL_KG,121,290,TRUE
+A21N,500,Climb,Marginal baseline,All profiles,KG_MIN,121,290,TRUE
+A21N,500,Climb,Marginal baseline,All profiles,KG_NM,115,290,TRUE
+A21N,500,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A21N,500,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A21N,500,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A21N,500,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A21N,500,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A21N,500,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A21N,500,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A21N,500,Descent,Marginal baseline,All profiles,DURATION_MIN,121,290,TRUE
+A21N,500,Descent,Marginal baseline,All profiles,FLOWN_NM,115,290,TRUE
+A21N,500,Descent,Marginal baseline,All profiles,FUEL_KG,121,290,TRUE
+A21N,500,Descent,Marginal baseline,All profiles,KG_MIN,121,290,TRUE
+A21N,500,Descent,Marginal baseline,All profiles,KG_NM,115,290,TRUE
+A21N,500,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A21N,500,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A21N,500,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A21N,500,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A21N,500,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A21N,500,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A21N,500,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A21N,500,Enroute,Marginal baseline,All profiles,DURATION_MIN,121,290,TRUE
+A21N,500,Enroute,Marginal baseline,All profiles,FLOWN_NM,115,290,TRUE
+A21N,500,Enroute,Marginal baseline,All profiles,FUEL_KG,121,290,TRUE
+A21N,500,Enroute,Marginal baseline,All profiles,KG_MIN,121,290,TRUE
+A21N,500,Enroute,Marginal baseline,All profiles,KG_NM,115,290,TRUE
+A21N,500,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+A21N,500,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+A21N,500,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+A21N,500,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+A21N,500,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+A21N,500,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,7,3,FALSE
+A21N,500,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,6,3,FALSE
+A21N,500,Enroute,Profile-conditioned,Below FL300,FUEL_KG,7,3,FALSE
+A21N,500,Enroute,Profile-conditioned,Below FL300,KG_MIN,7,3,FALSE
+A21N,500,Enroute,Profile-conditioned,Below FL300,KG_NM,6,3,FALSE
+A21N,500,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,77,21,FALSE
+A21N,500,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,73,21,FALSE
+A21N,500,Enroute,Profile-conditioned,FL300-339,FUEL_KG,77,21,FALSE
+A21N,500,Enroute,Profile-conditioned,FL300-339,KG_MIN,77,21,FALSE
+A21N,500,Enroute,Profile-conditioned,FL300-339,KG_NM,73,21,FALSE
+A21N,500,Enroute,Profile-conditioned,FL340+,DURATION_MIN,37,266,TRUE
+A21N,500,Enroute,Profile-conditioned,FL340+,FLOWN_NM,36,266,TRUE
+A21N,500,Enroute,Profile-conditioned,FL340+,FUEL_KG,37,266,TRUE
+A21N,500,Enroute,Profile-conditioned,FL340+,KG_MIN,37,266,TRUE
+A21N,500,Enroute,Profile-conditioned,FL340+,KG_NM,36,266,TRUE
+A21N,600,Climb,Marginal baseline,All profiles,DURATION_MIN,30,378,TRUE
+A21N,600,Climb,Marginal baseline,All profiles,FLOWN_NM,21,378,FALSE
+A21N,600,Climb,Marginal baseline,All profiles,FUEL_KG,30,378,TRUE
+A21N,600,Climb,Marginal baseline,All profiles,KG_MIN,30,378,TRUE
+A21N,600,Climb,Marginal baseline,All profiles,KG_NM,21,378,FALSE
+A21N,600,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A21N,600,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A21N,600,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A21N,600,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A21N,600,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A21N,600,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A21N,600,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A21N,600,Descent,Marginal baseline,All profiles,DURATION_MIN,30,378,TRUE
+A21N,600,Descent,Marginal baseline,All profiles,FLOWN_NM,21,378,FALSE
+A21N,600,Descent,Marginal baseline,All profiles,FUEL_KG,30,378,TRUE
+A21N,600,Descent,Marginal baseline,All profiles,KG_MIN,30,378,TRUE
+A21N,600,Descent,Marginal baseline,All profiles,KG_NM,21,378,FALSE
+A21N,600,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A21N,600,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A21N,600,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A21N,600,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A21N,600,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A21N,600,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A21N,600,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A21N,600,Enroute,Marginal baseline,All profiles,DURATION_MIN,30,378,TRUE
+A21N,600,Enroute,Marginal baseline,All profiles,FLOWN_NM,21,378,FALSE
+A21N,600,Enroute,Marginal baseline,All profiles,FUEL_KG,30,378,TRUE
+A21N,600,Enroute,Marginal baseline,All profiles,KG_MIN,30,378,TRUE
+A21N,600,Enroute,Marginal baseline,All profiles,KG_NM,21,378,FALSE
+A21N,600,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+A21N,600,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+A21N,600,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+A21N,600,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+A21N,600,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+A21N,600,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,24,2,FALSE
+A21N,600,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,17,2,FALSE
+A21N,600,Enroute,Profile-conditioned,Below FL300,FUEL_KG,24,2,FALSE
+A21N,600,Enroute,Profile-conditioned,Below FL300,KG_MIN,24,2,FALSE
+A21N,600,Enroute,Profile-conditioned,Below FL300,KG_NM,17,2,FALSE
+A21N,600,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,6,48,FALSE
+A21N,600,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,4,48,FALSE
+A21N,600,Enroute,Profile-conditioned,FL300-339,FUEL_KG,6,48,FALSE
+A21N,600,Enroute,Profile-conditioned,FL300-339,KG_MIN,6,48,FALSE
+A21N,600,Enroute,Profile-conditioned,FL300-339,KG_NM,4,48,FALSE
+A21N,600,Enroute,Profile-conditioned,FL340+,DURATION_MIN,0,328,FALSE
+A21N,600,Enroute,Profile-conditioned,FL340+,FLOWN_NM,0,328,FALSE
+A21N,600,Enroute,Profile-conditioned,FL340+,FUEL_KG,0,328,FALSE
+A21N,600,Enroute,Profile-conditioned,FL340+,KG_MIN,0,328,FALSE
+A21N,600,Enroute,Profile-conditioned,FL340+,KG_NM,0,328,FALSE
+A320,600,Climb,Marginal baseline,All profiles,DURATION_MIN,124,1794,TRUE
+A320,600,Climb,Marginal baseline,All profiles,FLOWN_NM,96,1794,TRUE
+A320,600,Climb,Marginal baseline,All profiles,FUEL_KG,124,1794,TRUE
+A320,600,Climb,Marginal baseline,All profiles,KG_MIN,124,1794,TRUE
+A320,600,Climb,Marginal baseline,All profiles,KG_NM,96,1794,TRUE
+A320,600,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A320,600,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A320,600,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A320,600,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A320,600,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A320,600,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A320,600,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A320,600,Descent,Marginal baseline,All profiles,DURATION_MIN,124,1794,TRUE
+A320,600,Descent,Marginal baseline,All profiles,FLOWN_NM,96,1794,TRUE
+A320,600,Descent,Marginal baseline,All profiles,FUEL_KG,124,1794,TRUE
+A320,600,Descent,Marginal baseline,All profiles,KG_MIN,124,1794,TRUE
+A320,600,Descent,Marginal baseline,All profiles,KG_NM,96,1794,TRUE
+A320,600,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A320,600,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A320,600,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A320,600,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A320,600,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A320,600,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A320,600,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A320,600,Enroute,Marginal baseline,All profiles,DURATION_MIN,124,1794,TRUE
+A320,600,Enroute,Marginal baseline,All profiles,FLOWN_NM,96,1794,TRUE
+A320,600,Enroute,Marginal baseline,All profiles,FUEL_KG,124,1794,TRUE
+A320,600,Enroute,Marginal baseline,All profiles,KG_MIN,124,1794,TRUE
+A320,600,Enroute,Marginal baseline,All profiles,KG_NM,96,1794,TRUE
+A320,600,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+A320,600,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+A320,600,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+A320,600,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+A320,600,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+A320,600,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,87,17,FALSE
+A320,600,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,68,17,FALSE
+A320,600,Enroute,Profile-conditioned,Below FL300,FUEL_KG,87,17,FALSE
+A320,600,Enroute,Profile-conditioned,Below FL300,KG_MIN,87,17,FALSE
+A320,600,Enroute,Profile-conditioned,Below FL300,KG_NM,68,17,FALSE
+A320,600,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,35,195,TRUE
+A320,600,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,27,195,FALSE
+A320,600,Enroute,Profile-conditioned,FL300-339,FUEL_KG,35,195,TRUE
+A320,600,Enroute,Profile-conditioned,FL300-339,KG_MIN,35,195,TRUE
+A320,600,Enroute,Profile-conditioned,FL300-339,KG_NM,27,195,FALSE
+A320,600,Enroute,Profile-conditioned,FL340+,DURATION_MIN,2,1582,FALSE
+A320,600,Enroute,Profile-conditioned,FL340+,FLOWN_NM,1,1582,FALSE
+A320,600,Enroute,Profile-conditioned,FL340+,FUEL_KG,2,1582,FALSE
+A320,600,Enroute,Profile-conditioned,FL340+,KG_MIN,2,1582,FALSE
+A320,600,Enroute,Profile-conditioned,FL340+,KG_NM,1,1582,FALSE
+A321,600,Climb,Marginal baseline,All profiles,DURATION_MIN,176,258,TRUE
+A321,600,Climb,Marginal baseline,All profiles,FLOWN_NM,131,258,TRUE
+A321,600,Climb,Marginal baseline,All profiles,FUEL_KG,176,258,TRUE
+A321,600,Climb,Marginal baseline,All profiles,KG_MIN,176,258,TRUE
+A321,600,Climb,Marginal baseline,All profiles,KG_NM,131,258,TRUE
+A321,600,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A321,600,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A321,600,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A321,600,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A321,600,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A321,600,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A321,600,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A321,600,Descent,Marginal baseline,All profiles,DURATION_MIN,176,258,TRUE
+A321,600,Descent,Marginal baseline,All profiles,FLOWN_NM,131,258,TRUE
+A321,600,Descent,Marginal baseline,All profiles,FUEL_KG,176,258,TRUE
+A321,600,Descent,Marginal baseline,All profiles,KG_MIN,176,258,TRUE
+A321,600,Descent,Marginal baseline,All profiles,KG_NM,131,258,TRUE
+A321,600,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+A321,600,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+A321,600,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+A321,600,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+A321,600,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+A321,600,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+A321,600,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+A321,600,Enroute,Marginal baseline,All profiles,DURATION_MIN,176,258,TRUE
+A321,600,Enroute,Marginal baseline,All profiles,FLOWN_NM,131,258,TRUE
+A321,600,Enroute,Marginal baseline,All profiles,FUEL_KG,176,258,TRUE
+A321,600,Enroute,Marginal baseline,All profiles,KG_MIN,176,258,TRUE
+A321,600,Enroute,Marginal baseline,All profiles,KG_NM,131,258,TRUE
+A321,600,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+A321,600,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+A321,600,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+A321,600,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+A321,600,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+A321,600,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,121,4,FALSE
+A321,600,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,93,4,FALSE
+A321,600,Enroute,Profile-conditioned,Below FL300,FUEL_KG,121,4,FALSE
+A321,600,Enroute,Profile-conditioned,Below FL300,KG_MIN,121,4,FALSE
+A321,600,Enroute,Profile-conditioned,Below FL300,KG_NM,93,4,FALSE
+A321,600,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,51,44,TRUE
+A321,600,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,34,44,TRUE
+A321,600,Enroute,Profile-conditioned,FL300-339,FUEL_KG,51,44,TRUE
+A321,600,Enroute,Profile-conditioned,FL300-339,KG_MIN,51,44,TRUE
+A321,600,Enroute,Profile-conditioned,FL300-339,KG_NM,34,44,TRUE
+A321,600,Enroute,Profile-conditioned,FL340+,DURATION_MIN,4,210,FALSE
+A321,600,Enroute,Profile-conditioned,FL340+,FLOWN_NM,4,210,FALSE
+A321,600,Enroute,Profile-conditioned,FL340+,FUEL_KG,4,210,FALSE
+A321,600,Enroute,Profile-conditioned,FL340+,KG_MIN,4,210,FALSE
+A321,600,Enroute,Profile-conditioned,FL340+,KG_NM,4,210,FALSE
+B738,600,Climb,Marginal baseline,All profiles,DURATION_MIN,165,1006,TRUE
+B738,600,Climb,Marginal baseline,All profiles,FLOWN_NM,83,1006,TRUE
+B738,600,Climb,Marginal baseline,All profiles,FUEL_KG,119,1006,TRUE
+B738,600,Climb,Marginal baseline,All profiles,KG_MIN,119,1006,TRUE
+B738,600,Climb,Marginal baseline,All profiles,KG_NM,83,1006,TRUE
+B738,600,Climb,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+B738,600,Climb,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Continuous,KG_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+B738,600,Climb,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+B738,600,Climb,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+B738,600,Climb,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+B738,600,Climb,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+B738,600,Climb,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+B738,600,Descent,Marginal baseline,All profiles,DURATION_MIN,165,1006,TRUE
+B738,600,Descent,Marginal baseline,All profiles,FLOWN_NM,83,1006,TRUE
+B738,600,Descent,Marginal baseline,All profiles,FUEL_KG,119,1006,TRUE
+B738,600,Descent,Marginal baseline,All profiles,KG_MIN,119,1006,TRUE
+B738,600,Descent,Marginal baseline,All profiles,KG_NM,83,1006,TRUE
+B738,600,Descent,Planned class,Continuous,DURATION_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Continuous,FLOWN_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Continuous,FUEL_KG,NA,NA,FALSE
+B738,600,Descent,Planned class,Continuous,KG_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Continuous,KG_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Heavily interrupted,DURATION_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Heavily interrupted,FLOWN_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Heavily interrupted,FUEL_KG,NA,NA,FALSE
+B738,600,Descent,Planned class,Heavily interrupted,KG_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Heavily interrupted,KG_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Lightly interrupted,DURATION_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Lightly interrupted,FLOWN_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Lightly interrupted,FUEL_KG,NA,NA,FALSE
+B738,600,Descent,Planned class,Lightly interrupted,KG_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Lightly interrupted,KG_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Unknown coverage,DURATION_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Unknown coverage,FLOWN_NM,NA,NA,FALSE
+B738,600,Descent,Planned class,Unknown coverage,FUEL_KG,NA,NA,FALSE
+B738,600,Descent,Planned class,Unknown coverage,KG_MIN,NA,NA,FALSE
+B738,600,Descent,Planned class,Unknown coverage,KG_NM,NA,NA,FALSE
+B738,600,Enroute,Marginal baseline,All profiles,DURATION_MIN,165,1006,TRUE
+B738,600,Enroute,Marginal baseline,All profiles,FLOWN_NM,83,1006,TRUE
+B738,600,Enroute,Marginal baseline,All profiles,FUEL_KG,119,1006,TRUE
+B738,600,Enroute,Marginal baseline,All profiles,KG_MIN,119,1006,TRUE
+B738,600,Enroute,Marginal baseline,All profiles,KG_NM,83,1006,TRUE
+B738,600,Enroute,Profile-conditioned,Altitude unobserved,DURATION_MIN,0,0,FALSE
+B738,600,Enroute,Profile-conditioned,Altitude unobserved,FLOWN_NM,0,0,FALSE
+B738,600,Enroute,Profile-conditioned,Altitude unobserved,FUEL_KG,0,0,FALSE
+B738,600,Enroute,Profile-conditioned,Altitude unobserved,KG_MIN,0,0,FALSE
+B738,600,Enroute,Profile-conditioned,Altitude unobserved,KG_NM,0,0,FALSE
+B738,600,Enroute,Profile-conditioned,Below FL300,DURATION_MIN,123,3,FALSE
+B738,600,Enroute,Profile-conditioned,Below FL300,FLOWN_NM,64,3,FALSE
+B738,600,Enroute,Profile-conditioned,Below FL300,FUEL_KG,86,3,FALSE
+B738,600,Enroute,Profile-conditioned,Below FL300,KG_MIN,86,3,FALSE
+B738,600,Enroute,Profile-conditioned,Below FL300,KG_NM,64,3,FALSE
+B738,600,Enroute,Profile-conditioned,FL300-339,DURATION_MIN,39,15,FALSE
+B738,600,Enroute,Profile-conditioned,FL300-339,FLOWN_NM,18,15,FALSE
+B738,600,Enroute,Profile-conditioned,FL300-339,FUEL_KG,30,15,FALSE
+B738,600,Enroute,Profile-conditioned,FL300-339,KG_MIN,30,15,FALSE
+B738,600,Enroute,Profile-conditioned,FL300-339,KG_NM,18,15,FALSE
+B738,600,Enroute,Profile-conditioned,FL340+,DURATION_MIN,3,988,FALSE
+B738,600,Enroute,Profile-conditioned,FL340+,FLOWN_NM,1,988,FALSE
+B738,600,Enroute,Profile-conditioned,FL340+,FUEL_KG,3,988,FALSE
+B738,600,Enroute,Profile-conditioned,FL340+,KG_MIN,3,988,FALSE
+B738,600,Enroute,Profile-conditioned,FL340+,KG_NM,1,988,FALSE

@@ -1,0 +1,18 @@
+{
+  "analysis_id": "PAPER-REFERENCES-2026-10-27-001",
+  "input_manifest": "config/paper-analysis-2026-10-27-inputs.csv",
+  "chn_release": "CHN-2026-10-27-001 returned candidate.6 defaults",
+  "eur_release": "EUR-2026-10-13-002",
+  "chn_directory": "derived/chn/verification/CHN-2026-10-27-001/returned",
+  "base_view": "derived/paper/eligibility-comparability/PAPER-2026-10-27-001",
+  "lower_ground_view": "derived/paper/eligibility-comparability/PAPER-2026-10-27-004-lower-ground",
+  "output_directory": "derived/paper/reference-tables/PAPER-REFERENCES-2026-10-27-001",
+  "minimum_reference_n": 30,
+  "date_convention": "Supplied summer-2025 campaign membership; report actual ATOT UTC dates; no timestamp changes",
+  "eur_roll_fuel": "Delivered adjusted fuel; original model fuel retained; stakeholder confirmation 27 October 2026; no second 0.8 factor",
+  "terminal_options": ["Climb-out source LTO", "Takeoff-FL075", "Approach-landing source LTO", "FL075-landing"],
+  "core_windows": ["Climb FL075-FL100", "Climb FL100-FL180", "Descent FL180-FL100", "Descent FL100-FL075"],
+  "profile_classes": "Marginal references first; interruption classes unassigned; unknown coverage is explicit",
+  "ground_distance_proxy": "Not assigned; retain supplied zero distances and fuel/time support",
+  "manuscript_stage": "Exploratory result development; allow approximately 12-14 pages before conference selection"
+}

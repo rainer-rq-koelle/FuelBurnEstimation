@@ -1,0 +1,9 @@
+REGION,WINDOW,N,DURATION_P50
+CHN,Landing-roll/runway-exit source segment,160,0.6833333333333333
+CHN,Takeoff roll source segment,160,0.8333333333333334
+CHN,Taxi-in recorded segment,160,10.508333333333333
+CHN,Taxi-out recorded segment,160,18.05
+EUR,Landing-roll/runway-exit source segment,1004,0.6666666666666666
+EUR,Takeoff roll source segment,1006,0.7
+EUR,Taxi-in recorded segment,1005,3.75
+EUR,Taxi-out recorded segment,1006,10.3

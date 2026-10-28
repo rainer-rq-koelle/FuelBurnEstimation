@@ -1,0 +1,14 @@
+CODE,INTERPRETATION,DETAIL,flight_batch_records,identifiers
+airborne_phase_speed_above_screen,requires_source_check,Non-taxi phase mean speed exceeds 750 kt,3290,3290
+altitude_outside_screen,requires_source_check,Emitted pressure altitude outside -2000..65000 ft,1,1
+event_vertical_rate_above_screen,requires_source_check,Altitude difference between emitted rows exceeds 12000 ft/min,10,10
+fuel_cleaning_over_5pct,source_or_cleaning_rule,Cleaning changes full-record fuel by more than 5%; window and source review needed,7,7
+fuel_spike_share_over_1pct,source_or_cleaning_rule,More than 1% of source rows flagged as fuel spikes,151,151
+ground_phase_speed_above_screen,requires_source_check,Taxi/exit phase mean speed exceeds 120 kt,1362,1362
+invalid_or_zero_event_position,requires_source_check,Invalid range or zero coordinate at an emitted event,684,684
+long_airborne_phase_zero_distance,requires_source_check,At least ten minutes of airborne phase with zero recorded distance,588,588
+missing_ALDT,source_or_legacy_detector,Missing ALDT under the distributed legacy detector,1190,1190
+missing_ATOT,source_or_legacy_detector,Missing ATOT under the distributed legacy detector,1,1
+missing_TOC,source_or_legacy_detector,Missing TOC under the distributed legacy detector,22,22
+missing_TOD,source_or_legacy_detector,Missing TOD under the distributed legacy detector,22,22
+zero_length_cruise,source_or_legacy_detector,TOC/TOD coincide; legacy shared-peak fallback or true zero cruise,1173,1173

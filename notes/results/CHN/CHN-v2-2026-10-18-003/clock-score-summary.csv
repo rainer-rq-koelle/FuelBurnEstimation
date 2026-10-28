@@ -1,0 +1,3 @@
+COLUMN,files,min_distinct_observations,max_row_expansion,min_collapsed_score,max_collapsed_score
+TIME,37,6438,195.99985911524374,1,1
+TIME.1,37,6199,197.138585801332,0.2475907029478458,0.27028096557182424
