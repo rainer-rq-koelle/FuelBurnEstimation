@@ -125,7 +125,11 @@ some of these files are read directly by the documents.
 ## Historical work and supporting records
 
 The [28 October cleanup record](notes/repository-cleanup-2026-10-28.md) lists
-retired branches, recovery tags, archived chats and the unchanged W2 hold.
+retired branches, recovery tags, archived chats and local housekeeping.
+The [W1/W2 lessons learned](notes/preprocessing-lessons-learned.md) retain the
+useful findings from the retired worker effort. The current baseline comes from
+EUR parallel preprocessing and the pinned CHN helper return, not the old worker
+repair proposals or eligibility flags.
 
 The following records remain available for provenance. Their original schedules,
 release labels and readiness claims describe earlier work, not current tasks:

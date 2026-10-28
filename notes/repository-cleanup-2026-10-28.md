@@ -1,8 +1,10 @@
 # Repository cleanup — 28 October 2026
 
-The user approved integrating the paper work into `main`, simplifying the README,
-then retiring superseded branches and chats. Evidence was to be preserved;
-restricted data and W2 history were explicitly held out of scope.
+The user initially approved integrating the paper work into `main`, simplifying
+the README, then retiring superseded branches and chats. Evidence was to be
+preserved; restricted data and W2 history were held out of that first pass.
+The follow-up below records the subsequent approval to complete local
+housekeeping and retire the remaining worker branches after retaining lessons.
 
 ## Integration and documentation
 
@@ -56,10 +58,10 @@ unarchived for paper review and development. The README preserves the EUR
 unchanged-until-further-notice decision and deferred CHN decoder work; detailed
 cohort handovers remain in `notes/`.
 
-## Explicitly preserved / deferred
+## Initial W2 hold (lifted in the follow-up)
 
-The following remote branches retain their original tips because they contain
-W2 work, including the two whose names start with W1:
+The first pass retained the following remote branches at their original tips
+because they contained W2 work, including the two whose names start with W1:
 
 | Branch | Unchanged tip |
 |---|---|
@@ -67,13 +69,13 @@ W2 work, including the two whose names start with W1:
 | `w1-eur-interval-diagnostic` | `bb7368aaf75529d3eab26eec00aae7879367ab9d` |
 | `w2-chn-validation-clean` | `2af7870b5f697f2126c60fed8d00372b6b14faca` |
 
-[W2 PR #3](https://github.com/rainer-rq-koelle/FuelBurnEstimation/pull/3) remains
-open and unchanged. No history rewriting, restricted-data deletion, R2 operation,
-canonical regeneration or analysis rebuild was performed. The exploratory stash,
-render caches, local exports and stale temporary-worktree registration remain
-untouched for a separate local-artifact cleanup.
+[W2 PR #3](https://github.com/rainer-rq-koelle/FuelBurnEstimation/pull/3) remained
+open after that first pass. No history rewriting, restricted-data deletion, R2
+operation, canonical regeneration or analysis rebuild was performed. The
+exploratory stash, render caches, local exports and stale temporary-worktree
+registration were left for the follow-up.
 
-## Verification
+## First-pass verification
 
 - All 110 pinned input hashes, 28 conference source hashes, 23 conference product
   hashes, 33 descent/enroute product hashes and four document export hashes match.
@@ -82,4 +84,36 @@ untouched for a separate local-artifact cleanup.
 - The README diff passed whitespace checks. Pre-existing whitespace in historical
   session logs/evidence was deliberately retained to preserve the recorded files.
 - Remote tags and remaining branch tips were checked; PR #5 is merged, PR #2 is
-  closed, and PR #3 remains open at its original head.
+  closed, and PR #3 was still open at its original head at that point.
+
+## Follow-up: local housekeeping and worker retirement
+
+The user then approved removing the exploratory stash/cache and missing worktree
+registration, and retiring the remaining W1/W2 work after extracting useful
+lessons. Paper exports, analysis caches and restricted data were to remain untouched.
+
+Completed actions:
+
+- Dropped the exact exploratory stash
+  `2a7645852f3b36395a4ffd1d072fffecda8f95f6` (the only stash).
+- Removed only `paper-exploratory-2026_cache/`: four files, 89,619,121 bytes
+  (approximately 85.5 MiB). General Quarto metadata and all other caches remain.
+- Pruned the registration for the already missing
+  `/private/tmp/fuelburn-w0-final-fix`. The main checkout is the only worktree.
+- Reviewed the original and corrected W1/W2 reports against the later EUR
+  parallel build, CHN helper validation and returned-batch audit. Recorded the
+  reusable findings in [preprocessing lessons learned](preprocessing-lessons-learned.md).
+- Closed W2 PR #3 and deleted the three remaining remote branches listed above,
+  using their exact expected tips as deletion guards. No W1/W2 code or flags were
+  merged into the paper baseline. Only `main` remains as a local/remote branch.
+- Retained existing recovery tags and historical evidence. No new W2 archive
+  branch/tag was created, and no Git history rewrite or PR-record erasure occurred.
+
+Verification compared a complete before/after inventory of `.fuelburn-data-store/`,
+`outputs/`, `_output/` and `data-derived/`: all **6,135 files**, totalling
+**9,106,603,166 bytes**, retained their sizes, modification times and SHA-256 hashes.
+This includes the paper exports, analytical caches and restricted source/derived
+data. No protected file was added or removed. The stash list is empty, the
+exploratory render cache is absent, and the missing worktree registration is gone.
+Documentation links and whitespace checks passed. No scientific rebuild or
+document render was needed.
