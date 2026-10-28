@@ -22,8 +22,9 @@ source(here::here("R", "setup.R"))
 This note documents the data-preparation workflow for the 2026 fuel-burn study. It is deliberately separate from the paper so that source-data handling, assumptions, and processing steps can be reviewed without overloading the scientific narrative.
 
 Analytical definitions, parameter trials, and side studies are now documented in
-`technical-note-methodology.qmd`; the work packages are in
-`notes/study-worker-plan.md`. The 9 October 2026 readiness audit found unresolved
+`technical-note-methodology.qmd`; the original work packages have been retired
+with their findings retained in [preprocessing lessons learned](notes/preprocessing-lessons-learned.md).
+The 9 October 2026 readiness audit found unresolved
 EUR interval repetitions/overlaps, CHN distance/time inconsistencies and missing
 ALDT events, and phase/export semantic differences. The availability of a
 hash-verified release does not establish analytical readiness. Run

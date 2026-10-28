@@ -117,3 +117,90 @@ data. No protected file was added or removed. The stash list is empty, the
 exploratory render cache is absent, and the missing worktree registration is gone.
 Documentation links and whitespace checks passed. No scientific rebuild or
 document render was needed.
+
+## Source and worker note cleanup
+
+The next approved pass removed obsolete scripts and coordination notes while
+retaining the dependencies of the current paper and Technical Note. The complete
+pre-removal revision is `9bdd2af033f62d0df9d72006a7a06ff1a10ba30a`.
+
+### Removed files
+
+| File | Reason |
+|---|---|
+| `scripts/09-upload-eur-fixed-to-r2.R` | One-off FIXED release upload |
+| `scripts/10-cleanup-intermediate-files.R` | Obsolete storage paths and destructive intermediate cleanup |
+| `scripts/11-update-r2-registry-for-fixed.R` | One-off source-rewriting registry patch |
+| `scripts/90-check-data-store.R` | Duplicate early storage checker with superseded folder assumptions |
+| `scripts/clean-manifest.R` | One-off manifest reconciliation for the older release |
+| `scripts/diagnose-manifest-r2-mismatch.R` | One-off earlier manifest/R2 investigation |
+| `scripts/update-r2-registry.R` | One-off source-rewriting registry patch |
+| `scripts/update-reconstruct-function.R` | One-off source-rewriting reconstruction patch |
+| `scripts/upload-fixed-to-r2.R` | One-off FIXED source upload |
+| `scripts/upload-chn-summer2025-to-r2.R` | One-off earlier CHN release upload |
+| `scripts/audit-pru-lvl-completeness.R` | Unused early LVL exploratory diagnostic |
+| `scripts/diagnose-lvl-imbalance.R` | Unused early LVL exploratory diagnostic |
+| `scripts/inspect-raw-pru-lvl.R` | Unused early LVL exploratory inspection |
+| `scripts/test-eur-canonical-import.R` | Ad hoc import smoke script for the older canonical release |
+| `notes/study-worker-plan.md` | Completed or superseded worker/setup coordination |
+| `notes/worker-dispatch.md` | Completed or superseded worker/setup coordination |
+| `notes/worker-handoff-template.md` | Completed or superseded worker/setup coordination |
+| `notes/mac-verification-request.md` | Completed or superseded worker/setup coordination |
+| `notes/r2-verification-request.md` | Completed or superseded worker/setup coordination |
+| `notes/level-segment-completion-report.md` | Completed or superseded worker/setup coordination |
+| `notes/EUR-FIXED-R2-Upload-20261009.txt` | Completed or superseded worker/setup coordination |
+| `notes/handover-2026-10-05.md` | Completed or superseded worker/setup coordination |
+| `notes/up-to-speed.md` | Completed or superseded worker/setup coordination |
+
+Fourteen scripts and nine coordination notes were removed (111,740 source bytes).
+Their exact original contents remain in the published Git history; no data files
+were removed in this pass. To inspect an original file without restoring clutter:
+
+```sh
+git show 9bdd2af033f62d0df9d72006a7a06ff1a10ba30a:scripts/update-reconstruct-function.R
+git show 9bdd2af033f62d0df9d72006a7a06ff1a10ba30a:notes/study-worker-plan.md
+```
+
+### Retained dependency boundary
+
+- Both current QMD sources, shared styles/bibliography, all `R/`, `config/`,
+  `helpers/` and `tests/` files remain byte-identical.
+- All `notes/results/` evidence, input/source/product manifests and the W0
+  checksummed release contract remain byte-identical. The G2G pilot and its
+  reproduction script are retained because they support the lessons learned.
+- Paper scripts 13–22, upstream eligibility assessments, EUR parallel builders,
+  source extraction, CHN helper construction/validation and evidence-producing
+  diagnostics remain. An absent filename reference alone did not justify removing
+  a helper-validation or data-producer script.
+- Generic R2 storage utilities and their checker remain. Earlier data producers
+  referenced by the storage registry or retained historical evidence also remain;
+  the removed upload/patch wrappers are not required to regenerate their data.
+- The preprocessing lessons note is unchanged. No scientific result, eligibility
+  rule, input pin or numerical coefficient was changed.
+
+### References and checks
+
+The review scanned tracked code/document references, manifest paths and checksum
+records before removal. No surviving executable source references a removed
+script. README links and three historical QMD references were updated; the old
+FIXED pipeline document now explicitly resolves retired commands at the original
+revision above. Frozen W0 evidence still mentions the original worker-plan paths:
+those are historical references to that revision, and were not edited to avoid
+invalidating evidence hashes.
+
+Completed validation:
+
+- All document analysis loaders passed without rebuilding.
+- `tests/paper-window-adoption.R` passed its cohort, window independence,
+  terminal pairing, roll adjustment, date and exposure-accounting checks.
+- `tests/paper-profile-class-adoption.R` passed its input immutability,
+  independent profile/fuel eligibility, unknown accounting and provenance checks.
+- All 335 protected source/evidence files retained their SHA-256 hashes.
+- All 6,135 protected restricted-data, analysis-cache and export files retained
+  their inventory, sizes, modification times and SHA-256 hashes.
+- Retained Python sources parse; changed documentation links and whitespace
+  checks pass. No removed path is referenced by surviving executable code.
+
+Full data regeneration and document rendering were intentionally not performed;
+the checks exercised the retained loaders/tests while preserving the pinned
+analyses and exact review exports.

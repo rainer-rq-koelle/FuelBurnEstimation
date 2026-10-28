@@ -128,7 +128,7 @@ The intended contribution is to test whether operational profile descriptors imp
 
 **Evidence status, 9 October 2026:** the local release contains `r formatC(eur_flights, format="d", big.mark=",")` EUR flights and `r formatC(chn_flights, format="d", big.mark=",")` CHN flights. File hashes match the manifest, but new interval and distance checks identify unresolved analytical defects. The descriptive figures below are diagnostics of delivered records. No validated international coefficients, regional efficiency ranking, or achievable fuel savings are claimed.
 
-**Working documents:** this exploratory paper develops the argument and initial evidence; `technical-note-data-preparation.qmd` describes source preparation; `technical-note-methodology.qmd` records analytical decisions and validation studies; `notes/study-worker-plan.md` provides work packages and acceptance gates.
+**Historical working documents:** this exploratory paper develops the initial argument and evidence; `technical-note-data-preparation.qmd` describes source preparation; `technical-note-methodology.qmd` records analytical decisions and validation studies. The original worker assignments are retired; see [preprocessing lessons learned](notes/preprocessing-lessons-learned.md). The current paper and full Technical Note are `conference-paper.qmd` and `paper.qmd`.
 
 # 1. Foundation and research contribution
 

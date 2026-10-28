@@ -138,9 +138,10 @@ release labels and readiness claims describe earlier work, not current tasks:
   [data-preparation note](technical-note-data-preparation.qmd) and
   [methodology note](technical-note-methodology.qmd): earlier design and process
   records; `paper.qmd` is the current full Technical Note.
-- [Worker plan](notes/study-worker-plan.md), [dispatch](notes/worker-dispatch.md),
-  [handoff template](notes/worker-handoff-template.md) and
-  [W0 release contract](notes/study-release-contract.md): the earlier W0–W7 workflow.
+- [W0 release contract](notes/study-release-contract.md): the earlier W0–W7
+  baseline and acceptance record, retained with its checksummed evidence. Obsolete
+  worker plans, dispatches, handoff templates and machine-specific verification
+  requests were removed; their exact revisions are recorded in the cleanup log.
 - [FIXED pipeline documentation](notes/EUR-Pipeline-FIXED-Documentation.md),
   [LOBT investigation](notes/CRITICAL-LOBT-Filter-Bug.md) and
   [schema comparison](notes/EUR-CHN-Schema-Comparison.md): historical delivery and
@@ -150,8 +151,15 @@ release labels and readiness claims describe earlier work, not current tasks:
   [lookup pilot](notes/paper-lookup-table.md): earlier analyses retained for
   comparison and reproduction.
 
-Historical repair/upload scripts and `scripts/10-cleanup-intermediate-files.R`
-remain preserved, but are not part of the current paper workflow. The cleanup
-script assumes older storage paths and should not be used for the adopted store.
+One-off repair/upload/manifest patchers, obsolete diagnostics and the old cleanup
+script have been removed. The [cleanup record](notes/repository-cleanup-2026-10-28.md#source-and-worker-note-cleanup)
+lists every removal and its recovery revision. Historical paths in frozen
+evidence refer to that revision, not necessarily to files in the current checkout.
+
+Older data producers and helper-validation scripts remain where they reproduce
+retained evidence or are named by manifests and storage provenance. The G2G pilot,
+EUR parallel builders, CHN helper and all paper analysis/build/formatting scripts
+are retained, as are their tests. Shared legacy code must not be removed solely
+because its name or date predates the paper.
 The previous study is in `../paper-2025-ICNS-CHN-EUR-fuelburn` (or the location
 specified by `FUELBURN_2025_PROJECT`).

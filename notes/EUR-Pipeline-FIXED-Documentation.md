@@ -1,5 +1,13 @@
 # EUR Data Preparation Pipeline - FIXED (October 2026)
 
+> Historical delivery record, superseded for paper analysis by EUR parallel
+> preprocessing. The readiness claims and commands below describe the October 9
+> workflow. One-off upload, registry-patching and cleanup scripts have since been
+> retired; resolve their paths against
+> [the preserved source revision](https://github.com/rainer-rq-koelle/FuelBurnEstimation/tree/9bdd2af033f62d0df9d72006a7a06ff1a10ba30a),
+> not the current checkout. See the [removal record](repository-cleanup-2026-10-28.md#source-and-worker-note-cleanup)
+> and [lessons learned](preprocessing-lessons-learned.md).
+
 ## Overview
 
 This document describes the complete EUR data preparation pipeline from PRU G2G extraction through to production-ready analytical datasets with 0% orphan rate and EUR-CHN schema compatibility.
